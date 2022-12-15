@@ -7,9 +7,12 @@ import edu.najah.cap.users.User;
 import edu.najah.cap.users.UserFactory;
 import edu.najah.cap.users.UserType;
 
+import java.sql.SQLException;
+
 public class App {
-    public static void main(String[] args) {
-        IDatabase database = MySQLDatabase.getInstance();
-        User admin = UserFactory.createUser(UserType.ADMIN);
+    public static void main(String[] args) throws SQLException {
+        User admin = UserFactory.createUser(UserType.ADMIN );
+        admin.importFile("/Users/ibtihaj/Desktop/words.txt");
+        System.out.println("vvvvv");
     }
 }

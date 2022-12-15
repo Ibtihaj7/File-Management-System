@@ -1,6 +1,8 @@
 package edu.najah.cap.Database.intf;
 
 
+import java.sql.ResultSet;
+
 public interface IDatabase {
-    void execute(String query);
+    public  ResultSet execute(String query);
 }

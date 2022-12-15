@@ -1,5 +1,6 @@
 package edu.najah.cap.users;
 
+import edu.najah.cap.Database.intf.IDatabase;
 import edu.najah.cap.FileRepository.impl.NormalDelete;
 import edu.najah.cap.FileRepository.impl.NormalExport;
 import edu.najah.cap.FileRepository.impl.NormalImport;

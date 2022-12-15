@@ -4,6 +4,8 @@ import edu.najah.cap.FileRepository.intf.Delete;
 import edu.najah.cap.FileRepository.intf.Export;
 import edu.najah.cap.FileRepository.intf.Import;
 
+import java.sql.SQLException;
+
 public class User {
     protected String name;
     protected String email;
@@ -14,7 +16,7 @@ public class User {
     protected Delete deleter;
 
 
-    public void importFile(String url){
+    public void importFile(String url) throws SQLException {
         if(importer != null){
             importer.importFile(url);
         }

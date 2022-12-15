@@ -2,12 +2,9 @@ package edu.najah.cap.Database.impl;
 
 import edu.najah.cap.Database.intf.IDatabase;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
-public class MySQLDatabase implements IDatabase {
+public class MySQLDatabase implements IDatabase{
 
     private static MySQLDatabase mySQLDatabase = null;
     private static Connection connection;
@@ -27,13 +24,16 @@ public class MySQLDatabase implements IDatabase {
         return mySQLDatabase;
     }
 
-    @Override
-    public synchronized void execute(String query) {
+@Override
+    public synchronized ResultSet execute(String query) {
+        ResultSet result = null;
         try{
-            statement.execute(query);
+            statement = connection.createStatement();
+            result = statement.executeQuery(query);
         }catch (Exception e){
             e.printStackTrace();
         }
+        return result;
     }
 
 }
