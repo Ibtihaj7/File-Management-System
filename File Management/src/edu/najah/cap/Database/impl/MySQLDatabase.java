@@ -4,7 +4,7 @@ import edu.najah.cap.Database.intf.IDatabase;
 
 import java.sql.*;
 
-public class MySQLDatabase implements IDatabase{
+public class MySQLDatabase implements IDatabase {
 
     private static MySQLDatabase mySQLDatabase = null;
     private static Connection connection;
@@ -24,7 +24,7 @@ public class MySQLDatabase implements IDatabase{
         return mySQLDatabase;
     }
 
-@Override
+    @Override
     public synchronized ResultSet execute(String query) {
         ResultSet result = null;
         try{

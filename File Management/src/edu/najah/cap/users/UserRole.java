@@ -1,5 +1,5 @@
 package edu.najah.cap.users;
 
-public enum UserType {
+public enum UserRole {
     ADMIN, STAFF, READER
 }
