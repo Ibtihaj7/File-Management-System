@@ -18,7 +18,7 @@ public class NormalImport implements Import {
     @Override
     public void importFile(String pathName) throws SQLException {
 
-        if(!Authorization.hasAdminPermission()||!Authorization.hasStaffPermission()){
+        if(!Authorization.hasAdminPermission()&&!Authorization.hasStaffPermission()){
             return;
         }
       File file = new File(pathName);
