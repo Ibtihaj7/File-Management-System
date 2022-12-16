@@ -4,6 +4,7 @@ import edu.najah.cap.FileRepository.intf.Delete;
 import edu.najah.cap.FileRepository.intf.Export;
 import edu.najah.cap.FileRepository.intf.Import;
 
+import java.io.File;
 import java.sql.SQLException;
 
 public class User {
@@ -26,10 +27,11 @@ public class User {
             deleter.delete(filename,category);
         }
     }
-    public void exportFile(String filename, String category){
+    public File exportFile(String filename, String category) throws SQLException {
         if(exporter != null){
-            exporter.export(filename,category);
+            return exporter.export(filename,category);
         }
+        return null;
     }
 
     public void setImporter(Import importer) {

@@ -27,9 +27,8 @@ public class NormalImport implements Import {
         }
 
         if(statement.next() == false){
-            System.out.println("success");
             try {
-                String query = "INSERT INTO files VALUES ('" + name + "','" + type + "'," + size + ",null,0);";
+                String query = "INSERT INTO files VALUES ('" + name + "','" + type + "'," + size + ",null,'"+pathName+"',0);";
                 MySQLDatabase.getInstance().execute(query);
                 System.out.println("The file has been imported successfully");
             }catch (Exception e){
@@ -42,7 +41,7 @@ public class NormalImport implements Import {
         System.out.print("your choice : ");
         int choice = input.nextInt();
         while(choice!= 1 && choice!= 2 ){
-            System.out.print("Bad number, try agin enter valid number : ");
+            System.out.print("Bad number, try again enter valid number : ");
             choice = input.nextInt();
         }
 
@@ -53,7 +52,7 @@ public class NormalImport implements Import {
                 statement.next();
             }
             newVersion+=1;
-            MySQLDatabase.getInstance().execute("INSERT INTO files VALUES ('" + name+"("+newVersion+")','" + type + "'," + size + "," + newVersion + ")" );
+            MySQLDatabase.getInstance().execute("INSERT INTO files VALUES ('" + name+"("+newVersion+")','" + type + "'," + size + ",'"+pathName+"'," + newVersion + ")" );
             System.out.println("The file has been imported successfully");
             return;
         }
@@ -61,6 +60,7 @@ public class NormalImport implements Import {
                 "SET\n" +
                 "`type` = "+type+",\n" +
                 "`size` = "+size+"\n" +
+                "`path` = "+pathName+"\n" +
                 "WHERE `name` = "+statement.getString("name")+";\n");
         System.out.println("The file has been imported successfully");
     }
