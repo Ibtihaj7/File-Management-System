@@ -6,7 +6,6 @@ import edu.najah.cap.Security.Authentication;
 import edu.najah.cap.users.User;
 import edu.najah.cap.users.UserFactory;
 import edu.najah.cap.users.UserRole;
-import java.io.File;
 import java.util.Scanner;
 
 public class App {
@@ -23,6 +22,5 @@ public class App {
             e.printStackTrace();
         }
         User user = UserFactory.createUser(UserRole.valueOf(Authentication.getUserRole()));
-
     }
 }
