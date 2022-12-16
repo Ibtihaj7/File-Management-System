@@ -17,7 +17,8 @@ public class NormalExport implements Export {
         }
         ResultSet statement = null;
         try{
-            statement = MySQLDatabase.getInstance().execute("SELECT * FROM files WHERE name = '"+filename+"' AND category = '"+category+"'");
+            String query = "select * from user WHERE name = '"+filename+"' AND category = '"+category+"'";
+            statement = MySQLDatabase.getInstance().execute(query);
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -25,6 +26,8 @@ public class NormalExport implements Export {
             System.out.println("there is no files");
             return null;
         }
+        System.out.println(statement.getString("path"));
+
         return ( new File(statement.getString("path")) );
     }
 }
