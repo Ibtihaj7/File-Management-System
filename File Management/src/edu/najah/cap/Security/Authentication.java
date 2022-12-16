@@ -1,0 +1,31 @@
+package edu.najah.cap.Security;
+
+import edu.najah.cap.Database.impl.MySQLDatabase;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+public abstract class Authentication {
+   private static String userRole;
+    public static void logIn(String userName,String password)  throws SQLException {
+        MySQLDatabase mySQLDatabase = MySQLDatabase.getInstance();
+        String query=null;
+        ResultSet resultQuery=null;
+        try {
+            query = "select * from user WHERE name = '" + userName + "' AND password= '" + password + "'";
+            resultQuery=mySQLDatabase.execute(query);
+            System.out.println("Login completed successfully.");
+        }catch (Exception e){
+         e.printStackTrace();
+        }
+
+        if(resultQuery.next()) {
+
+        userRole=resultQuery.getString("role");
+        }
+
+    }
+
+    public static String getUserRole() {
+        return userRole;
+    }
+}
