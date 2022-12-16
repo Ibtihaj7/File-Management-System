@@ -2,8 +2,7 @@ package edu.najah.cap;
 
 import edu.najah.cap.Database.impl.MySQLDatabase;
 import edu.najah.cap.Database.intf.IDatabase;
-import edu.najah.cap.FileRepository.impl.NormalImport;
-import edu.najah.cap.Security.Login;
+import edu.najah.cap.Security.Authentication;
 import edu.najah.cap.users.User;
 import edu.najah.cap.users.UserFactory;
 import edu.najah.cap.users.UserRole;
@@ -19,10 +18,10 @@ public class App {
         System.out.println("Enter the password.");
         String password=in.nextLine();
         try {
-            Login.logeUserInSystem(userName, password);
+            Authentication.logIn(userName, password);
         }catch (Exception e){
             e.printStackTrace();
         }
-        User admin = UserFactory.createUser(UserRole.ADMIN);
+        User user = UserFactory.createUser(UserRole.valueOf(Authentication.getUserRole()));
     }
 }
