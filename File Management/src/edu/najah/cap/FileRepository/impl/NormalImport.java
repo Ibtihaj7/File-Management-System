@@ -3,6 +3,9 @@ package edu.najah.cap.FileRepository.impl;
 import edu.najah.cap.Database.impl.MySQLDatabase;
 import edu.najah.cap.Database.intf.IDatabase;
 import edu.najah.cap.FileRepository.intf.Import;
+import edu.najah.cap.Security.Authentication;
+import edu.najah.cap.Security.Authorization;
+import edu.najah.cap.users.UserRole;
 
 import java.io.File;
 import java.sql.ResultSet;
@@ -14,6 +17,10 @@ public class NormalImport implements Import {
     Scanner input = new Scanner(System.in);
     @Override
     public void importFile(String pathName) throws SQLException {
+
+        if(!Authorization.hasAdminPermission()||!Authorization.hasStaffPermission()){
+            return;
+        }
       File file = new File(pathName);
       String name = file.getName().split("\\.")[0];
       String type = file.getName().split("\\.")[1];
