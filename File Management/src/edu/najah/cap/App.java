@@ -7,15 +7,16 @@ import edu.najah.cap.users.User;
 import edu.najah.cap.users.UserFactory;
 import edu.najah.cap.users.UserRole;
 
+import java.io.File;
 import java.util.Scanner;
 
 public class App {
     public static void main(String[] args) {
         IDatabase database = MySQLDatabase.getInstance();
         Scanner in=new Scanner(System.in);
-        System.out.println("Enter the user name.");
+        System.out.print("Enter the user name: ");
         String userName=in.nextLine();
-        System.out.println("Enter the password.");
+        System.out.print("Enter the password: ");
         String password=in.nextLine();
         try {
             Authentication.logIn(userName, password);
@@ -23,5 +24,6 @@ public class App {
             e.printStackTrace();
         }
         User user = UserFactory.createUser(UserRole.valueOf(Authentication.getUserRole()));
+
     }
 }
