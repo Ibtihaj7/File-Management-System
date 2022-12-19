@@ -6,7 +6,7 @@ import java.sql.SQLException;
 
 
 public abstract class Authentication {
-   private static String userRole;
+   private static String userRole=null;
     public static void logIn(String userName,String password)  throws SQLException {
         String query=null;
         ResultSet resultQuery=null;
@@ -19,11 +19,9 @@ public abstract class Authentication {
         }
 
         if(resultQuery.next()) {
-
-        userRole=resultQuery.getString("role");
+            userRole=resultQuery.getString("role");
             System.out.println(userRole);
         }
-
     }
 
     public static String getUserRole() {
