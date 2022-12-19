@@ -1,10 +1,10 @@
 package edu.najah.cap.FileRepository.impl;
 
 import edu.najah.cap.Database.impl.MySQLDatabase;
-import edu.najah.cap.FileRepository.intf.Delete;
+import edu.najah.cap.FileRepository.intf.DeleteBehaviour;
 import edu.najah.cap.Security.Authorization;
 
-public class NormalDelete implements Delete {
+public class Delete implements DeleteBehaviour {
 
     @Override
     public void delete(String filename, String category) {
@@ -17,6 +17,10 @@ public class NormalDelete implements Delete {
         }catch (Exception e){
             e.printStackTrace();
         }
+
         System.out.println("delete successfully");
+    }
+    public void delete(String filename) {
+        delete(filename,"null");
     }
 }

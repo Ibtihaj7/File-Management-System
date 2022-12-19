@@ -1,9 +1,8 @@
 package edu.najah.cap.users;
 
-import edu.najah.cap.FileRepository.intf.Delete;
-import edu.najah.cap.FileRepository.intf.Export;
-import edu.najah.cap.FileRepository.intf.Import;
-import edu.najah.cap.Security.Authorization;
+import edu.najah.cap.FileRepository.intf.DeleteBehaviour;
+import edu.najah.cap.FileRepository.intf.ExportBehaviour;
+import edu.najah.cap.FileRepository.intf.ImportBehaviour;
 
 import java.io.File;
 import java.sql.SQLException;
@@ -13,9 +12,9 @@ public class User {
     protected String email;
     protected String password;
 
-    protected Import importer;
-    protected Export exporter;
-    protected Delete deleter;
+    protected ImportBehaviour importer;
+    protected ExportBehaviour exporter;
+    protected DeleteBehaviour deleter;
 
 
     public void importFile(String url) throws SQLException {
@@ -35,15 +34,15 @@ public class User {
         return null;
     }
 
-    public void setImporter(Import importer) {
+    public void setImporter(ImportBehaviour importer) {
         this.importer = importer;
     }
 
-    public void setExporter(Export exporter) {
+    public void setExporter(ExportBehaviour exporter) {
         this.exporter = exporter;
     }
 
-    public void setDeleter(Delete deleter) {
+    public void setDeleter(DeleteBehaviour deleter) {
         this.deleter = deleter;
     }
 

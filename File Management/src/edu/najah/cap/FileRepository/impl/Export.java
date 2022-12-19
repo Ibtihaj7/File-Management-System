@@ -1,13 +1,13 @@
 package edu.najah.cap.FileRepository.impl;
 
 import edu.najah.cap.Database.impl.MySQLDatabase;
-import edu.najah.cap.FileRepository.intf.Export;
+import edu.najah.cap.FileRepository.intf.ExportBehaviour;
 
 import java.io.File;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class NormalExport implements Export {
+public class Export implements ExportBehaviour {
 
     @Override
     public File export(String filename, String category) throws SQLException {
@@ -25,5 +25,8 @@ public class NormalExport implements Export {
         }
 
         return ( new File(statement.getString("path")) );
+    }
+    public File export(String filename) throws SQLException {
+        return export(filename, "null");
     }
 }

@@ -1,15 +1,11 @@
 package edu.najah.cap;
 
-import edu.najah.cap.Database.impl.MySQLDatabase;
-import edu.najah.cap.Database.intf.IDatabase;
-import edu.najah.cap.Security.Authentication;
 import edu.najah.cap.users.User;
 import edu.najah.cap.users.UserFactory;
 import edu.najah.cap.users.UserRole;
 
 import java.io.File;
 import java.sql.SQLException;
-import java.util.Scanner;
 
 public class App {
     public static void main(String[] args) throws SQLException {
