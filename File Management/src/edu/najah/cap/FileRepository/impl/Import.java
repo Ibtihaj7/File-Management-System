@@ -10,20 +10,19 @@ import java.sql.SQLException;
 import java.util.Scanner;
 
 public class Import implements ImportBehaviour {
+    String query =null;
     Scanner input = new Scanner(System.in);
     @Override
     public void importFile(String pathName) throws SQLException {
 
-        if(!Authorization.hasAdminPermission()&&!Authorization.hasStaffPermission()){
-            return;
-        }
-      File file = new File(pathName);
-      String name = file.getName().split("\\.")[0];
-      String type = file.getName().split("\\.")[1];
-      int size = (int) file.length();
+        File file = new File(pathName);
+        String name = file.getName().split("\\.")[0];
+        String type = file.getName().split("\\.")[1];
+        int size = (int) file.length();
         ResultSet statement = null;
         try {
-            statement = MySQLDatabase.getInstance().selectQuery("SELECT * FROM files WHERE name LIKE '"+name+"(' OR name = '"+name+"' ");
+            query ="SELECT * FROM files WHERE name LIKE '"+name+"(' OR name = '"+name+"' ";
+            statement = MySQLDatabase.getInstance().selectQuery(query);
 
         }catch (Exception e){
             e.printStackTrace();
@@ -31,7 +30,7 @@ public class Import implements ImportBehaviour {
 
         if(!statement.next()){
             try {
-                String query = "INSERT INTO files VALUES ('" + name + "','" + type + "'," + size + ",null,'"+pathName+"',0);";
+                query = "INSERT INTO files VALUES ('" + name + "','" + type + "'," + size + ",null,'"+pathName+"',0);";
                 MySQLDatabase.getInstance().insertDeleteQuery(query);
                 System.out.println("The file has been imported successfully");
             }catch (Exception e){
@@ -51,26 +50,26 @@ public class Import implements ImportBehaviour {
             if (choice == 1) {
                 int newVersion = statement.getInt("version");
                 while (statement.next()) {
+                    System.out.println(statement.getString("name"));
                     newVersion = statement.getInt("version");
                     statement.next();
                 }
                 newVersion += 1;
-                MySQLDatabase.getInstance().insertDeleteQuery("INSERT INTO files VALUES ('" + name + "(" + newVersion + ")','" + type + "'," + size + ",'" + pathName + "'," + newVersion + ")");
+                String nameWithVersion = name+"("+newVersion+")";
+                query = "INSERT INTO files VALUES ('" + nameWithVersion + "','" + type + "'," + size + ",null,'"+pathName+"',"+newVersion+");";
+                MySQLDatabase.getInstance().insertDeleteQuery(query);
                 System.out.println("The file has been imported successfully");
                 return;
             }
-            if(Authorization.hasAdminPermission()) {
-                MySQLDatabase.getInstance().updateQuery("UPDATE files\n" +
-                        "SET\n" +
-                        "`type` = " + type + ",\n" +
-                        "`size` = " + size + "\n" +
-                        "`path` = " + pathName + "\n" +
-                        "WHERE `name` = " + statement.getString("name") + ";\n");
-                System.out.println("The file has been imported successfully");
-            }
-            else{
-                System.out.println("You don't have access for this");
-            }
+            MySQLDatabase.getInstance().updateQuery("UPDATE files\n" +
+                    "SET\n" +
+                    "`type` = " + type + ",\n" +
+                    "`size` = " + size + ",\n" +
+                    "`path` = " + pathName + "\n" +
+                    "WHERE `name` = " + statement.getString("name") + ";\n");
+            System.out.println("The file has been imported successfully");
+
+
         }
     }
 
