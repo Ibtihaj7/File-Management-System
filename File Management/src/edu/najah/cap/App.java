@@ -1,10 +1,9 @@
 package edu.najah.cap;
 
+import edu.najah.cap.File.SystemFile;
 import edu.najah.cap.users.User;
 import edu.najah.cap.users.UserFactory;
 import edu.najah.cap.users.UserRole;
-
-import java.io.File;
 import java.sql.SQLException;
 
 public class App {
@@ -22,7 +21,7 @@ public class App {
 //        }
 //        User user = UserFactory.createUser(UserRole.valueOf(Authentication.getUserRole()));
         User user = UserFactory.createUser(UserRole.ADMIN);
-        File file = user.exportFile("ibtihaj","category1");
+        SystemFile file = user.exportFile("ibtihaj","category1");
         System.out.println(file);
         user.importFile("/Users/ibtihaj/Desktop/words.txt");
     }

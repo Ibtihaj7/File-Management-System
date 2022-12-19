@@ -1,10 +1,11 @@
 package edu.najah.cap.users;
 
+import edu.najah.cap.File.SystemFile;
 import edu.najah.cap.FileRepository.intf.DeleteBehaviour;
 import edu.najah.cap.FileRepository.intf.ExportBehaviour;
 import edu.najah.cap.FileRepository.intf.ImportBehaviour;
 
-import java.io.File;
+
 import java.sql.SQLException;
 
 public class User {
@@ -27,7 +28,7 @@ public class User {
             deleter.delete(filename,category);
         }
     }
-    public File exportFile(String filename, String category) throws SQLException {
+    public SystemFile exportFile(String filename, String category) throws SQLException {
         if(exporter != null){
             return exporter.export(filename,category);
         }

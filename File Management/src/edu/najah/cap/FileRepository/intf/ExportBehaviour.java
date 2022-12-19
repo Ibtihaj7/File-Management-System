@@ -1,8 +1,10 @@
 package edu.najah.cap.FileRepository.intf;
 
-import java.io.File;
+import edu.najah.cap.File.SystemFile;
+
+
 import java.sql.SQLException;
 
 public interface ExportBehaviour {
-    File export(String filename, String category) throws SQLException;
+    SystemFile export(String filename, String category) throws SQLException;
 }
