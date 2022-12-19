@@ -23,6 +23,6 @@ public class App {
         User user = UserFactory.createUser(UserRole.ADMIN);
         SystemFile file = user.exportFile("ibtihaj","category1");
         System.out.println(file);
-        user.importFile("/Users/ibtihaj/Desktop/words.txt");
+        user.importFile("/Users/ibtihaj/Desktop/word.txt");
     }
 }
