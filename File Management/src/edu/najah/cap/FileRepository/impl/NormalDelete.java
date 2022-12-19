@@ -13,7 +13,7 @@ public class NormalDelete implements Delete {
                 return;
             }
             String query = "DELETE FROM files WHERE name = "+filename+" AND category = "+category+";";
-            MySQLDatabase.getInstance().execute(query);
+            MySQLDatabase.getInstance().insertDeleteQuery(query);
         }catch (Exception e){
             e.printStackTrace();
         }

@@ -12,7 +12,7 @@ public abstract class Authentication {
         ResultSet resultQuery=null;
         try {
             query = "select * from user WHERE name = '" + userName + "' AND password= '" + password + "'";
-            resultQuery=MySQLDatabase.getInstance().execute(query);
+            resultQuery=MySQLDatabase.getInstance().selectQuery(query);
             System.out.println("Login completed successfully.");
         }catch (Exception e){
          e.printStackTrace();

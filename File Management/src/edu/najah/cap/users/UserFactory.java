@@ -12,7 +12,7 @@ public class UserFactory {
         if(type.equals(UserRole.ADMIN)){
             user = new User();
             user.setImporter(new NormalImport());
-            user.setImporter(new OverwriteImport());
+//            user.setImporter(new OverwriteImport());
             user.setDeleter(new NormalDelete());
             user.setExporter(new NormalExport());
         }

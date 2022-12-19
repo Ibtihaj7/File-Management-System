@@ -8,7 +8,6 @@ public class MySQLDatabase implements IDatabase{
     private static final String ROOT = "root";
     private static final String PASSWORD = "password";
     private static final String URL = "jdbc:mysql://localhost:3306/File_Management";
-
     private static MySQLDatabase mySQLDatabase = null;
     private static Connection connection;
     private static Statement statement;
@@ -24,6 +23,7 @@ public class MySQLDatabase implements IDatabase{
         if(mySQLDatabase == null){
             try{
                 mySQLDatabase = new MySQLDatabase();
+                statement = connection.createStatement();
             }catch (Exception e){
                 e.printStackTrace();
             }
@@ -31,16 +31,30 @@ public class MySQLDatabase implements IDatabase{
         return mySQLDatabase;
     }
 
-@Override
-    public synchronized ResultSet execute(String query) {
+    @Override
+    public synchronized ResultSet selectQuery(String query) {
         ResultSet result = null;
         try{
-            statement = connection.createStatement();
             result = statement.executeQuery(query);
         }catch (Exception e){
             e.printStackTrace();
         }
         return result;
     }
-
+    @Override
+    public synchronized void insertDeleteQuery(String query) {
+        try{
+            statement.executeUpdate(query);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+    @Override
+    public synchronized void updateQuery(String query) {
+        try{
+            connection.prepareStatement(query);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
 }
