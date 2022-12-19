@@ -21,8 +21,9 @@ public class App {
 //        }
 //        User user = UserFactory.createUser(UserRole.valueOf(Authentication.getUserRole()));
         User user = UserFactory.createUser(UserRole.ADMIN);
-        SystemFile file = user.exportFile("ibtihaj","category1");
-        System.out.println(file);
-        user.importFile("/Users/ibtihaj/Desktop/word.txt");
+        SystemFile file = user.exportFile("word","null");
+        System.out.println(file.getName());
+//        user.importFile("/Users/ibtihaj/Desktop/word.txt");
+        user.viewFiles();
     }
 }
