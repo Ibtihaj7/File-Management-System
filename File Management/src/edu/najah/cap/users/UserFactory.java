@@ -4,9 +4,11 @@ import edu.najah.cap.FileRepository.impl.Delete;
 import edu.najah.cap.FileRepository.impl.Export;
 import edu.najah.cap.FileRepository.impl.Import;
 
+import java.sql.SQLException;
+
 public class UserFactory {
 
-    public static User createUser(UserRole type){
+    public static User createUser(UserRole type) throws SQLException {
         User user = null;
         if(type.equals(UserRole.ADMIN)){
             user = new User();
