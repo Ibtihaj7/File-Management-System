@@ -1,4 +1,4 @@
-package edu.najah.cap.File;
+package edu.najah.cap.FileRepository;
 
 public class SystemFile {
     private String name;

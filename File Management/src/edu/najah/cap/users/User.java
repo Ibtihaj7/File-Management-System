@@ -1,7 +1,7 @@
 package edu.najah.cap.users;
 
 import edu.najah.cap.Database.impl.MySQLDatabase;
-import edu.najah.cap.File.SystemFile;
+import edu.najah.cap.FileRepository.SystemFile;
 import edu.najah.cap.FileRepository.intf.DeleteBehaviour;
 import edu.najah.cap.FileRepository.intf.ExportBehaviour;
 import edu.najah.cap.FileRepository.intf.ImportBehaviour;
@@ -65,5 +65,9 @@ public class User {
             System.out.println("File " + i + " name: "+statement.getString("name")+" \t path : "+statement.getString("path")+" \t type : "+statement.getString("type")+" \t size : "+statement.getInt("size")+" \t category : "+statement.getString("category"));
         }
         System.out.println();
+    }
+
+    public SystemFile exportFile(String fileName) throws SQLException {
+        return exporter.export(fileName);
     }
 }

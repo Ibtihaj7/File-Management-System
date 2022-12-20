@@ -1,7 +1,8 @@
 package edu.najah.cap;
 
-import edu.najah.cap.File.SystemFile;
+import edu.najah.cap.FileRepository.SystemFile;
 import edu.najah.cap.Security.Authentication;
+import edu.najah.cap.VersionControl.VersionControl;
 import edu.najah.cap.users.User;
 import edu.najah.cap.users.UserFactory;
 import edu.najah.cap.users.UserRole;
@@ -22,9 +23,8 @@ public class App {
             e.printStackTrace();
         }
         User user = UserFactory.createUser(UserRole.valueOf(Authentication.getUserRole()));
-        SystemFile file = user.exportFile("word","null");
+        VersionControl.Rollback("karam");
+        SystemFile file = user.exportFile("karam");
         System.out.println(file.getName());
-//        user.importFile("/Users/ibtihaj/Desktop/word.txt");
-        user.viewFiles();
     }
 }

@@ -8,7 +8,7 @@ import java.sql.SQLException;
 public abstract class Authentication {
    private static String userRole=null;
     public static void logIn(String userName,String password)  throws SQLException {
-        String query=null;
+        String query;
         ResultSet resultQuery=null;
         try {
             query = "select * from user WHERE name = '" + userName + "' AND password= '" + password + "'";
@@ -20,7 +20,6 @@ public abstract class Authentication {
 
         if(resultQuery.next()) {
             userRole=resultQuery.getString("role");
-            System.out.println(userRole);
         }
     }
 

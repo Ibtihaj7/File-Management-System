@@ -1,7 +1,7 @@
 package edu.najah.cap.FileRepository.impl;
 
 import edu.najah.cap.Database.impl.MySQLDatabase;
-import edu.najah.cap.File.SystemFile;
+import edu.najah.cap.FileRepository.SystemFile;
 import edu.najah.cap.FileRepository.intf.ExportBehaviour;
 
 import java.sql.ResultSet;
@@ -25,6 +25,7 @@ public class Export implements ExportBehaviour {
             System.out.println("There is no file with this name or category.");
             return null;
         }
+        statement.last();
         String fileName=statement.getString("name"),
                 fileType=statement.getString("type"),
                 fileCategory=statement.getString("category"),
@@ -32,20 +33,10 @@ public class Export implements ExportBehaviour {
         int fileSize= statement.getInt("size"),
                 fileVersion=statement.getInt("version");
 
-        while(statement.next()){
-            if(statement.getInt("version") > fileVersion){
-                fileName=statement.getString("name");
-                fileType=statement.getString("type");
-                fileCategory=statement.getString("category");
-                filePath=statement.getString("path");
-                fileSize= statement.getInt("size");
-                fileVersion=statement.getInt("version");
-            }
-        }
 
         return ( new SystemFile(fileName,fileType, fileSize, fileCategory, filePath, fileVersion));
     }
     public SystemFile export(String filename) throws SQLException {
-        return export(filename, null);
+        return export(filename, "null");
     }
 }

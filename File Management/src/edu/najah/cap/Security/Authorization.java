@@ -4,18 +4,10 @@ import edu.najah.cap.users.UserRole;
 
 public abstract class Authorization {
    public static boolean hasAdminPermission(){
-       if(UserRole.valueOf(Authentication.getUserRole())!=UserRole.ADMIN) {
-           System.err.println("You do not have the admin authority to access.");
-           return false;
-       }
-       return true;
-    }
+       return UserRole.valueOf(Authentication.getUserRole()) == UserRole.ADMIN;
+   }
 
     public static boolean hasStaffPermission(){
-        if(UserRole.valueOf(Authentication.getUserRole())!=UserRole.STAFF) {
-            System.err.println("You do not have the staff authority to access.");
-            return false;
-        }
-        return true;
+        return UserRole.valueOf(Authentication.getUserRole()) == UserRole.STAFF;
     }
 }

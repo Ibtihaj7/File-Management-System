@@ -8,7 +8,7 @@ import java.sql.SQLException;
 
 public class UserFactory {
 
-    public static User createUser(UserRole type) throws SQLException {
+    public static User createUser(UserRole type) {
         User user = null;
         if(type.equals(UserRole.ADMIN)){
             user = new User();
@@ -23,7 +23,6 @@ public class UserFactory {
         }
         if(type.equals(UserRole.READER)){
             user = new User();
-            user.viewFiles();
         }
         return user;
     }
