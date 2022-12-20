@@ -1,9 +1,10 @@
 package edu.najah.cap.FileClassification.impl;
 
 import edu.najah.cap.Database.impl.MySQLDatabase;
-import edu.najah.cap.File.Ifile;
-import edu.najah.cap.File.SystemFile;
+
 import edu.najah.cap.FileClassification.FileType;
+import edu.najah.cap.FileRepository.Ifile;
+import edu.najah.cap.FileRepository.SystemFile;
 
 import java.sql.ResultSet;
 import java.util.ArrayList;
@@ -29,7 +30,7 @@ public class TypeClassification {
             while(statement.next()){
                 SystemFile file=new SystemFile(statement.getString("name"),statement.getString("type"),
                         statement.getInt("size"), statement.getString("category"),
-                        statement.getString("path"), statement.getString("version"));
+                        statement.getString("path"), statement.getInt("version"));
                 if (FileType.valueOf(file.getType().toUpperCase()).equals(FileType.TXT)){
                     textFiles.add(file);
                 }

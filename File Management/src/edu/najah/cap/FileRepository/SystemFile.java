@@ -1,6 +1,6 @@
 package edu.najah.cap.FileRepository;
 
-public class SystemFile {
+public class SystemFile implements Ifile {
     private String name;
     private int size;
     private String category;

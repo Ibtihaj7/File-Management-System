@@ -1,6 +1,7 @@
 package edu.najah.cap.FileClassification.Interface;
 
-import edu.najah.cap.File.Ifile;
+
+import edu.najah.cap.FileRepository.Ifile;
 
 import java.util.ArrayList;
 

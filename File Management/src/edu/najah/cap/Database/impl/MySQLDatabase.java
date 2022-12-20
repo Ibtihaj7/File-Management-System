@@ -6,7 +6,7 @@ import java.sql.*;
 
 public class MySQLDatabase implements Database {
     private static final String ROOT = "root";
-    private static final String PASSWORD = "password";
+    private static final String PASSWORD = "<password>";
     private static final String URL = "jdbc:mysql://localhost:3306/File_Management";
     private static MySQLDatabase mySQLDatabase = null;
     private static Connection connection;
