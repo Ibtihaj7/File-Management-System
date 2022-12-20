@@ -11,6 +11,8 @@ public class MySQLDatabase implements Database {
     private static MySQLDatabase mySQLDatabase = null;
     private static Connection connection;
     private static Statement statement;
+
+
     private MySQLDatabase()  {
         try {
             connection = DriverManager.getConnection(URL, ROOT, PASSWORD);
@@ -23,7 +25,7 @@ public class MySQLDatabase implements Database {
         if(mySQLDatabase == null){
             try{
                 mySQLDatabase = new MySQLDatabase();
-                statement = connection.createStatement();
+                statement = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_READ_ONLY);
             }catch (Exception e){
                 e.printStackTrace();
             }
@@ -57,4 +59,8 @@ public class MySQLDatabase implements Database {
             e.printStackTrace();
         }
     }
+    public static Connection getConnection() {
+        return connection;
+    }
+
 }

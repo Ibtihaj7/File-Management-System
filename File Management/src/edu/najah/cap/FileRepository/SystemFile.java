@@ -1,14 +1,14 @@
-package edu.najah.cap.File;
+package edu.najah.cap.FileRepository;
 
 public class SystemFile {
     private String name;
     private int size;
     private String category;
     private String type;
-    private String version;
+    private int version;
     private String path;
 
-    public SystemFile(String name, String type, int size, String category, String path, String version) {
+    public SystemFile(String name, String type, int size, String category, String path, int version) {
         this.name = name;
         this.type = type;
         this.size = size;
@@ -33,11 +33,11 @@ public class SystemFile {
 
     public void setType(String type) { this.type = type; }
 
-    public String getVersion() {
+    public int getVersion() {
         return version;
     }
 
-    public void setVersion(String version) {
+    public void setVersion(int version) {
         this.version = version;
     }
 
