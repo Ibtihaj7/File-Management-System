@@ -23,6 +23,11 @@ public class SystemFile implements Ifile {
 
     public int getSize() { return size; }
 
+    @Override
+    public void printName() {
+        System.out.print(this.name);
+    }
+
     public void setSize(int size) { this.size = size; }
 
     public String getCategory() { return category; }
