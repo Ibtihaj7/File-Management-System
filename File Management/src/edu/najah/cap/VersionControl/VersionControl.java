@@ -1,6 +1,7 @@
 package edu.najah.cap.VersionControl;
 
 import edu.najah.cap.Database.impl.MySQLDatabase;
+import edu.najah.cap.users.User;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -33,7 +34,7 @@ public abstract class VersionControl {
             System.out.println("The file has been imported successfully");
         }
     }
-    public static void Rollback(String fileName) throws SQLException {
+    public static void Rollback(String fileName, User createdBy) throws SQLException {
         ResultSet statement = null;
         String query;
         try {

@@ -3,9 +3,7 @@ package edu.najah.cap.users;
 import edu.najah.cap.Database.impl.MySQLDatabase;
 import edu.najah.cap.FileClassification.Classification;
 import edu.najah.cap.FileRepository.SystemFile;
-import edu.najah.cap.FileRepository.intf.DeleteBehaviour;
-import edu.najah.cap.FileRepository.intf.ExportBehaviour;
-import edu.najah.cap.FileRepository.intf.ImportBehaviour;
+
 
 
 import java.sql.ResultSet;
@@ -17,9 +15,6 @@ public class User {
     protected String email;
     protected String password;
 
-    protected ImportBehaviour importer;
-    protected ExportBehaviour exporter;
-    protected DeleteBehaviour deleter;
 
     protected Classification classification ;
 
@@ -47,39 +42,6 @@ public class User {
     }
 
 
-    public void importFile(String url) throws SQLException {
-        if(importer != null){
-            importer.importFile(url);
-        }
-    }
-    public void deleteFile(String filename, String category){
-        if(deleter != null){
-            deleter.delete(filename,category);
-        }
-    }
-    public SystemFile exportFile(String filename, String category) throws SQLException {
-        if(exporter != null){
-            return exporter.export(filename,category);
-        }
-        return null;
-    }
-
-    public void setImporter(ImportBehaviour importer) {
-        this.importer = importer;
-    }
-
-    public void setExporter(ExportBehaviour exporter) {
-        this.exporter = exporter;
-    }
-
-    public void setDeleter(DeleteBehaviour deleter) {
-        this.deleter = deleter;
-    }
-
-    public void setClassification(Classification classification) {
-        this.classification = classification;
-    }
-
     public void viewFiles() throws SQLException  {
         String query="select * from files";
         ResultSet statement = null;
@@ -98,7 +60,4 @@ public class User {
         System.out.println();
     }
 
-    public SystemFile exportFile(String fileName) throws SQLException {
-        return exporter.export(fileName);
-    }
 }
