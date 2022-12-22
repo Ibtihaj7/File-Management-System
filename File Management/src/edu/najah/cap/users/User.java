@@ -1,45 +1,19 @@
 package edu.najah.cap.users;
 
 import edu.najah.cap.Database.impl.MySQLDatabase;
-import edu.najah.cap.FileClassification.Classification;
-import edu.najah.cap.FileRepository.FileRepository;
-import edu.najah.cap.FileRepository.SystemFile;
-import edu.najah.cap.Services.FileService;
 
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Scanner;
+
 
 public class User {
-    private Classification classification ;
 
-    public User() {
-        classification=new Classification();
-    }
 
-    public void classifyFile(String fileName) throws SQLException {
-        Scanner input = new Scanner(System.in);
-        if (classification != null){
-            System.out.println("How would you like to classify "+fileName+" file ? (size , type or new category) enter one of them please ");
-            String choice = input.next();
-            if(!(choice.equals("size") || choice.equals("type") || choice.equals("new category"))){
-                System.out.println("bad choice");
-                return;
-            }
-            if(choice.equals("size")){
-                classification.classifySize(fileName);
-                return;
-            }
-            if(choice.equals("type")){
-                return;
-            }
-        }
-    }
-    public void PrintClassifiedFiles(){
-        classification.displaySizeClassification();
-    }
+
+   // public void PrintClassifiedFiles(){
+       // classification.displaySizeClassification();
+
 
     public void viewFiles() throws SQLException  {
         String query="select * from files";

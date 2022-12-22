@@ -1,7 +1,6 @@
 package edu.najah.cap.Services;
 
 import edu.najah.cap.Database.impl.MySQLDatabase;
-import edu.najah.cap.FileClassification.ClassificationType;
 import edu.najah.cap.FileRepository.SystemFile;
 import edu.najah.cap.Security.Authorization;
 import edu.najah.cap.VersionControl.VersionControl;
@@ -15,7 +14,7 @@ import java.util.Scanner;
 
 public abstract class FileService {
     static Scanner input = new Scanner(System.in);
-    public void doImport(String pathName, User createdBy) throws SQLException {
+    public static void doImport(String pathName, User createdBy) throws SQLException {
 
         if(!Authorization.hasAdminPermission()){
             return ;
@@ -64,7 +63,7 @@ public abstract class FileService {
         VersionControl.Enable(name,type,size,pathName,statement);
     }
 
-    public SystemFile doExportByFileName(String filename, User createdBy) throws SQLException {
+    public static SystemFile doExportByFileName(String filename, User createdBy) throws SQLException {
         if(!Authorization.hasAdminPermission()){
             return null;
         }
@@ -90,27 +89,27 @@ public abstract class FileService {
 
         return ( new SystemFile(fileName,fileType, fileSize, fileCategory, filePath, fileVersion));
     }
-    public ArrayList<SystemFile> doExportByCategory(String categoryName, String categoryType, User createdBy) {
-        if(!Authorization.hasAdminPermission()){
-            return null;
-        }
-        if (categoryType.equals("size"))
-            if(ClassificationType.getSizeClasification().containsKey(categoryName))
-                return ClassificationType.getSizeClasification().get(categoryName);
+//    public static ArrayList<SystemFile> doExportByCategory(String categoryName, String categoryType, User createdBy) {
+//        if(!Authorization.hasAdminPermission()){
+//            return null;
+//        }
+//        if (categoryType.equals("size"))
+//            if(ClassificationType.getSizeClasification().containsKey(categoryName))
+//                return ClassificationType.getSizeClasification().get(categoryName);
+//
+//        if (categoryType.equals("type"))
+//            if(ClassificationType.getTypeClasification().containsKey(categoryName))
+//                return ClassificationType.getTypeClasification().get(categoryName);
+//
+//        if (categoryType.equals("size"))
+//            if(ClassificationType.getNewCategoryClasification().containsKey(categoryName))
+//                return ClassificationType.getNewCategoryClasification().get(categoryName);
+//
+//        System.out.println("this category not exist");
+//        return null;
+//    }
 
-        if (categoryType.equals("type"))
-            if(ClassificationType.getTypeClasification().containsKey(categoryName))
-                return ClassificationType.getTypeClasification().get(categoryName);
-
-        if (categoryType.equals("size"))
-            if(ClassificationType.getNewCategoryClasification().containsKey(categoryName))
-                return ClassificationType.getNewCategoryClasification().get(categoryName);
-
-        System.out.println("this category not exist");
-        return null;
-    }
-
-    public void doDelete(String filename, User createdBy) {
+    public static void doDelete(String filename, User createdBy) {
         try {
             if(!Authorization.hasAdminPermission()){
                 return;
@@ -124,7 +123,7 @@ public abstract class FileService {
         System.out.println("delete successfully");
     }
 
-    public void view() throws SQLException  {
+    public static void view() throws SQLException  {
         String query="select * from files";
         ResultSet statement = null;
         try{
@@ -142,8 +141,9 @@ public abstract class FileService {
         System.out.println();
     }
 
-    public void doRollBack(String url, User createdBy) throws SQLException {
+    public static void doRollBack(String url, User createdBy) throws SQLException {
         VersionControl.Rollback(url, createdBy);
     }
+
 
 }
