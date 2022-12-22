@@ -1,6 +1,8 @@
 package edu.najah.cap.users;
 
 import edu.najah.cap.Database.impl.MySQLDatabase;
+import edu.najah.cap.Security.Authentication;
+import edu.najah.cap.Security.Authorization;
 
 
 import java.sql.ResultSet;
@@ -8,6 +10,44 @@ import java.sql.SQLException;
 
 
 public class User {
+private String email;
+    private String password;
+    private String name;
+    private String role;
+
+    public User(String email, String password) throws SQLException {
+        this.email = email;
+        this.password = password;
+        Authentication.logIn(email,password);
+        setRole();
+        permission();
+    }
+
+    private void setRole()throws SQLException {
+        this.role = Authentication.getUserRole();
+    }
+    public void permission(){
+        if(role.equals("ADMIN")){
+            Authorization.users.get("Admin").add(this);
+        }
+        if(role.equals("STAFF")){
+            Authorization.users.get("Staff").add(this);
+        }
+        if(role.equals("READER")){
+            Authorization.users.get("Reader").add(this);
+        }
+    }
+
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getRole() {
+
+        return role;
+    }
+
 
 
 

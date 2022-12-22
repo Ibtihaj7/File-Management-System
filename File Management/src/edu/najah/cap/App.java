@@ -19,16 +19,16 @@ import java.util.Scanner;
 public class App {
     public static void main(String[] args) throws SQLException, InvalidAlgorithmParameterException, IllegalBlockSizeException, NoSuchPaddingException, NoSuchAlgorithmException, IOException, BadPaddingException, InvalidKeyException {
         Scanner in=new Scanner(System.in);
-        System.out.print("Enter the user name : ");
-        String userName=in.nextLine();
+        System.out.print("Enter the user email: ");
+        String userEmail=in.nextLine();
         System.out.print("Enter the password : ");
         String password=in.nextLine();
         try {
-            Authentication.logIn(userName, password);
+            Authentication.logIn(userEmail, password);
         }catch (Exception e){
             e.printStackTrace();
         }
-        User user =new User();
+        User user =new User(userEmail,password);
         FileRepository fileRepository = new FileRepository("karam");
 //        fileRepository.importFile("/Users/ibtihaj/Desktop/words.txt",user);
 //        fileRepository.importFile("/Users/ibtihaj/Desktop/sss.txt",user);
@@ -39,11 +39,11 @@ public class App {
         SystemFile file1 = new SystemFile("ee","txt",100,"/Users/ibtihaj/Desktop/ee.txt",0);
         SystemFile file2 = new SystemFile("tt","txt",1000,"/Users/ibtihaj/Desktop/tt.txt",0);
         SystemFile file3 = new SystemFile("yy","txt",10,"/Users/ibtihaj/Desktop/yy.txt",0);
-
+/*
         fileRepository.classifyFileBySize(file1);
         fileRepository.classifyFileBySize(file2);
         fileRepository.classifyFileBySize(file3);
-
+*/
         FileClassifier.getFileSizeRanges().forEach((key,value)->{
             System.out.println(key+" : ");
             value.forEach(file->{

@@ -1,7 +1,7 @@
 package edu.najah.cap.VersionControl;
 
 import edu.najah.cap.Database.impl.MySQLDatabase;
-import edu.najah.cap.Security.ASEDecryptionEncryption;
+import edu.najah.cap.Security.AES;
 import edu.najah.cap.users.User;
 
 import javax.crypto.BadPaddingException;
@@ -17,7 +17,7 @@ import java.sql.SQLException;
 
 public abstract class VersionControl {
 
-    public static void Enable(String name, String type, int size, String path, ResultSet result) throws SQLException, NoSuchAlgorithmException, IOException, IllegalBlockSizeException,
+    public static void Enable(String name, String type, int size, String path, ResultSet result) throws SQLException, NoSuchAlgorithmException, IllegalBlockSizeException,
             InvalidKeyException, BadPaddingException, InvalidAlgorithmParameterException,
             NoSuchPaddingException {
         String query;
@@ -28,8 +28,8 @@ public abstract class VersionControl {
         }
         newVersion += 1;
         String nameWithVersion = name + "(" + newVersion + ")";
-      ASEDecryptionEncryption.Encrypt(nameWithVersion);
-        query = "INSERT INTO files VALUES ('" +  ASEDecryptionEncryption.Encrypt(nameWithVersion)+ "','" + type + "'," + size + ",null,'" + path+ "'," + newVersion + ");";
+     AES.encrypt(nameWithVersion);
+        query = "INSERT INTO files VALUES ('" +  AES.encrypt(nameWithVersion)+ "','" + type + "'," + size + ",null,'" + path+ "'," + newVersion + ");";
         MySQLDatabase.getInstance().insertDeleteQuery(query);
         System.out.println("The file has been imported successfully");
     }
@@ -49,7 +49,7 @@ public abstract class VersionControl {
         ResultSet statement = null;
         String query;
         try {
-            query = "SELECT * FROM files WHERE name LIKE '" + ASEDecryptionEncryption.Encrypt(fileName) + "(%' OR name = '" +ASEDecryptionEncryption.Encrypt(fileName) + "' ";
+            query = "SELECT * FROM files WHERE name LIKE '" + AES.encrypt(fileName) + "(%' OR name = '" +AES.encrypt(fileName) + "' ";
             statement = MySQLDatabase.getInstance().selectQuery(query);
 
         } catch (Exception e) {
