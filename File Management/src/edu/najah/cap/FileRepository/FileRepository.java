@@ -2,51 +2,45 @@ package edu.najah.cap.FileRepository;
 
 import edu.najah.cap.Services.FileService;
 import edu.najah.cap.users.User;
+
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+import java.io.IOException;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
-import java.util.ArrayList;
 
 public class FileRepository {
     private String name;
+    private static FileService fileService;
 
-    public FileRepository(String name) { this.name = name; }
-
-    public void importFile(String url, User createdBy) throws SQLException {
-        FileService.doImport(url,createdBy);
-    }
-    public SystemFile exportFileByName(String url,User createdBy) throws SQLException {
-       return FileService.doExportByFileName(url,createdBy);
-    }
-//    public ArrayList<SystemFile> exportFileByCategory(String categoryName, String categoryType,User createdBy) throws SQLException {
-//        return FileService.doExportByCategory(categoryName,categoryType,createdBy);
-//    }
-    public void deleteFile(String url,User createdBy) {
-        FileService.doDelete(url,createdBy);
+    public FileRepository(String name) {
+        this.name = name;
     }
 
-    public void viewFiles() throws SQLException {
-        FileService.view();
+    private void importFile(String url, User createdBy) throws SQLException , NoSuchAlgorithmException, IOException, IllegalBlockSizeException,
+            InvalidKeyException, BadPaddingException, InvalidAlgorithmParameterException,
+            NoSuchPaddingException {
+        fileService.doImport(url,createdBy);
+    }
+    private SystemFile exportFile(String url, User createdBy) throws SQLException , NoSuchAlgorithmException, IOException, IllegalBlockSizeException,
+            InvalidKeyException, BadPaddingException, InvalidAlgorithmParameterException,
+            NoSuchPaddingException{
+       return fileService.doExport(url, createdBy);
+    }
+    private void deleteFile(String url,User createdBy) {
+        fileService.doDelete(url,createdBy);
     }
 
-    public void RollBack(String url,User createdBy) throws SQLException {
-        FileService.doRollBack(url,createdBy);
-    }
-//    public void classifyFile(String fileName) throws SQLException {
-//        Scanner input = new Scanner(System.in);
-//        if (classification != null){
-//            System.out.println("How would you like to classify "+fileName+" file ? (size , type or new category) enter one of them please ");
-//            String choice = input.next();
-//            if(!(choice.equals("size") || choice.equals("type") || choice.equals("new category"))){
-//                System.out.println("bad choice");
-//                return;
-//            }
-//            if(choice.equals("size")){
-//                classification.classifySize(fileName);
-//                return;
-//            }
-//            if(choice.equals("type")){
-//                return;
-//            }
-//        }
+    private void viewFiles() throws SQLException, NoSuchAlgorithmException, IOException, IllegalBlockSizeException,
+            InvalidKeyException, BadPaddingException, InvalidAlgorithmParameterException,
+            NoSuchPaddingException {
+        fileService.view();
     }
 
-
+    private void RollBack(String url,User createdBy) throws SQLException {
+        fileService.doRollBack(url,createdBy);
+    }
+}

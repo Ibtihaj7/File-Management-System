@@ -34,9 +34,12 @@ public class App {
 //        System.out.println(file);
 //        System.out.println(file2);
         FileRepository fileRepository = new FileRepository("karam");
+        /*
         fileRepository.importFile("C:\\Users\\HP\\Desktop\\karam.txt", user);
         SystemFile file = fileRepository.exportFileByName("karam",user);
         System.out.println(file);
+
+         */
 
     }
 

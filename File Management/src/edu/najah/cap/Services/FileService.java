@@ -2,32 +2,41 @@ package edu.najah.cap.Services;
 
 import edu.najah.cap.Database.impl.MySQLDatabase;
 import edu.najah.cap.FileRepository.SystemFile;
+import edu.najah.cap.Security.ASEDecryptionEncryption;
 import edu.najah.cap.Security.Authorization;
 import edu.najah.cap.VersionControl.VersionControl;
 import edu.najah.cap.users.User;
 
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 import java.io.File;
+import java.io.IOException;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Scanner;
 
 public abstract class FileService {
     static Scanner input = new Scanner(System.in);
-    public static void doImport(String pathName, User createdBy) throws SQLException {
+    public void doImport(String pathName, User createdBy) throws SQLException , NoSuchAlgorithmException, IOException, IllegalBlockSizeException,
+            InvalidKeyException, BadPaddingException, InvalidAlgorithmParameterException, NoSuchPaddingException {
 
-        if(!Authorization.hasAdminPermission()){
-            return ;
-        }
+//        if(Authorization.hasStaffPermission() || Authorization.hasStaffPermission()){
+//            return;
+//        }
         File file = new File(pathName);
         String name = file.getName().split("\\.")[0];
         String type = file.getName().split("\\.")[1];
         int size = (int) file.length();
-
+        String encryptedFileName= ASEDecryptionEncryption.Encrypt(name);
+        String encryptedFilePath= ASEDecryptionEncryption.Encrypt(pathName);
         ResultSet statement = null;
         String query;
         try {
-            query = "SELECT * FROM files WHERE name LIKE '" + name + "(%' OR name = '" + name + "' ";
+            query = "SELECT * FROM files WHERE name LIKE '" +  encryptedFileName + "(%' OR name = '" +  encryptedFileName + "' ";
             statement = MySQLDatabase.getInstance().selectQuery(query);
 
         } catch (Exception e) {
@@ -37,7 +46,7 @@ public abstract class FileService {
 
         if (!statement1.next()) {
             try {
-                query = "INSERT INTO files VALUES ('" + name + "','" + type + "'," + size + ",'" + pathName + "',0);";
+                query = "INSERT INTO files VALUES ('" +  encryptedFileName + "','" + type + "'," + size + ",null,'" + encryptedFilePath+ "',0);";
                 MySQLDatabase.getInstance().insertDeleteQuery(query);
                 System.out.println("The file has been imported successfully");
             } catch (Exception e) {
@@ -52,69 +61,51 @@ public abstract class FileService {
             String choice = input.next();
 
             if (choice.equals("no")) {
-                VersionControl.Enable(name,type,size,pathName,statement);
+                VersionControl.Enable(name,type,size,encryptedFilePath,statement);
                 return;
             }
             if(choice.equals("yes")){
-                VersionControl.Disable(type,size,pathName,statement);
+                VersionControl.Disable(type,size,encryptedFilePath,statement);
                 return;
             }
         }
-        VersionControl.Enable(name,type,size,pathName,statement);
+        VersionControl.Enable(name,type,size,encryptedFilePath,statement);
     }
 
-    public static SystemFile doExportByFileName(String filename, User createdBy) throws SQLException {
-        if(!Authorization.hasAdminPermission()){
-            return null;
-        }
+    public SystemFile doExport(String filename, User createdBy) throws SQLException  , NoSuchAlgorithmException, IOException, IllegalBlockSizeException,
+            InvalidKeyException, BadPaddingException, InvalidAlgorithmParameterException, NoSuchPaddingException{
         ResultSet statement = null;
+        String encryptedFileName= ASEDecryptionEncryption.Encrypt(filename);
+
         try{
-            String query =  "SELECT * FROM files WHERE (name LIKE '"+filename+"(%' OR name = '"+filename+"')";
+            String query =  "SELECT * FROM files WHERE (name LIKE '"+encryptedFileName+"(%' OR name = '"+encryptedFileName+"')";
             statement = MySQLDatabase.getInstance().selectQuery(query);
         }catch (Exception e){
             e.printStackTrace();
         }
 
         if(!statement.next()){
-            System.out.println("There is no file with this name.");
+            System.out.println("There is no file with this name or category.");
             return null;
         }
         statement.last();
-        String fileName=statement.getString("name"),
+        String fileName=ASEDecryptionEncryption.decrypt(statement.getString("name")),
                 fileType=statement.getString("type"),
                 fileCategory=statement.getString("category"),
-                filePath=statement.getString("path");
+                filePath=ASEDecryptionEncryption.decrypt(statement.getString("path"));
         int fileSize= statement.getInt("size"),
                 fileVersion=statement.getInt("version");
 
+
         return ( new SystemFile(fileName,fileType, fileSize, fileCategory, filePath, fileVersion));
     }
-//    public static ArrayList<SystemFile> doExportByCategory(String categoryName, String categoryType, User createdBy) {
-//        if(!Authorization.hasAdminPermission()){
-//            return null;
-//        }
-//        if (categoryType.equals("size"))
-//            if(ClassificationType.getSizeClasification().containsKey(categoryName))
-//                return ClassificationType.getSizeClasification().get(categoryName);
-//
-//        if (categoryType.equals("type"))
-//            if(ClassificationType.getTypeClasification().containsKey(categoryName))
-//                return ClassificationType.getTypeClasification().get(categoryName);
-//
-//        if (categoryType.equals("size"))
-//            if(ClassificationType.getNewCategoryClasification().containsKey(categoryName))
-//                return ClassificationType.getNewCategoryClasification().get(categoryName);
-//
-//        System.out.println("this category not exist");
-//        return null;
-//    }
 
-    public static void doDelete(String filename, User createdBy) {
+    public void doDelete(String filename, User createdBy) {
         try {
             if(!Authorization.hasAdminPermission()){
                 return;
             }
-            String query = "DELETE FROM files WHERE name = "+filename+";";
+            String query = "DELETE FROM files WHERE name = "+ASEDecryptionEncryption.Encrypt(filename)+";";
             MySQLDatabase.getInstance().insertDeleteQuery(query);
         }catch (Exception e){
             e.printStackTrace();
@@ -123,7 +114,8 @@ public abstract class FileService {
         System.out.println("delete successfully");
     }
 
-    public static void view() throws SQLException  {
+    public void view() throws SQLException  , NoSuchAlgorithmException, IOException, IllegalBlockSizeException,
+            InvalidKeyException, BadPaddingException, InvalidAlgorithmParameterException, NoSuchPaddingException {
         String query="select * from files";
         ResultSet statement = null;
         try{
@@ -136,14 +128,13 @@ public abstract class FileService {
             return;
         }
         for (int i = 1; statement.next(); i++) {
-            System.out.println("File " + i + " name: "+statement.getString("name")+" \t path : "+statement.getString("path")+" \t type : "+statement.getString("type")+" \t size : "+statement.getInt("size")+" \t category : "+statement.getString("category"));
+            System.out.println("File " + i + " name: "+ASEDecryptionEncryption.decrypt(statement.getString("name"))+" \t path : "+ASEDecryptionEncryption.decrypt(statement.getString("path"))+" \t type : "+statement.getString("type")+" \t size : "+statement.getInt("size")+" \t category : "+statement.getString("category"));
         }
         System.out.println();
     }
 
-    public static void doRollBack(String url, User createdBy) throws SQLException {
+    public void doRollBack(String url, User createdBy) throws SQLException {
         VersionControl.Rollback(url, createdBy);
     }
-
 
 }
