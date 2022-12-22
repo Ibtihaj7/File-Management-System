@@ -4,12 +4,9 @@ import edu.najah.cap.FileClassification.Interface.IClassification;
 
 import java.sql.SQLException;
 
-public class TypeClassification implements IClassification {
-
-
+public class NewCategoryClassification implements IClassification {
     @Override
     public void addClassification(String fileName) throws SQLException {
 
     }
 }
-

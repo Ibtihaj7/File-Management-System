@@ -53,4 +53,16 @@ public class SystemFile implements Ifile {
     public void setPath(String path) {
         this.path = path;
     }
+
+    @Override
+    public String toString() {
+        return "File information{" +
+                "name : '" + name + "\t\'" +
+                ", size : " + size +"\t\'"+
+                ", category : '" + category + "\t\'"+
+                ", type : '" + type + "\t\'"+
+                ", version : " + version +"\t\'"+
+                ", path : '" + path + "\t\'"+
+                '}';
+    }
 }

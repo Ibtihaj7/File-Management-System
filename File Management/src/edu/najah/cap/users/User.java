@@ -1,6 +1,7 @@
 package edu.najah.cap.users;
 
 import edu.najah.cap.Database.impl.MySQLDatabase;
+import edu.najah.cap.FileClassification.Classification;
 import edu.najah.cap.FileRepository.SystemFile;
 import edu.najah.cap.FileRepository.intf.DeleteBehaviour;
 import edu.najah.cap.FileRepository.intf.ExportBehaviour;
@@ -9,6 +10,7 @@ import edu.najah.cap.FileRepository.intf.ImportBehaviour;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Scanner;
 
 public class User {
     protected String name;
@@ -18,6 +20,31 @@ public class User {
     protected ImportBehaviour importer;
     protected ExportBehaviour exporter;
     protected DeleteBehaviour deleter;
+
+    protected Classification classification ;
+
+    public void classifyFile(String fileName) throws SQLException {
+        Scanner input = new Scanner(System.in);
+        if (classification != null){
+            System.out.println("How would you like to classify "+fileName+" file ? (size , type or new category) enter one of them please ");
+            String choice = input.next();
+            if(!(choice.equals("size") || choice.equals("type") || choice.equals("new category"))){
+                System.out.println("bad choice");
+                return;
+            }
+            if(choice.equals("size")){
+                classification.classifySize(fileName);
+                return;
+            }
+            if(choice.equals("type")){
+                return;
+            }
+
+        }
+    }
+    public void PrintClassifiedFiles(){
+        classification.displaySizeClassification();
+    }
 
 
     public void importFile(String url) throws SQLException {
@@ -47,6 +74,10 @@ public class User {
 
     public void setDeleter(DeleteBehaviour deleter) {
         this.deleter = deleter;
+    }
+
+    public void setClassification(Classification classification) {
+        this.classification = classification;
     }
 
     public void viewFiles() throws SQLException  {
