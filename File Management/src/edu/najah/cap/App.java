@@ -3,13 +3,21 @@ package edu.najah.cap;
 import edu.najah.cap.FileRepository.FileRepository;
 import edu.najah.cap.FileRepository.SystemFile;
 import edu.najah.cap.Security.Authentication;
+import edu.najah.cap.classification.FileClassifier;
 import edu.najah.cap.users.User;
 
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+import java.io.IOException;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
 import java.util.Scanner;
 
 public class App {
-    public static void main(String[] args) throws SQLException {
+    public static void main(String[] args) throws SQLException, InvalidAlgorithmParameterException, IllegalBlockSizeException, NoSuchPaddingException, NoSuchAlgorithmException, IOException, BadPaddingException, InvalidKeyException {
         Scanner in=new Scanner(System.in);
         System.out.print("Enter the user name : ");
         String userName=in.nextLine();
@@ -21,25 +29,28 @@ public class App {
             e.printStackTrace();
         }
         User user =new User();
-//        user.importFile("/Users/ibtihaj/Desktop/words.txt",new User());
-//        user.importFile("/Users/ibtihaj/Desktop/file.pdf",new User());
-//        user.importFile("/Users/ibtihaj/Desktop/sss.txt",new User());
-//        user.importFile("/Users/ibtihaj/Desktop/ddd.txt",new User());
-//        user.importFile("/Users/ibtihaj/Desktop/fff.txt",new User());
-//
-//        System.out.println("_________________");
-//        SystemFile file = user.exportFileByName("words",new User());
-//        ArrayList<SystemFile> file2 = user.exportFileByCategory("0","size",new User());
-
-//        System.out.println(file);
-//        System.out.println(file2);
         FileRepository fileRepository = new FileRepository("karam");
-        /*
-        fileRepository.importFile("C:\\Users\\HP\\Desktop\\karam.txt", user);
-        SystemFile file = fileRepository.exportFileByName("karam",user);
-        System.out.println(file);
+//        fileRepository.importFile("/Users/ibtihaj/Desktop/words.txt",user);
+//        fileRepository.importFile("/Users/ibtihaj/Desktop/sss.txt",user);
+//        fileRepository.importFile("/Users/ibtihaj/Desktop/www.txt",user);
+//        fileRepository.importFile("/Users/ibtihaj/Desktop/qqq.txt",user);
+//        fileRepository.importFile("/Users/ibtihaj/Desktop/aaa.txt",user);
+//        fileRepository.importFile("/Users/ibtihaj/Desktop/zzz.txt",user);
+        SystemFile file1 = new SystemFile("ee","txt",100,"/Users/ibtihaj/Desktop/ee.txt",0);
+        SystemFile file2 = new SystemFile("tt","txt",1000,"/Users/ibtihaj/Desktop/tt.txt",0);
+        SystemFile file3 = new SystemFile("yy","txt",10,"/Users/ibtihaj/Desktop/yy.txt",0);
 
-         */
+        fileRepository.classifyFileBySize(file1);
+        fileRepository.classifyFileBySize(file2);
+        fileRepository.classifyFileBySize(file3);
+
+        FileClassifier.getFileSizeRanges().forEach((key,value)->{
+            System.out.println(key+" : ");
+            value.forEach(file->{
+                System.out.println(file);
+            });
+        });
+        System.out.println(file1);
 
     }
 

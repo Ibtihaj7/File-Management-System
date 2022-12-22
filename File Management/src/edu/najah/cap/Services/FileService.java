@@ -5,6 +5,7 @@ import edu.najah.cap.FileRepository.SystemFile;
 import edu.najah.cap.Security.ASEDecryptionEncryption;
 import edu.najah.cap.Security.Authorization;
 import edu.najah.cap.VersionControl.VersionControl;
+import edu.najah.cap.classification.FileClassifier;
 import edu.najah.cap.users.User;
 
 import javax.crypto.BadPaddingException;
@@ -17,18 +18,22 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Scanner;
 
-public abstract class FileService {
+public  class FileService {
     static Scanner input = new Scanner(System.in);
-    public void doImport(String pathName, User createdBy) throws SQLException , NoSuchAlgorithmException, IOException, IllegalBlockSizeException,
+    public static void doImport(String pathName, User createdBy) throws SQLException , NoSuchAlgorithmException, IOException, IllegalBlockSizeException,
             InvalidKeyException, BadPaddingException, InvalidAlgorithmParameterException, NoSuchPaddingException {
 
 //        if(Authorization.hasStaffPermission() || Authorization.hasStaffPermission()){
 //            return;
 //        }
         File file = new File(pathName);
-        String name = file.getName().split("\\.")[0];
+
+        int index = pathName.lastIndexOf("/");
+        String filenameWin = pathName.substring(index + 1);
+        String name = filenameWin.split("\\.")[0];
         String type = file.getName().split("\\.")[1];
         int size = (int) file.length();
         String encryptedFileName= ASEDecryptionEncryption.Encrypt(name);
@@ -46,7 +51,7 @@ public abstract class FileService {
 
         if (!statement1.next()) {
             try {
-                query = "INSERT INTO files VALUES ('" +  encryptedFileName + "','" + type + "'," + size + ",null,'" + encryptedFilePath+ "',0);";
+                query = "INSERT INTO files VALUES ('" +  encryptedFileName + "','" + type + "'," + size + ",'" + encryptedFilePath+ "',0);";
                 MySQLDatabase.getInstance().insertDeleteQuery(query);
                 System.out.println("The file has been imported successfully");
             } catch (Exception e) {
@@ -72,10 +77,11 @@ public abstract class FileService {
         VersionControl.Enable(name,type,size,encryptedFilePath,statement);
     }
 
-    public SystemFile doExport(String filename, User createdBy) throws SQLException  , NoSuchAlgorithmException, IOException, IllegalBlockSizeException,
+    public static SystemFile doExportByName(String filename, User createdBy) throws SQLException  , NoSuchAlgorithmException, IOException, IllegalBlockSizeException,
             InvalidKeyException, BadPaddingException, InvalidAlgorithmParameterException, NoSuchPaddingException{
         ResultSet statement = null;
         String encryptedFileName= ASEDecryptionEncryption.Encrypt(filename);
+        System.out.println("encryptedFileName   -> "+encryptedFileName);
 
         try{
             String query =  "SELECT * FROM files WHERE (name LIKE '"+encryptedFileName+"(%' OR name = '"+encryptedFileName+"')";
@@ -85,10 +91,14 @@ public abstract class FileService {
         }
 
         if(!statement.next()){
-            System.out.println("There is no file with this name or category.");
+            System.out.println("There is no file with this name.");
             return null;
         }
+
         statement.last();
+
+        System.out.println("decript -> "+ASEDecryptionEncryption.decrypt(statement.getString("name")));
+
         String fileName=ASEDecryptionEncryption.decrypt(statement.getString("name")),
                 fileType=statement.getString("type"),
                 fileCategory=statement.getString("category"),
@@ -96,11 +106,27 @@ public abstract class FileService {
         int fileSize= statement.getInt("size"),
                 fileVersion=statement.getInt("version");
 
-
-        return ( new SystemFile(fileName,fileType, fileSize, fileCategory, filePath, fileVersion));
+        return ( new SystemFile(fileName,fileType, fileSize, filePath, fileVersion));
     }
 
-    public void doDelete(String filename, User createdBy) {
+    public static ArrayList<SystemFile> doExportByCategory(String categoryName,String categoryType ) {
+        if(categoryType.equals("size"))
+            if(FileClassifier.getFileSizeRanges().containsKey(categoryName))
+                return FileClassifier.getFileSizeRanges().get(categoryName);
+
+        if(categoryType.equals("type"))
+            if(FileClassifier.getFileTypeRuler().containsKey(categoryName))
+                return FileClassifier.getFileTypeRuler().get(categoryName);
+
+        if(categoryType.equals("category"))
+            if(FileClassifier.getFileCategoryRulers().containsKey(categoryName))
+                return FileClassifier.getFileCategoryRulers().get(categoryName);
+
+        System.out.println("Error in entering category name or category type .");
+        return null;
+    }
+
+    public static void doDeleteByName(String filename, User createdBy) {
         try {
             if(!Authorization.hasAdminPermission()){
                 return;
@@ -113,8 +139,20 @@ public abstract class FileService {
 
         System.out.println("delete successfully");
     }
+    public static void doDeleteByCategory(String categoryName,String categoryType) {
+        if(categoryType.equals("size")){
 
-    public void view() throws SQLException  , NoSuchAlgorithmException, IOException, IllegalBlockSizeException,
+        }
+        if(categoryType.equals("type")){
+
+        }
+        if(categoryType.equals("category")){
+
+        }
+
+    }
+
+    public static void view() throws SQLException  , NoSuchAlgorithmException, IOException, IllegalBlockSizeException,
             InvalidKeyException, BadPaddingException, InvalidAlgorithmParameterException, NoSuchPaddingException {
         String query="select * from files";
         ResultSet statement = null;
@@ -132,8 +170,18 @@ public abstract class FileService {
         }
         System.out.println();
     }
+    public static void viewSizeRating(){
 
-    public void doRollBack(String url, User createdBy) throws SQLException {
+    }
+    public static void viewTypeRating(){
+
+    }
+    public static void viewCategoryRating(){
+
+    }
+
+
+    public static void doRollBack(String url, User createdBy) throws SQLException {
         VersionControl.Rollback(url, createdBy);
     }
 
