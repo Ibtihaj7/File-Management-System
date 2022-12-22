@@ -2,21 +2,22 @@ package edu.najah.cap.users;
 
 import edu.najah.cap.Database.impl.MySQLDatabase;
 import edu.najah.cap.FileClassification.Classification;
+import edu.najah.cap.FileRepository.FileRepository;
 import edu.najah.cap.FileRepository.SystemFile;
-
+import edu.najah.cap.Services.FileService;
 
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class User {
-    protected String name;
-    protected String email;
-    protected String password;
+    private Classification classification ;
 
-
-    protected Classification classification ;
+    public User() {
+        classification=new Classification();
+    }
 
     public void classifyFile(String fileName) throws SQLException {
         Scanner input = new Scanner(System.in);
@@ -34,13 +35,11 @@ public class User {
             if(choice.equals("type")){
                 return;
             }
-
         }
     }
     public void PrintClassifiedFiles(){
         classification.displaySizeClassification();
     }
-
 
     public void viewFiles() throws SQLException  {
         String query="select * from files";

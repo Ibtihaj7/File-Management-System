@@ -17,7 +17,6 @@ public class SystemFile{
         this.version = version;
     }
 
-
     @Override
     public String toString() {
         return "File information{" +

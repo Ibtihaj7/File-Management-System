@@ -1,6 +1,7 @@
 package edu.najah.cap.Services;
 
 import edu.najah.cap.Database.impl.MySQLDatabase;
+import edu.najah.cap.FileClassification.ClassificationType;
 import edu.najah.cap.FileRepository.SystemFile;
 import edu.najah.cap.Security.Authorization;
 import edu.najah.cap.VersionControl.VersionControl;
@@ -9,15 +10,16 @@ import edu.najah.cap.users.User;
 import java.io.File;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public abstract class FileService {
     static Scanner input = new Scanner(System.in);
     public void doImport(String pathName, User createdBy) throws SQLException {
 
-//        if(Authorization.hasStaffPermission() || Authorization.hasStaffPermission()){
-//            return;
-//        }
+        if(!Authorization.hasAdminPermission()){
+            return ;
+        }
         File file = new File(pathName);
         String name = file.getName().split("\\.")[0];
         String type = file.getName().split("\\.")[1];
@@ -36,7 +38,7 @@ public abstract class FileService {
 
         if (!statement1.next()) {
             try {
-                query = "INSERT INTO files VALUES ('" + name + "','" + type + "'," + size + ",null,'" + pathName + "',0);";
+                query = "INSERT INTO files VALUES ('" + name + "','" + type + "'," + size + ",'" + pathName + "',0);";
                 MySQLDatabase.getInstance().insertDeleteQuery(query);
                 System.out.println("The file has been imported successfully");
             } catch (Exception e) {
@@ -62,7 +64,10 @@ public abstract class FileService {
         VersionControl.Enable(name,type,size,pathName,statement);
     }
 
-    public SystemFile doExport(String filename, User createdBy) throws SQLException {
+    public SystemFile doExportByFileName(String filename, User createdBy) throws SQLException {
+        if(!Authorization.hasAdminPermission()){
+            return null;
+        }
         ResultSet statement = null;
         try{
             String query =  "SELECT * FROM files WHERE (name LIKE '"+filename+"(%' OR name = '"+filename+"')";
@@ -72,7 +77,7 @@ public abstract class FileService {
         }
 
         if(!statement.next()){
-            System.out.println("There is no file with this name or category.");
+            System.out.println("There is no file with this name.");
             return null;
         }
         statement.last();
@@ -83,8 +88,26 @@ public abstract class FileService {
         int fileSize= statement.getInt("size"),
                 fileVersion=statement.getInt("version");
 
-
         return ( new SystemFile(fileName,fileType, fileSize, fileCategory, filePath, fileVersion));
+    }
+    public ArrayList<SystemFile> doExportByCategory(String categoryName, String categoryType, User createdBy) {
+        if(!Authorization.hasAdminPermission()){
+            return null;
+        }
+        if (categoryType.equals("size"))
+            if(ClassificationType.getSizeClasification().containsKey(categoryName))
+                return ClassificationType.getSizeClasification().get(categoryName);
+
+        if (categoryType.equals("type"))
+            if(ClassificationType.getTypeClasification().containsKey(categoryName))
+                return ClassificationType.getTypeClasification().get(categoryName);
+
+        if (categoryType.equals("size"))
+            if(ClassificationType.getNewCategoryClasification().containsKey(categoryName))
+                return ClassificationType.getNewCategoryClasification().get(categoryName);
+
+        System.out.println("this category not exist");
+        return null;
     }
 
     public void doDelete(String filename, User createdBy) {

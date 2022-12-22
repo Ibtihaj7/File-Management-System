@@ -37,10 +37,10 @@ public class SizeClassification implements IClassification {
         int version = statement.getInt("version");
         SystemFile file = new SystemFile(name,type,size,category,path,version);
 
-        if(!ClassificationType.sizeClasification.containsKey(sizeFile)){
-            ClassificationType.sizeClasification.put(sizeFile,new ArrayList<SystemFile>());
+        if(!ClassificationType.getSizeClasification().containsKey(String.valueOf(sizeFile))){
+            ClassificationType.getSizeClasification().put(String.valueOf(sizeFile),new ArrayList<SystemFile>());
         }
-        ClassificationType.sizeClasification.get(sizeFile).add(file);
+        ClassificationType.getSizeClasification().get(sizeFile).add(file);
         System.out.println("The file has been compiled successfully.");
     }
 }

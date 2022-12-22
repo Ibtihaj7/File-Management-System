@@ -35,7 +35,7 @@ public class Classification {
     public ClassificationType getClassificationType() { return classificationType; }
 
     public void displaySizeClassification(){
-       HashMap<Integer, ArrayList<SystemFile>> filesWithSize =  classificationType.getSizeClasification();
+       HashMap<String, ArrayList<SystemFile>> filesWithSize =  classificationType.getSizeClasification();
         filesWithSize.forEach((size,files) -> {
             System.out.println("Files whose size is equal to "+size+" : ");
             files.forEach(file -> {
