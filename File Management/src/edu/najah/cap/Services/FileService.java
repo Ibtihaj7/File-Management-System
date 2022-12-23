@@ -26,7 +26,9 @@ public abstract class FileService {
 
     public void doImport(String pathName, User createdBy) throws SQLException , NoSuchAlgorithmException, IOException, IllegalBlockSizeException,
             InvalidKeyException, BadPaddingException, InvalidAlgorithmParameterException, NoSuchPaddingException {
+        System.out.println(333333);
         if(!Authorization.hasAdminPermission(createdBy)||!Authorization.hasStaffPermission(createdBy)){
+            System.out.println(44444);
             return;
         }
         File file = new File(pathName);
@@ -45,8 +47,9 @@ public abstract class FileService {
             e.printStackTrace();
         }
         ResultSet statement1 = statement;
-
+        System.out.println(1);
         if (!statement1.next()) {
+            System.out.println(2);
             try {
                 query = "INSERT INTO files VALUES ('" +  encryptedFileName + "','" + type + "'," + size + ",null,'" + encryptedFilePath+ "',0);";
                 MySQLDatabase.getInstance().insertDeleteQuery(query);
@@ -75,6 +78,7 @@ public abstract class FileService {
             }
 
         VersionControl.Enable(name,type,size,encryptedFilePath,statement);
+
     }
 
     public SystemFile doExport(String filename, User createdBy) throws SQLException  , NoSuchAlgorithmException, IOException, IllegalBlockSizeException,

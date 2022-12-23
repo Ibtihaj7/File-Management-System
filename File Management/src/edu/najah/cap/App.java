@@ -2,7 +2,9 @@ package edu.najah.cap;
 
 import edu.najah.cap.FileRepository.FileRepository;
 import edu.najah.cap.FileRepository.SystemFile;
+import edu.najah.cap.Security.AES;
 import edu.najah.cap.Security.Authentication;
+import edu.najah.cap.Security.Authorization;
 import edu.najah.cap.classification.FileClassifier;
 import edu.najah.cap.users.User;
 
@@ -26,16 +28,18 @@ public class App {
         try {
             Authentication.logIn(userEmail, password);
             if(!Authentication.isLogUserStatus()){
-           System.out.println("Login not completed successfully.");
+           System.out.println("User name or password isn't correct.");
             return;
             }
         }catch (Exception e){
             e.printStackTrace();
         }
         User user =new User(userEmail,password);
+
         FileRepository fileRepository = new FileRepository("karam");
-       fileRepository.importFile("/Users/ibtihaj/Desktop/words.txt",user);
-//        fileRepository.importFile("/Users/ibtihaj/Desktop/sss.txt",user);
+        System.out.println(user.getRole());
+      // fileRepository.importFile("/Users/ibtihaj/Desktop/words.txt",user);
+  //   fileRepository.importFile("/Users/ibtihaj/Desktop/sss.txt",user);
 //        fileRepository.importFile("/Users/ibtihaj/Desktop/www.txt",user);
 //        fileRepository.importFile("/Users/ibtihaj/Desktop/qqq.txt",user);
 //        fileRepository.importFile("/Users/ibtihaj/Desktop/aaa.txt",user);

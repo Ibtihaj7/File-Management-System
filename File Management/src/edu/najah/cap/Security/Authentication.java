@@ -22,13 +22,12 @@ public abstract class Authentication {
         try {
             query = "select * from user WHERE email = '" + userEmail + "' AND password= '" + password + "'";
             resultQuery=MySQLDatabase.getInstance().selectQuery(query);
-            if(resultQuery!=null)
-                logUserStatus=true;
         }catch (Exception e){
          e.printStackTrace();
         }
 
         if(resultQuery.next()) {
+                logUserStatus=true;
             userRole=resultQuery.getString("role");
         }
 

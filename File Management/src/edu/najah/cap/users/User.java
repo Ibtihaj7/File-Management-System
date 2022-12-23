@@ -13,15 +13,11 @@ public class User {
 private String email;
     private String password;
     private String name;
-    private String role;
+    private String role=Authentication.getUserRole();
 
     public User(String email, String password){
         this.email = email;
         this.password = password;
-    }
-
-    private void setRole(){
-        this.role = Authentication.getUserRole();
     }
 
 
