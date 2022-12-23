@@ -5,10 +5,10 @@ import edu.najah.cap.users.UserRole;
 
 public abstract class Authorization {
    public static boolean hasAdminPermission(User user){
-       return UserRole.valueOf(user.getRole()) == UserRole.ADMIN;
+       return (UserRole.valueOf(user.getRole()) == UserRole.ADMIN);
    }
 
     public static boolean hasStaffPermission(User user){
-        return UserRole.valueOf(user.getRole()) == UserRole.STAFF;
+        return (UserRole.valueOf(user.getRole()) == UserRole.STAFF);
     }
 }

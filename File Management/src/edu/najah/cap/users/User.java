@@ -13,14 +13,17 @@ public class User {
 private String email;
     private String password;
     private String name;
-    private String role=Authentication.getUserRole();
-    private boolean loginStatus = Authentication.getLogUserStatus();
+    private String role;
+    private boolean loginStatus;
 
     public User(String email, String password){
         this.email = email;
         this.password = password;
         try{
             Authentication.logIn(email, password);
+            role = Authentication.getUserRole();
+            loginStatus = Authentication.getLogUserStatus();
+            name = Authentication.getUserName();
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -36,6 +39,6 @@ private String email;
     public boolean hasLogged() {return loginStatus;}
 
     public String getName() {
-        return Authentication.getUserName();
+        return name;
     }
 }

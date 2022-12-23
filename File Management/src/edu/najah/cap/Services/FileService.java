@@ -3,20 +3,12 @@ package edu.najah.cap.Services;
 import edu.najah.cap.Database.impl.MySQLDatabase;
 import edu.najah.cap.FileRepository.SystemFile;
 import edu.najah.cap.Security.AES;
-import edu.najah.cap.Security.Authentication;
 import edu.najah.cap.Security.Authorization;
 import edu.najah.cap.VersionControl.VersionControl;
 import edu.najah.cap.classification.FileClassifier;
 import edu.najah.cap.users.User;
 
-import javax.crypto.BadPaddingException;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
 import java.io.File;
-import java.io.IOException;
-import java.security.InvalidAlgorithmParameterException;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -26,25 +18,22 @@ public abstract class FileService {
     static Scanner input = new Scanner(System.in);
 
 
-    public static void doImport(String pathName, User createdBy) throws SQLException , NoSuchAlgorithmException, IllegalBlockSizeException,
-            InvalidKeyException, BadPaddingException, InvalidAlgorithmParameterException, NoSuchPaddingException {
+    public static void doImport(String pathName, User createdBy) throws SQLException {
 
-//        if(!Authorization.hasAdminPermission(createdBy) && !Authorization.hasStaffPermission(createdBy)){
-//            return;
-//        }
+        if(!Authorization.hasAdminPermission(createdBy) && !Authorization.hasStaffPermission(createdBy)){
+            return;
+        }
         File file = new File(pathName);
         int index = file.getName().lastIndexOf(".");
         String name = file.getName().substring(0,index);
-        System.out.println(name);
         String type = file.getName().substring(index + 1);
-        System.out.println(type);
         int size = (int) file.length();
-        String encryptedFileName= AES.encrypt(name);
-        String encryptedFilePath= AES.encrypt(pathName);
+        String encryptedFileName= AES.encodeBase64(name);
+        String encryptedFilePath= AES.encodeBase64(pathName);
         ResultSet statement = null;
         String query;
         try {
-            query = "SELECT * FROM files WHERE name LIKE '" +  encryptedFileName + "(%' OR name = '" +  encryptedFileName + "' ";
+            query = "SELECT * FROM files WHERE name = '" +  encryptedFileName + "' ";
             statement = MySQLDatabase.getInstance().selectQuery(query);
 
         } catch (Exception e) {
@@ -61,35 +50,34 @@ public abstract class FileService {
             }
             return;
         }
-//           if(!Authorization.hasAdminPermission(createdBy)){
-                VersionControl.Enable(name,type,size,encryptedFilePath,statement);
+              if(!Authorization.hasAdminPermission(createdBy)){
+                VersionControl.Enable(encryptedFileName,type,size,encryptedFilePath,statement);
                return;
-//           }
+          }
 
-//            System.out.println("Do you want to disable Version Control ?");
-//            System.out.print("your choice : ");
-//            String choice = input.next();
-//
-//            if (choice.equals("no")) {
-//                VersionControl.Enable(name,type,size,encryptedFilePath,statement);
-//                return;
-//            }
-//            if(choice.equals("yes")) {
-//                VersionControl.Disable(type, size, encryptedFilePath, statement);
-//            }
+            System.out.println("Do you want to disable Version Control ?");
+            System.out.print("your choice : ");
+            String choice = input.next();
+
+            if (choice.equals("no")) {
+                VersionControl.Enable(encryptedFileName,type,size,encryptedFilePath,statement);
+                return;
+            }
+            if(choice.equals("yes")) {
+                VersionControl.Disable(encryptedFileName,type, size, encryptedFilePath, statement);
+            }
 
     }
 
-    public static SystemFile doExportByName(String filename, User createdBy) throws SQLException  , NoSuchAlgorithmException, IOException, IllegalBlockSizeException,
-            InvalidKeyException, BadPaddingException, InvalidAlgorithmParameterException, NoSuchPaddingException{
-//        if(!Authorization.hasAdminPermission(createdBy)){
-//            return null;
-//        }
+    public static SystemFile doExportByName(String filename, User createdBy) throws SQLException {
+        if(!Authorization.hasAdminPermission(createdBy)){
+            return null;
+        }
         ResultSet statement = null;
-        String encryptedFileName= AES.encrypt(filename);
+        String encryptedFileName= AES.encodeBase64(filename);
 
         try{
-            String query =  "SELECT * FROM files WHERE (name LIKE '"+encryptedFileName+"(%' OR name = '"+encryptedFileName+"')";
+            String query =  "SELECT * FROM files WHERE name = '"+encryptedFileName+"'";
             statement = MySQLDatabase.getInstance().selectQuery(query);
         }catch (Exception e){
             e.printStackTrace();
@@ -100,9 +88,9 @@ public abstract class FileService {
             return null;
         }
         statement.last();
-        String fileName=AES.decrypt(statement.getString("name")),
+        String fileName=AES.decodeBase64(statement.getString("name")),
                 fileType=statement.getString("type"),
-                filePath=AES.decrypt(statement.getString("path"));
+                filePath=AES.decodeBase64(statement.getString("path"));
         int fileSize= statement.getInt("size"),
                 fileVersion=statement.getInt("version");
 
@@ -129,8 +117,9 @@ public abstract class FileService {
         if(!Authorization.hasAdminPermission(createdBy)){
             return;
         }
+        String fileNameEncoded = AES.encodeBase64(filename);
         try {
-            String query = "DELETE FROM files WHERE name = "+AES.encrypt(filename)+";";
+            String query = "DELETE FROM files WHERE (name = "+fileNameEncoded + ");";
             MySQLDatabase.getInstance().insertDeleteQuery(query);
         }catch (Exception e){
             e.printStackTrace();
@@ -166,7 +155,7 @@ public abstract class FileService {
             return;
         }
         for (int i = 1; statement.next(); i++) {
-            System.out.println("File " + i + " name: "+AES.decrypt(statement.getString("name"))+" \t path : "+AES.decrypt(statement.getString("path"))+" \t type : "+statement.getString("type")+" \t size : "+statement.getInt("size")+" \t category : "+statement.getString("category"));
+            System.out.println("File " + i + " name: "+AES.decodeBase64(statement.getString("name"))+" \t path : "+AES.decodeBase64(statement.getString("path"))+" \t type : "+statement.getString("type")+" \t size : "+statement.getInt("size")+" \t category : "+statement.getString("category"));
         }
         System.out.println();
     }

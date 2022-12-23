@@ -18,13 +18,14 @@ import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
 
 public class App {
-    public static void main(String[] args) throws SQLException, InvalidAlgorithmParameterException, IllegalBlockSizeException, NoSuchPaddingException, NoSuchAlgorithmException, IOException, BadPaddingException, InvalidKeyException {
+    public static void main(String[] args) throws SQLException {
 
         FileRepository fileRepository = new FileRepository("karam");
-        User user = new User("karam@gmail.com","karam123");
-        fileRepository.importFile("C:\\Users\\HP\\Desktop\\karam.txt",user);
-//        SystemFile filek = fileRepository.exportFileByName("karam",user);
+        User user = new User("karam@gmail.com","karam@123");
+//        fileRepository.importFile("C:\\Users\\HP\\Desktop\\karam.txt",user);
+//       SystemFile filek = fileRepository.exportFileByName("karam",user);
 //        System.out.println(filek);
+        fileRepository.deleteFileByName("karam", user);
 
 //        SystemFile file1 = new SystemFile("ee","txt",100,"/Users/ibtihaj/Desktop/ee.txt",0);
 //        SystemFile file2 = new SystemFile("tt","txt",1000,"/Users/ibtihaj/Desktop/tt.txt",0);

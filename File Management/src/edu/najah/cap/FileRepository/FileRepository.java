@@ -4,13 +4,6 @@ import edu.najah.cap.Services.FileService;
 import edu.najah.cap.classification.FileClassifier;
 import edu.najah.cap.users.User;
 
-import javax.crypto.BadPaddingException;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
-import java.io.IOException;
-import java.security.InvalidAlgorithmParameterException;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -21,14 +14,10 @@ public class FileRepository {
         this.name = name;
     }
 
-    public void importFile(String url, User createdBy) throws SQLException , NoSuchAlgorithmException, IOException, IllegalBlockSizeException,
-            InvalidKeyException, BadPaddingException, InvalidAlgorithmParameterException,
-            NoSuchPaddingException {
+    public void importFile(String url, User createdBy) throws SQLException  {
      FileService.doImport(url,createdBy);
     }
-    public SystemFile exportFileByName(String fileName, User createdBy) throws SQLException , NoSuchAlgorithmException, IOException, IllegalBlockSizeException,
-            InvalidKeyException, BadPaddingException, InvalidAlgorithmParameterException,
-            NoSuchPaddingException{
+    public SystemFile exportFileByName(String fileName, User createdBy) throws SQLException {
        return FileService.doExportByName(fileName, createdBy);
     }
     public ArrayList<SystemFile> exportFileByCategory(String categoryName, String categoryType) {
