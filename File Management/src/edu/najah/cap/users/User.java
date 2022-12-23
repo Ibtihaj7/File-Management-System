@@ -14,46 +14,28 @@ private String email;
     private String password;
     private String name;
     private String role=Authentication.getUserRole();
+    private boolean loginStatus = Authentication.getLogUserStatus();
 
     public User(String email, String password){
         this.email = email;
         this.password = password;
-    }
-
-
-
-    public String getEmail() {
-        return email;
-    }
-
-    public String getRole() {
-
-        return role;
-    }
-
-
-
-
-   // public void PrintClassifiedFiles(){
-       // classification.displaySizeClassification();
-
-
-    public void viewFiles() throws SQLException  {
-        String query="select * from files";
-        ResultSet statement = null;
         try{
-            statement = MySQLDatabase.getInstance().selectQuery(query);
+            Authentication.logIn(email, password);
         }catch (Exception e){
             e.printStackTrace();
         }
-        if(!statement.next()){
-            System.out.println("there is no file in the system.");
-            return;
-        }
-        for (int i = 1; statement.next(); i++) {
-            System.out.println("File " + i + " name: "+statement.getString("name")+" \t path : "+statement.getString("path")+" \t type : "+statement.getString("type")+" \t size : "+statement.getInt("size")+" \t category : "+statement.getString("category"));
-        }
-        System.out.println();
+
     }
 
+
+
+    public String getEmail() { return email; }
+
+    public String getRole() { return role; }
+
+    public boolean hasLogged() {return loginStatus;}
+
+    public String getName() {
+        return Authentication.getUserName();
+    }
 }

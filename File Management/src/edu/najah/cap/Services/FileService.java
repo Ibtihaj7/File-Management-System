@@ -29,12 +29,15 @@ public abstract class FileService {
     public static void doImport(String pathName, User createdBy) throws SQLException , NoSuchAlgorithmException, IllegalBlockSizeException,
             InvalidKeyException, BadPaddingException, InvalidAlgorithmParameterException, NoSuchPaddingException {
 
-        if(!Authorization.hasAdminPermission(createdBy)&& !Authorization.hasStaffPermission(createdBy)){
-            return;
-        }
+//        if(!Authorization.hasAdminPermission(createdBy) && !Authorization.hasStaffPermission(createdBy)){
+//            return;
+//        }
         File file = new File(pathName);
-        String name = file.getName().split("\\.")[0];
-        String type = file.getName().split("\\.")[1];
+        int index = file.getName().lastIndexOf(".");
+        String name = file.getName().substring(0,index);
+        System.out.println(name);
+        String type = file.getName().substring(index + 1);
+        System.out.println(type);
         int size = (int) file.length();
         String encryptedFileName= AES.encrypt(name);
         String encryptedFilePath= AES.encrypt(pathName);
@@ -48,9 +51,7 @@ public abstract class FileService {
             e.printStackTrace();
         }
         ResultSet statement1 = statement;
-        System.out.println(1);
         if (!statement1.next()) {
-            System.out.println(2);
             try {
                 query = "INSERT INTO files VALUES ('" +  encryptedFileName + "','" + type + "'," + size + ",'" + encryptedFilePath+ "',0);";
                 MySQLDatabase.getInstance().insertDeleteQuery(query);
@@ -60,33 +61,30 @@ public abstract class FileService {
             }
             return;
         }
-            if(!Authorization.hasAdminPermission(createdBy)){
+//           if(!Authorization.hasAdminPermission(createdBy)){
                 VersionControl.Enable(name,type,size,encryptedFilePath,statement);
-                return;
-            }
+               return;
+//           }
 
-            System.out.println("Do you want to disable Version Control ?");
-            System.out.print("your choice : ");
-            String choice = input.next();
-
-            if (choice.equals("no")) {
-                VersionControl.Enable(name,type,size,encryptedFilePath,statement);
-                return;
-            }
-            if(choice.equals("yes")){
-                VersionControl.Disable(type,size,encryptedFilePath,statement);
-                return;
-            }
-
-        VersionControl.Enable(name,type,size,encryptedFilePath,statement);
+//            System.out.println("Do you want to disable Version Control ?");
+//            System.out.print("your choice : ");
+//            String choice = input.next();
+//
+//            if (choice.equals("no")) {
+//                VersionControl.Enable(name,type,size,encryptedFilePath,statement);
+//                return;
+//            }
+//            if(choice.equals("yes")) {
+//                VersionControl.Disable(type, size, encryptedFilePath, statement);
+//            }
 
     }
 
     public static SystemFile doExportByName(String filename, User createdBy) throws SQLException  , NoSuchAlgorithmException, IOException, IllegalBlockSizeException,
             InvalidKeyException, BadPaddingException, InvalidAlgorithmParameterException, NoSuchPaddingException{
-        if(!Authorization.hasAdminPermission(createdBy)){
-            return null;
-        }
+//        if(!Authorization.hasAdminPermission(createdBy)){
+//            return null;
+//        }
         ResultSet statement = null;
         String encryptedFileName= AES.encrypt(filename);
 

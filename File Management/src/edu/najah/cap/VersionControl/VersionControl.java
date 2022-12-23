@@ -7,7 +7,6 @@ import edu.najah.cap.users.User;
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
-import java.io.IOException;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
@@ -21,15 +20,22 @@ public abstract class VersionControl {
             InvalidKeyException, BadPaddingException, InvalidAlgorithmParameterException,
             NoSuchPaddingException {
         String query;
-        result.next();
         int newVersion = result.getInt("version");
         while (result.next()) {
             newVersion = result.getInt("version");
         }
+        System.out.println(newVersion);
         newVersion += 1;
         String nameWithVersion = name + "(" + newVersion + ")";
      AES.encrypt(nameWithVersion);
-        query = "INSERT INTO files VALUES ('" +  AES.encrypt(nameWithVersion)+ "','" + type + "'," + size + ",null,'" + path+ "'," + newVersion + ");";
+        query = "INSERT INTO files VALUES (?, ?, ?, ?, ?)";
+        PreparedStatement preparedStatement = MySQLDatabase.getConnection().prepareStatement(query);
+        preparedStatement.setString(1, AES.encrypt(nameWithVersion));
+        preparedStatement.setString(2, type);
+        preparedStatement.setInt(3,size);
+        preparedStatement.setString(4,path);
+        preparedStatement.setInt(5, newVersion);
+        preparedStatement.execute();
         MySQLDatabase.getInstance().insertDeleteQuery(query);
         System.out.println("The file has been imported successfully");
     }

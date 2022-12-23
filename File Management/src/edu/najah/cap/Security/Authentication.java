@@ -11,8 +11,7 @@ import java.util.HashMap;
 
 public abstract class Authentication {
    private static String userRole=null;
-
-
+   private static String userName = null;
     private static  boolean logUserStatus=false;
 
 
@@ -29,6 +28,7 @@ public abstract class Authentication {
         if(resultQuery.next()) {
                 logUserStatus=true;
             userRole=resultQuery.getString("role");
+            userName = resultQuery.getString("name");
         }
 
     }
@@ -36,7 +36,9 @@ public abstract class Authentication {
     public static String getUserRole() {
         return userRole;
     }
-    public static boolean isLogUserStatus() {
+    public static boolean getLogUserStatus() {
         return logUserStatus;
     }
+
+    public static String getUserName(){return userName;}
 }
