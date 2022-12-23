@@ -24,7 +24,7 @@ public abstract class FileService {
     static Scanner input = new Scanner(System.in);
 
 
-    public void doImport(String pathName, User createdBy) throws SQLException , NoSuchAlgorithmException, IOException, IllegalBlockSizeException,
+    public static void doImport(String pathName, User createdBy) throws SQLException , NoSuchAlgorithmException, IOException, IllegalBlockSizeException,
             InvalidKeyException, BadPaddingException, InvalidAlgorithmParameterException, NoSuchPaddingException {
         System.out.println(333333);
         if(!Authorization.hasAdminPermission(createdBy)||!Authorization.hasStaffPermission(createdBy)){
@@ -81,7 +81,7 @@ public abstract class FileService {
 
     }
 
-    public SystemFile doExport(String filename, User createdBy) throws SQLException  , NoSuchAlgorithmException, IOException, IllegalBlockSizeException,
+    public static SystemFile doExport(String filename, User createdBy) throws SQLException  , NoSuchAlgorithmException, IOException, IllegalBlockSizeException,
             InvalidKeyException, BadPaddingException, InvalidAlgorithmParameterException, NoSuchPaddingException{
         if(!Authorization.hasAdminPermission(createdBy)){
             return null;
@@ -112,7 +112,7 @@ public abstract class FileService {
         return ( new SystemFile(fileName,fileType, fileSize, filePath, fileVersion));
     }
 
-    public void doDelete(String filename, User createdBy) {
+    public static void doDelete(String filename, User createdBy) {
         if(!Authorization.hasAdminPermission(createdBy)){
             return;
         }
@@ -126,7 +126,7 @@ public abstract class FileService {
         System.out.println("delete successfully");
     }
 
-    public void view() throws SQLException  , NoSuchAlgorithmException, IOException, IllegalBlockSizeException,
+    public static void view() throws SQLException  , NoSuchAlgorithmException, IOException, IllegalBlockSizeException,
             InvalidKeyException, BadPaddingException, InvalidAlgorithmParameterException, NoSuchPaddingException {
 
         String query="select * from files";
@@ -146,7 +146,7 @@ public abstract class FileService {
         System.out.println();
     }
 
-    public void doRollBack(String url, User createdBy) throws SQLException {
+    public static void doRollBack(String url, User createdBy) throws SQLException {
         if(!Authorization.hasAdminPermission(createdBy)){
             return;
         }

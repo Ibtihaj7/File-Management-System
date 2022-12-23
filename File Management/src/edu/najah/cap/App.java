@@ -38,7 +38,7 @@ public class App {
 
         FileRepository fileRepository = new FileRepository("karam");
         System.out.println(user.getRole());
-      // fileRepository.importFile("/Users/ibtihaj/Desktop/words.txt",user);
+       fileRepository.importFile("/Users/ibtihaj/Desktop/words.txt",user);
   //   fileRepository.importFile("/Users/ibtihaj/Desktop/sss.txt",user);
 //        fileRepository.importFile("/Users/ibtihaj/Desktop/www.txt",user);
 //        fileRepository.importFile("/Users/ibtihaj/Desktop/qqq.txt",user);

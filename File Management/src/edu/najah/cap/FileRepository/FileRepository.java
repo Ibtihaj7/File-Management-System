@@ -11,12 +11,9 @@ import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
 
 public class FileRepository {
     private String name;
-    private static FileService fileService;
 
     public FileRepository(String name) {
         this.name = name;
@@ -25,24 +22,24 @@ public class FileRepository {
  public void importFile(String url, User createdBy) throws SQLException , NoSuchAlgorithmException, IOException, IllegalBlockSizeException,
             InvalidKeyException, BadPaddingException, InvalidAlgorithmParameterException,
             NoSuchPaddingException {
-        fileService.doImport(url,createdBy);
+     FileService.doImport(url,createdBy);
     }
     private SystemFile exportFile(String url, User createdBy) throws SQLException , NoSuchAlgorithmException, IOException, IllegalBlockSizeException,
             InvalidKeyException, BadPaddingException, InvalidAlgorithmParameterException,
             NoSuchPaddingException{
-       return fileService.doExport(url, createdBy);
+       return FileService.doExport(url, createdBy);
     }
     private void deleteFile(String url,User createdBy) {
-        fileService.doDelete(url,createdBy);
+        FileService.doDelete(url,createdBy);
     }
 
     private void viewFiles() throws SQLException, NoSuchAlgorithmException, IOException, IllegalBlockSizeException,
             InvalidKeyException, BadPaddingException, InvalidAlgorithmParameterException,
             NoSuchPaddingException {
-        fileService.view();
+        FileService.view();
     }
 
     private void RollBack(String url,User createdBy) throws SQLException {
-        fileService.doRollBack(url,createdBy);
+        FileService.doRollBack(url,createdBy);
     }
 }
