@@ -119,7 +119,7 @@ public abstract class FileService {
         }
         String fileNameEncoded = AES.encodeBase64(filename);
         try {
-            String query = "DELETE FROM files WHERE (name = "+fileNameEncoded + ");";
+            String query = "DELETE FROM files WHERE name = '"+fileNameEncoded + "'";
             MySQLDatabase.getInstance().insertDeleteQuery(query);
         }catch (Exception e){
             e.printStackTrace();
