@@ -12,13 +12,16 @@ import java.util.HashMap;
 public abstract class Authentication {
    private static String userRole=null;
 
+
+    private static  boolean logUserStatus=false;
+
+
     public static void logIn(String userEmail,String password)  throws SQLException {
         String query;
         ResultSet resultQuery=null;
         try {
             query = "select * from user WHERE email = '" + userEmail + "' AND password= '" + password + "'";
             resultQuery=MySQLDatabase.getInstance().selectQuery(query);
-            System.out.println("Login completed successfully.");
         }catch (Exception e){
          e.printStackTrace();
         }
@@ -26,9 +29,13 @@ public abstract class Authentication {
         if(resultQuery.next()) {
             userRole=resultQuery.getString("role");
         }
+        logUserStatus=true;
     }
 
     public static String getUserRole() {
         return userRole;
+    }
+    public static boolean isLogUserStatus() {
+        return logUserStatus;
     }
 }

@@ -15,28 +15,15 @@ private String email;
     private String name;
     private String role;
 
-    public User(String email, String password) throws SQLException {
+    public User(String email, String password){
         this.email = email;
         this.password = password;
-        Authentication.logIn(email,password);
-        setRole();
-        permission();
     }
 
-    private void setRole()throws SQLException {
+    private void setRole(){
         this.role = Authentication.getUserRole();
     }
-    public void permission(){
-        if(role.equals("ADMIN")){
-            Authorization.users.get("Admin").add(this);
-        }
-        if(role.equals("STAFF")){
-            Authorization.users.get("Staff").add(this);
-        }
-        if(role.equals("READER")){
-            Authorization.users.get("Reader").add(this);
-        }
-    }
+
 
 
     public String getEmail() {

@@ -22,7 +22,7 @@ public class FileRepository {
         this.name = name;
     }
 
-    private void importFile(String url, User createdBy) throws SQLException , NoSuchAlgorithmException, IOException, IllegalBlockSizeException,
+ public void importFile(String url, User createdBy) throws SQLException , NoSuchAlgorithmException, IOException, IllegalBlockSizeException,
             InvalidKeyException, BadPaddingException, InvalidAlgorithmParameterException,
             NoSuchPaddingException {
         fileService.doImport(url,createdBy);

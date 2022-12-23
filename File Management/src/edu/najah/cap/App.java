@@ -25,6 +25,8 @@ public class App {
         String password=in.nextLine();
         try {
             Authentication.logIn(userEmail, password);
+            if(Authentication.isLogUserStatus()){
+           System.out.println("Login completed successfully.");   }
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -43,6 +45,7 @@ public class App {
         fileRepository.classifyFileBySize(file1);
         fileRepository.classifyFileBySize(file2);
         fileRepository.classifyFileBySize(file3);
+
 */
         FileClassifier.getFileSizeRanges().forEach((key,value)->{
             System.out.println(key+" : ");

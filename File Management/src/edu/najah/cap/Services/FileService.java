@@ -3,6 +3,7 @@ package edu.najah.cap.Services;
 import edu.najah.cap.Database.impl.MySQLDatabase;
 import edu.najah.cap.FileRepository.SystemFile;
 import edu.najah.cap.Security.AES;
+import edu.najah.cap.Security.Authentication;
 import edu.najah.cap.Security.Authorization;
 import edu.najah.cap.VersionControl.VersionControl;
 import edu.najah.cap.users.User;
@@ -25,7 +26,9 @@ public abstract class FileService {
 
     public void doImport(String pathName, User createdBy) throws SQLException , NoSuchAlgorithmException, IOException, IllegalBlockSizeException,
             InvalidKeyException, BadPaddingException, InvalidAlgorithmParameterException, NoSuchPaddingException {
-        Authorization.hasImportExportPermission(createdBy);
+        if(!Authorization.hasAdminPermission(createdBy)||!Authorization.hasStaffPermission(createdBy)){
+            return;
+        }
         File file = new File(pathName);
         String name = file.getName().split("\\.")[0];
         String type = file.getName().split("\\.")[1];
@@ -53,8 +56,11 @@ public abstract class FileService {
             }
             return;
         }
+            if(!Authorization.hasAdminPermission(createdBy)){
+                VersionControl.Enable(name,type,size,encryptedFilePath,statement);
+                return;
+            }
 
-        Authorization.hasDeletePermission(createdBy);
             System.out.println("Do you want to disable Version Control ?");
             System.out.print("your choice : ");
             String choice = input.next();
@@ -73,7 +79,9 @@ public abstract class FileService {
 
     public SystemFile doExport(String filename, User createdBy) throws SQLException  , NoSuchAlgorithmException, IOException, IllegalBlockSizeException,
             InvalidKeyException, BadPaddingException, InvalidAlgorithmParameterException, NoSuchPaddingException{
-        Authorization.hasImportExportPermission(createdBy);
+        if(!Authorization.hasAdminPermission(createdBy)){
+            return null;
+        }
         ResultSet statement = null;
         String encryptedFileName= AES.encrypt(filename);
 
@@ -101,7 +109,9 @@ public abstract class FileService {
     }
 
     public void doDelete(String filename, User createdBy) {
-        Authorization.hasDeletePermission(createdBy);
+        if(!Authorization.hasAdminPermission(createdBy)){
+            return;
+        }
         try {
             String query = "DELETE FROM files WHERE name = "+AES.encrypt(filename)+";";
             MySQLDatabase.getInstance().insertDeleteQuery(query);
@@ -114,6 +124,8 @@ public abstract class FileService {
 
     public void view() throws SQLException  , NoSuchAlgorithmException, IOException, IllegalBlockSizeException,
             InvalidKeyException, BadPaddingException, InvalidAlgorithmParameterException, NoSuchPaddingException {
+        if(!Authentication.isLogUserStatus())
+            return;
         String query="select * from files";
         ResultSet statement = null;
         try{
@@ -132,7 +144,10 @@ public abstract class FileService {
     }
 
     public void doRollBack(String url, User createdBy) throws SQLException {
-        Authorization.hasDeletePermission(createdBy);
+        if(!Authorization.hasAdminPermission(createdBy)){
+            return;
+        }
+
         VersionControl.Rollback(url, createdBy);
     }
 
