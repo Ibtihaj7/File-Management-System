@@ -26,11 +26,10 @@ public abstract class FileService {
     static Scanner input = new Scanner(System.in);
 
 
-    public static void doImport(String pathName, User createdBy) throws SQLException , NoSuchAlgorithmException, IOException, IllegalBlockSizeException,
+    public static void doImport(String pathName, User createdBy) throws SQLException , NoSuchAlgorithmException, IllegalBlockSizeException,
             InvalidKeyException, BadPaddingException, InvalidAlgorithmParameterException, NoSuchPaddingException {
-        System.out.println(333333);
-        if(!Authorization.hasAdminPermission(createdBy)||!Authorization.hasStaffPermission(createdBy)){
-            System.out.println(44444);
+
+        if(!Authorization.hasAdminPermission(createdBy)&& !Authorization.hasStaffPermission(createdBy)){
             return;
         }
         File file = new File(pathName);
@@ -53,7 +52,7 @@ public abstract class FileService {
         if (!statement1.next()) {
             System.out.println(2);
             try {
-                query = "INSERT INTO files VALUES ('" +  encryptedFileName + "','" + type + "'," + size + ",null,'" + encryptedFilePath+ "',0);";
+                query = "INSERT INTO files VALUES ('" +  encryptedFileName + "','" + type + "'," + size + ",'" + encryptedFilePath+ "',0);";
                 MySQLDatabase.getInstance().insertDeleteQuery(query);
                 System.out.println("The file has been imported successfully");
             } catch (Exception e) {
@@ -105,7 +104,6 @@ public abstract class FileService {
         statement.last();
         String fileName=AES.decrypt(statement.getString("name")),
                 fileType=statement.getString("type"),
-                fileCategory=statement.getString("category"),
                 filePath=AES.decrypt(statement.getString("path"));
         int fileSize= statement.getInt("size"),
                 fileVersion=statement.getInt("version");

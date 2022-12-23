@@ -38,8 +38,9 @@ public class App {
 
         FileRepository fileRepository = new FileRepository("karam");
         System.out.println(user.getRole());
-        SystemFile filee = fileRepository.exportFileByName("www",user);
-        System.out.println(filee);
+//        fileRepository.importFile("/Users/ibtihaj/Desktop/xcxct.txt",user);
+        SystemFile filee = fileRepository.exportFileByName("xcxct",user);
+        System.out.println("----------->"+filee);
 //       fileRepository.importFile("/Users/ibtihaj/Desktop/words.txt",user);
   //   fileRepository.importFile("/Users/ibtihaj/Desktop/sss.txt",user);
 //        fileRepository.importFile("/Users/ibtihaj/Desktop/www.txt",user);
