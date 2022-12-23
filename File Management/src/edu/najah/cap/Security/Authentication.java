@@ -22,6 +22,8 @@ public abstract class Authentication {
         try {
             query = "select * from user WHERE email = '" + userEmail + "' AND password= '" + password + "'";
             resultQuery=MySQLDatabase.getInstance().selectQuery(query);
+            if(resultQuery!=null)
+                logUserStatus=true;
         }catch (Exception e){
          e.printStackTrace();
         }
@@ -29,7 +31,7 @@ public abstract class Authentication {
         if(resultQuery.next()) {
             userRole=resultQuery.getString("role");
         }
-        logUserStatus=true;
+
     }
 
     public static String getUserRole() {

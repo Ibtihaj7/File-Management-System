@@ -25,14 +25,16 @@ public class App {
         String password=in.nextLine();
         try {
             Authentication.logIn(userEmail, password);
-            if(Authentication.isLogUserStatus()){
-           System.out.println("Login completed successfully.");   }
+            if(!Authentication.isLogUserStatus()){
+           System.out.println("Login not completed successfully.");
+            return;
+            }
         }catch (Exception e){
             e.printStackTrace();
         }
         User user =new User(userEmail,password);
         FileRepository fileRepository = new FileRepository("karam");
-//        fileRepository.importFile("/Users/ibtihaj/Desktop/words.txt",user);
+       fileRepository.importFile("/Users/ibtihaj/Desktop/words.txt",user);
 //        fileRepository.importFile("/Users/ibtihaj/Desktop/sss.txt",user);
 //        fileRepository.importFile("/Users/ibtihaj/Desktop/www.txt",user);
 //        fileRepository.importFile("/Users/ibtihaj/Desktop/qqq.txt",user);

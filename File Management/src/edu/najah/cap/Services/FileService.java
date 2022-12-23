@@ -124,8 +124,7 @@ public abstract class FileService {
 
     public void view() throws SQLException  , NoSuchAlgorithmException, IOException, IllegalBlockSizeException,
             InvalidKeyException, BadPaddingException, InvalidAlgorithmParameterException, NoSuchPaddingException {
-        if(!Authentication.isLogUserStatus())
-            return;
+
         String query="select * from files";
         ResultSet statement = null;
         try{
