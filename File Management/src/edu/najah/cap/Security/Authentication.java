@@ -1,6 +1,7 @@
 package edu.najah.cap.Security;
 
 import edu.najah.cap.Database.impl.MySQLDatabase;
+import edu.najah.cap.exception.AuthorizationExeption;
 import edu.najah.cap.users.User;
 
 import java.sql.ResultSet;
@@ -8,29 +9,27 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-
 public abstract class Authentication {
    private static String userRole=null;
    private static String userName = null;
     private static  boolean logUserStatus=false;
 
-
-    public static void logIn(String userEmail,String password)  throws SQLException {
-        String query;
+    public static void logIn(String userEmail,String password)  throws Exception {
+        String query = "select * from user WHERE email = '" + userEmail + "' AND password= '" + password + "'";
         ResultSet resultQuery=null;
         try {
-            query = "select * from user WHERE email = '" + userEmail + "' AND password= '" + password + "'";
             resultQuery=MySQLDatabase.getInstance().selectQuery(query);
         }catch (Exception e){
-         e.printStackTrace();
+            System.err.println(e.getMessage());
         }
 
         if(resultQuery.next()) {
-                logUserStatus=true;
+            logUserStatus=true;
             userRole=resultQuery.getString("role");
             userName = resultQuery.getString("name");
+            return;
         }
-
+        throw new AuthorizationExeption("Email or password incorrect.");
     }
 
     public static String getUserRole() {
@@ -39,6 +38,5 @@ public abstract class Authentication {
     public static boolean getLogUserStatus() {
         return logUserStatus;
     }
-
     public static String getUserName(){return userName;}
 }

@@ -12,13 +12,12 @@ public class MySQLDatabase implements Database {
     private static Connection connection;
     private static Statement statement;
 
-
     private MySQLDatabase()  {
         try {
             connection = DriverManager.getConnection(URL, ROOT, PASSWORD);
             statement = connection.createStatement();
         }catch (Exception e){
-            e.printStackTrace();
+            System.err.println(e.getMessage());
         }
     }
     public static synchronized MySQLDatabase getInstance(){
@@ -27,7 +26,7 @@ public class MySQLDatabase implements Database {
                 mySQLDatabase = new MySQLDatabase();
                 statement = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_READ_ONLY);
             }catch (Exception e){
-                e.printStackTrace();
+                System.err.println(e.getMessage());
             }
         }
         return mySQLDatabase;
@@ -39,7 +38,7 @@ public class MySQLDatabase implements Database {
         try{
             result = statement.executeQuery(query);
         }catch (Exception e){
-            e.printStackTrace();
+            System.err.println(e.getMessage());
         }
         return result;
     }
@@ -48,7 +47,7 @@ public class MySQLDatabase implements Database {
         try{
             statement.executeUpdate(query);
         }catch (Exception e){
-            e.printStackTrace();
+            System.err.println(e.getMessage());
         }
     }
     @Override
@@ -56,11 +55,10 @@ public class MySQLDatabase implements Database {
         try{
             connection.prepareStatement(query);
         }catch (Exception e){
-            e.printStackTrace();
+            System.err.println(e.getMessage());
         }
     }
     public static Connection getConnection() {
         return connection;
     }
-
 }

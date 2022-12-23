@@ -18,24 +18,30 @@ import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
 
 public class App {
-    public static void main(String[] args) throws SQLException {
+    public static void main(String[] args) {
 
-        FileRepository fileRepository = new FileRepository("karam");
-        User user = new User("karam@gmail.com","karam@123");
+        FileRepository fileRepository = new FileRepository("ibtihaj");
+        User user = new User("ibtihaj.adham7@gmail.com","ibtihaj");
 //        fileRepository.importFile("C:\\Users\\HP\\Desktop\\karam.txt",user);
-//       SystemFile filek = fileRepository.exportFileByName("karam",user);
-//        System.out.println(filek);
-        fileRepository.deleteFileByName("karam", user);
+        SystemFile file1=null;
+        try{
+             file1 = fileRepository.exportFileByName("karam",user);
+        }catch (Exception e){
+            System.err.println(e.getMessage());
+        }
+        System.out.println(file1);
+//        fileRepository.deleteFileByName("karam", user);
 
 //        SystemFile file1 = new SystemFile("ee","txt",100,"/Users/ibtihaj/Desktop/ee.txt",0);
 //        SystemFile file2 = new SystemFile("tt","txt",1000,"/Users/ibtihaj/Desktop/tt.txt",0);
 //        SystemFile file3 = new SystemFile("yy","txt",10,"/Users/ibtihaj/Desktop/yy.txt",0);
-//
-//
+
+
 //        fileRepository.classifyFileBySize(file1);
 //        fileRepository.classifyFileBySize(file2);
 //        fileRepository.classifyFileBySize(file3);
-//
+
+        System.out.println("fff");
 //
 //        FileClassifier.getFileSizeRanges().forEach((key,value)->{
 //            System.out.println(key+" : ");

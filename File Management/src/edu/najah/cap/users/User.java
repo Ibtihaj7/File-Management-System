@@ -25,20 +25,14 @@ private String email;
             loginStatus = Authentication.getLogUserStatus();
             name = Authentication.getUserName();
         }catch (Exception e){
-            e.printStackTrace();
+            System.err.println(e.getMessage());
         }
-
     }
-
-
-
     public String getEmail() { return email; }
 
     public String getRole() { return role; }
 
     public boolean hasLogged() {return loginStatus;}
 
-    public String getName() {
-        return name;
-    }
+    public String getName() { return name; }
 }

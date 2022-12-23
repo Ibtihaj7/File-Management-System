@@ -14,46 +14,33 @@ public class FileRepository {
         this.name = name;
     }
 
-    public void importFile(String url, User createdBy) throws SQLException  {
+    public void importFile(String url, User createdBy) throws Exception  {
      FileService.doImport(url,createdBy);
     }
-    public SystemFile exportFileByName(String fileName, User createdBy) throws SQLException {
+    public SystemFile exportFileByName(String fileName, User createdBy) throws Exception {
        return FileService.doExportByName(fileName, createdBy);
     }
-    public ArrayList<SystemFile> exportFileByCategory(String categoryName, String categoryType) {
+    public ArrayList<SystemFile> exportFileByCategory(String categoryName, String categoryType)throws Exception  {
         return FileService.doExportByCategory(categoryName, categoryType);
     }
-    public void deleteFileByName(String url,User createdBy) {
+    public void deleteFileByName(String url,User createdBy)throws Exception  {
         FileService.doDeleteByName(url,createdBy);
     }
-    public void deleteFileByCategory(String categoryName,String categoryType) {
+    public void deleteFileByCategory(String categoryName,String categoryType)throws Exception  {
         FileService.doDeleteByCategory(categoryName,categoryType);
     }
 
     public void classifyFileBySize(SystemFile file){
         FileClassifier.classifyFileBySize(file);
     }
-    public void classifyFileByType(SystemFile file){
+    public void classifyFileByType(SystemFile file) throws Exception{
         FileClassifier.classifyFileByType(file);
     }
-    public void classifyFileByCategory(SystemFile file, String categoryName){
-        FileClassifier.classifyFileByCategory(file,categoryName);
-    }
+    public void classifyFileByCategory(SystemFile file, String categoryName){ FileClassifier.classifyFileByCategory(file,categoryName); }
 
-    public void viewFiles() throws SQLException{
-        FileService.view();
-    }
-    public void ViewSizeRating(){
-        FileService.viewSizeRating();
-    }
-    public void ViewTypeRating(){
-        FileService.viewTypeRating();
-    }
-    public void ViewCategoryRating(){
-        FileService.viewCategoryRating();
-    }
+    public void viewFiles() throws Exception { FileService.view(); }
 
-    public void RollBack(String url,User createdBy) throws SQLException {
+    public void RollBack(String url,User createdBy) throws Exception  {
         FileService.doRollBack(url,createdBy);
     }
 }

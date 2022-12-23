@@ -2,6 +2,7 @@ package edu.najah.cap.VersionControl;
 
 import edu.najah.cap.Database.impl.MySQLDatabase;
 import edu.najah.cap.Security.AES;
+import edu.najah.cap.exception.FileNotFoundExeption;
 import edu.najah.cap.users.User;
 
 import java.sql.PreparedStatement;
@@ -25,7 +26,11 @@ public abstract class VersionControl {
         preparedStatement.setString(4,path);
         preparedStatement.setInt(5, newVersion);
         preparedStatement.execute();
-        MySQLDatabase.getInstance().insertDeleteQuery(query);
+        try {
+            MySQLDatabase.getInstance().insertDeleteQuery(query);
+        }catch (Exception e){
+            System.err.println(e.getMessage());
+        }
         System.out.println("The file has been imported successfully");
     }
     public static void Disable(String name,String type, int size, String path, ResultSet result) throws SQLException {
@@ -40,7 +45,7 @@ public abstract class VersionControl {
             System.out.println("The file has been imported successfully");
         }
     }
-    public static void Rollback(String fileName, User createdBy) throws SQLException {
+    public static void Rollback(String fileName, User createdBy) throws Exception {
         ResultSet statement = null;
         String query;
         try {
@@ -48,14 +53,20 @@ public abstract class VersionControl {
             statement = MySQLDatabase.getInstance().selectQuery(query);
 
         } catch (Exception e) {
-            e.printStackTrace();
+            System.err.println(e.getMessage());
         }
+        if(!statement.next())
+            throw new FileNotFoundExeption( "The file name you entered does not exist");
 
         statement.last();
         query = "DELETE FROM files WHERE name = ?";
         PreparedStatement preparedStatement = MySQLDatabase.getConnection().prepareStatement(query);
         preparedStatement.setString(1, statement.getString("name"));
-        preparedStatement.execute();
+        try {
+            preparedStatement.execute();
+        }catch (Exception e){
+            System.err.println(e.getMessage());
         }
-    }
+        }
+}
 

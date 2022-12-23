@@ -1,6 +1,7 @@
 package edu.najah.cap.classification;
 
 import edu.najah.cap.FileRepository.SystemFile;
+import edu.najah.cap.exception.TypeNotSupportExeption;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -29,18 +30,18 @@ public abstract class FileClassifier {
         fileCategoryRulers = new HashMap<String,ArrayList<SystemFile>>();
     }
     public static void classifyFileBySize(SystemFile file){
-        if(file.getSize() <100 ) {
+        if(file.getSize() < 100  ) {
             fileSizeRanges.get("Small").add(file);
             return;
         }
-        if(file.getSize() < 1000){
+        if(file.getSize() < 5000){
             fileSizeRanges.get("Medium").add(file);
             return;
         }
         fileSizeRanges.get("Large").add(file);
     }
 
-    public static void classifyFileByType(SystemFile file){
+    public static void classifyFileByType(SystemFile file)throws Exception{
         if(file.getType().equals("txt")){
             fileTypeRuler.get("txt").add(file);
             return;
@@ -73,7 +74,7 @@ public abstract class FileClassifier {
             fileTypeRuler.get("html").add(file);
             return;
         }
-        System.out.println("Error type name");
+        throw new TypeNotSupportExeption("The type of this file not support in our system.");
     }
 
     public static void classifyFileByCategory(SystemFile file,String categoryName){
