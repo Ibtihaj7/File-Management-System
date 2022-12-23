@@ -6,6 +6,7 @@ import edu.najah.cap.Security.AES;
 import edu.najah.cap.Security.Authentication;
 import edu.najah.cap.Security.Authorization;
 import edu.najah.cap.VersionControl.VersionControl;
+import edu.najah.cap.classification.FileClassifier;
 import edu.najah.cap.users.User;
 
 import javax.crypto.BadPaddingException;
@@ -18,6 +19,7 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public abstract class FileService {
@@ -81,7 +83,7 @@ public abstract class FileService {
 
     }
 
-    public static SystemFile doExport(String filename, User createdBy) throws SQLException  , NoSuchAlgorithmException, IOException, IllegalBlockSizeException,
+    public static SystemFile doExportByName(String filename, User createdBy) throws SQLException  , NoSuchAlgorithmException, IOException, IllegalBlockSizeException,
             InvalidKeyException, BadPaddingException, InvalidAlgorithmParameterException, NoSuchPaddingException{
         if(!Authorization.hasAdminPermission(createdBy)){
             return null;
@@ -97,7 +99,7 @@ public abstract class FileService {
         }
 
         if(!statement.next()){
-            System.out.println("There is no file with this name or category.");
+            System.out.println("There is no file with this name.");
             return null;
         }
         statement.last();
@@ -111,8 +113,23 @@ public abstract class FileService {
 
         return ( new SystemFile(fileName,fileType, fileSize, filePath, fileVersion));
     }
+    public static ArrayList<SystemFile> doExportByCategory(String categoryName, String categoryType ) {
+        if (categoryType.equals("size"))
+            if (FileClassifier.getFileSizeRanges().containsKey(categoryName))
+                return FileClassifier.getFileSizeRanges().get(categoryName);
+        if(categoryType.equals("type"))
+            if(FileClassifier.getFileTypeRuler().containsKey(categoryName))
+                return FileClassifier.getFileTypeRuler().get(categoryName);
 
-    public static void doDelete(String filename, User createdBy) {
+        if(categoryType.equals("category"))
+            if(FileClassifier.getFileCategoryRulers().containsKey(categoryName))
+                return FileClassifier.getFileCategoryRulers().get(categoryName);
+
+        System.out.println("Error in entering category name or category type .");
+        return null;
+    }
+
+    public static void doDeleteByName(String filename, User createdBy) {
         if(!Authorization.hasAdminPermission(createdBy)){
             return;
         }
@@ -122,12 +139,24 @@ public abstract class FileService {
         }catch (Exception e){
             e.printStackTrace();
         }
-
         System.out.println("delete successfully");
     }
+    public static void doDeleteByCategory(String categoryName, String categoryType) {
+        if(categoryType.equals("size")){
+            // karam
 
-    public static void view() throws SQLException  , NoSuchAlgorithmException, IOException, IllegalBlockSizeException,
-            InvalidKeyException, BadPaddingException, InvalidAlgorithmParameterException, NoSuchPaddingException {
+        }
+        if(categoryType.equals("type")){
+            // karam
+
+        }
+        if(categoryType.equals("category")){
+            // karam
+
+        }
+    }
+
+    public static void view() throws SQLException  {
 
         String query="select * from files";
         ResultSet statement = null;
@@ -146,11 +175,22 @@ public abstract class FileService {
         System.out.println();
     }
 
+    public static void viewSizeRating(){
+        // karam
+
+    }
+    public static void viewTypeRating(){
+      // karam
+    }
+    public static void viewCategoryRating(){
+        // karam
+
+    }
+
     public static void doRollBack(String url, User createdBy) throws SQLException {
         if(!Authorization.hasAdminPermission(createdBy)){
             return;
         }
-
         VersionControl.Rollback(url, createdBy);
     }
 

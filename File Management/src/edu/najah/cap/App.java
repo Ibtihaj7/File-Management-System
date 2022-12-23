@@ -38,7 +38,9 @@ public class App {
 
         FileRepository fileRepository = new FileRepository("karam");
         System.out.println(user.getRole());
-       fileRepository.importFile("/Users/ibtihaj/Desktop/words.txt",user);
+        SystemFile filee = fileRepository.exportFileByName("www",user);
+        System.out.println(filee);
+//       fileRepository.importFile("/Users/ibtihaj/Desktop/words.txt",user);
   //   fileRepository.importFile("/Users/ibtihaj/Desktop/sss.txt",user);
 //        fileRepository.importFile("/Users/ibtihaj/Desktop/www.txt",user);
 //        fileRepository.importFile("/Users/ibtihaj/Desktop/qqq.txt",user);
@@ -47,12 +49,13 @@ public class App {
         SystemFile file1 = new SystemFile("ee","txt",100,"/Users/ibtihaj/Desktop/ee.txt",0);
         SystemFile file2 = new SystemFile("tt","txt",1000,"/Users/ibtihaj/Desktop/tt.txt",0);
         SystemFile file3 = new SystemFile("yy","txt",10,"/Users/ibtihaj/Desktop/yy.txt",0);
-/*
+
+
         fileRepository.classifyFileBySize(file1);
         fileRepository.classifyFileBySize(file2);
         fileRepository.classifyFileBySize(file3);
 
-*/
+
         FileClassifier.getFileSizeRanges().forEach((key,value)->{
             System.out.println(key+" : ");
             value.forEach(file->{
