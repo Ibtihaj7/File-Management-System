@@ -4,31 +4,25 @@ import edu.najah.cap.FileRepository.SystemFile;
 import java.util.ArrayList;
 import java.util.HashMap;
 abstract class InitializeClassifier {
-    protected static void initializeStaticVariable(HashMap<String, ArrayList<SystemFile>> fileSizeRanges, HashMap<String, ArrayList<SystemFile>> fileTypeRuler, HashMap<String, ArrayList<SystemFile>> fileCategoryRulers) {
+    protected static void initializeStaticVariable(HashMap<String, ArrayList<SystemFile>> fileSizeRanges, HashMap<String, ArrayList<SystemFile>> fileTypeRuler) {
         initializeFileSizeRanges(fileSizeRanges);
         initializeFileTypeRuler(fileTypeRuler);
-        initializeFileCategoryRulers(fileCategoryRulers);
-    }
-    protected static void initializeFileCategoryRulers(HashMap<String, ArrayList<SystemFile>> fileCategoryRulers) {
-        fileCategoryRulers = new HashMap<String,ArrayList<SystemFile>>();
     }
 
     protected static void initializeFileTypeRuler(HashMap<String, ArrayList<SystemFile>> fileTypeRuler) {
-        fileTypeRuler = new HashMap<>();
-        fileTypeRuler.put("txt",new ArrayList<>());
-        fileTypeRuler.put("pdf",new ArrayList<>());
-        fileTypeRuler.put("csv",new ArrayList<>());
-        fileTypeRuler.put("gif",new ArrayList<>());
-        fileTypeRuler.put("png",new ArrayList<>());
-        fileTypeRuler.put("jpeg",new ArrayList<>());
-        fileTypeRuler.put("doc",new ArrayList<>());
-        fileTypeRuler.put("html",new ArrayList<>());
+        fileTypeRuler.put("txt",new ArrayList<SystemFile>());
+        fileTypeRuler.put("pdf",new ArrayList<SystemFile>());
+        fileTypeRuler.put("csv",new ArrayList<SystemFile>());
+        fileTypeRuler.put("gif",new ArrayList<SystemFile>());
+        fileTypeRuler.put("png",new ArrayList<SystemFile>());
+        fileTypeRuler.put("jpeg",new ArrayList<SystemFile>());
+        fileTypeRuler.put("doc",new ArrayList<SystemFile>());
+        fileTypeRuler.put("html",new ArrayList<SystemFile>());
     }
 
     protected static void initializeFileSizeRanges(HashMap<String, ArrayList<SystemFile>> fileSizeRanges) {
-        fileSizeRanges = new HashMap<String, ArrayList<SystemFile>>();
-        fileSizeRanges.put("Large",new ArrayList<>());
-        fileSizeRanges.put("Medium",new ArrayList<>());
-        fileSizeRanges.put("Small",new ArrayList<>());
+        fileSizeRanges.put("Large",new ArrayList<SystemFile>());
+        fileSizeRanges.put("Medium",new ArrayList<SystemFile>());
+        fileSizeRanges.put("Small",new ArrayList<SystemFile>());
     }
 }

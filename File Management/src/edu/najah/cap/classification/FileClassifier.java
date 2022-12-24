@@ -6,12 +6,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public abstract class FileClassifier {
-    private static HashMap<String,ArrayList<SystemFile>> fileSizeRanges ;
-    private static HashMap<String,ArrayList<SystemFile>> fileTypeRuler;
-    private static HashMap<String,ArrayList<SystemFile>> fileCategoryRulers;
+    private static HashMap<String,ArrayList<SystemFile>> fileSizeRanges = new HashMap<String,ArrayList<SystemFile>>() ;
+    private static HashMap<String,ArrayList<SystemFile>> fileTypeRuler= new HashMap<String,ArrayList<SystemFile>>() ;
+    private static HashMap<String,ArrayList<SystemFile>> fileCategoryRulers= new HashMap<String,ArrayList<SystemFile>>() ;
 
     static {
-     InitializeClassifier.initializeStaticVariable(fileSizeRanges,fileTypeRuler,fileCategoryRulers);
+     InitializeClassifier.initializeStaticVariable(fileSizeRanges,fileTypeRuler);
     }
 
     public static void classifyFileBySize(SystemFile file){
