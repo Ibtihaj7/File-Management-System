@@ -11,9 +11,11 @@ public class MySQLDatabase implements Database {
     private static MySQLDatabase mySQLDatabase = null;
     private static Connection connection;
     private static Statement statement;
+    private static int counter = 0;
 
     private MySQLDatabase()  {
         try {
+            counter++;
             connection = DriverManager.getConnection(URL, ROOT, PASSWORD);
             statement = connection.createStatement();
         }catch (Exception e){
@@ -60,5 +62,9 @@ public class MySQLDatabase implements Database {
     }
     public static Connection getConnection() {
         return connection;
+    }
+
+    public static int getCounter() {
+        return counter;
     }
 }

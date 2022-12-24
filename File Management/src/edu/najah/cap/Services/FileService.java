@@ -10,12 +10,14 @@ import edu.najah.cap.Exceptions.*;
 import edu.najah.cap.Users.User;
 
 import java.io.File;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 public abstract class FileService {
     static Scanner input = new Scanner(System.in);
+    private static PreparedStatement preparedStatement;
 
     public static void doImport(String pathName, User createdBy) throws Exception {
 
@@ -34,18 +36,26 @@ public abstract class FileService {
             throw new MaxSizeExeption("The file size is too large for the system to store");
         }
         ResultSet statement = null;
-        String query = "SELECT * FROM files WHERE name = '" +  encryptedFileName + "' ";
+        String query = "SELECT * FROM files WHERE name = ? AND type = ?";
+         preparedStatement = MySQLDatabase.getConnection().prepareStatement(query, ResultSet.TYPE_SCROLL_SENSITIVE,
+                ResultSet.CONCUR_UPDATABLE);
+        preparedStatement.setString(1, encryptedFileName);
+        preparedStatement.setString(2,type);
         try {
-            statement = MySQLDatabase.getInstance().selectQuery(query);
+           statement = preparedStatement.executeQuery();
         } catch (Exception e) {
             System.err.println(e.getMessage());
         }
-        ResultSet statement1 = statement;
-        if (!statement1.next()) {
-            query = "INSERT INTO files VALUES ('" +  encryptedFileName + "','" + type + "'," + size + ",'" + encryptedFilePath+ "',0);";
+        if (!statement.first()) {
+            query = "INSERT INTO files VALUES (?, ?, ?, ?, ?)";
+            preparedStatement = MySQLDatabase.getConnection().prepareStatement(query);
+            preparedStatement.setString(1, encryptedFileName);
+            preparedStatement.setString(2, type);
+            preparedStatement.setInt(3, size);
+            preparedStatement.setString(4, encryptedFileName);
+            preparedStatement.setInt(5, 0);
             try {
-                MySQLDatabase.getInstance().insertDeleteQuery(query);
-                System.out.println("The file has been imported successfully");
+                preparedStatement.execute();
             } catch (Exception e) {
                 System.err.println(e.getMessage());
             }
@@ -72,15 +82,20 @@ public abstract class FileService {
         throw new InvalidInputExeption("Bad entry choice.");
     }
 
-    public static SystemFile doExportByName(String filename, User createdBy) throws Exception {
+    public static SystemFile doExportByName(String filename,String type, User createdBy) throws Exception {
         if(!Authorization.hasAdminPermission(createdBy)){
             throw new AuthorizationExeption("Your type is not allowed to do an export a file.");
         }
         ResultSet statement = null;
         String encryptedFileName= AES.encodeBase64(filename);
-        String query =  "SELECT * FROM files WHERE name = '"+encryptedFileName+"'";
+        String query =  "SELECT * FROM files WHERE name = ? AND type = ?";
+        PreparedStatement preparedStatement = MySQLDatabase.getConnection().prepareStatement(query,  ResultSet.TYPE_SCROLL_SENSITIVE,
+                ResultSet.CONCUR_UPDATABLE);
+        preparedStatement.setString(1, encryptedFileName);
+        preparedStatement.setString(2,type);
         try{
-            statement = MySQLDatabase.getInstance().selectQuery(query);
+//            statement = MySQLDatabase.getInstance().selectQuery(query);
+            statement = preparedStatement.executeQuery();
         }catch (Exception e){
             System.err.println(e.getMessage());
         }
@@ -124,9 +139,11 @@ public abstract class FileService {
             throw new AuthorizationExeption("Your type is not allowed to do an export a file.");
         }
         String fileNameEncoded = AES.encodeBase64(filename);
-        String query = "DELETE FROM files WHERE name = '"+fileNameEncoded + "'";
+        String query = "DELETE FROM files WHERE name = ?";
+        PreparedStatement preparedStatement = MySQLDatabase.getConnection().prepareStatement(query);
+        preparedStatement.setString(1, fileNameEncoded);
         try {
-            MySQLDatabase.getInstance().insertDeleteQuery(query);
+            preparedStatement.execute();
         }catch (Exception e){
             System.err.println(e.getMessage());
         }
@@ -148,24 +165,26 @@ public abstract class FileService {
     }
 
     public static void view() throws Exception {
-        String query="select * from files";
+        String query="select name,type,size,path,MAX(version) AS version\n" +
+                " from files\n" +
+                " GROUP BY name";
+        PreparedStatement preparedStatement = MySQLDatabase.getConnection().prepareStatement(query,ResultSet.TYPE_SCROLL_SENSITIVE,
+                ResultSet.CONCUR_UPDATABLE);
         ResultSet statement = null;
         try{
-            statement = MySQLDatabase.getInstance().selectQuery(query);
+          statement = preparedStatement.executeQuery();
         }catch (Exception e){
            System.err.println(e.getMessage());
         }
-        if(!statement.next())  throw new FileNotFoundExeption("There is no file in the system.");
-
-        for (int i = 1; statement.next(); i++) {
-            System.out.println("File " + i + " name: "+AES.decodeBase64(statement.getString("name"))+" \t path : "+AES.decodeBase64(statement.getString("path"))+" \t type : "+statement.getString("type")+" \t size : "+statement.getInt("size")+" \t category : "+statement.getString("category"));
+        if(!statement.first())  throw new FileNotFoundExeption("There is no file in the system.");
+        int i = 1;
+        System.out.println("File " + i++ + " name: "+AES.decodeBase64(statement.getString("name"))+" \t path : "+AES.decodeBase64(statement.getString("path"))+" \t type : "+statement.getString("type")+" \t size : "+statement.getInt("size")+" \t version : "+statement.getInt("version"));
+        while(statement.next()){
+            System.out.println("File " + i++ + " name: "+AES.decodeBase64(statement.getString("name"))+" \t path : "+AES.decodeBase64(statement.getString("path"))+" \t type : "+statement.getString("type")+" \t size : "+statement.getInt("size")+" \t version : "+statement.getInt("version"));
         }
         System.out.println();
     }
     public static void doRollBack(String fileName, int version, User createdBy) throws Exception {
-        if(!Authorization.hasAdminPermission(createdBy)){
-            throw new AuthorizationExeption("Your type is not allowed to do an export a file.");
-        }
         VersionControl.Rollback(fileName,version, createdBy);
     }
 }

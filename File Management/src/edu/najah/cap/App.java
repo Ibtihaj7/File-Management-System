@@ -1,5 +1,6 @@
 package edu.najah.cap;
 
+import edu.najah.cap.Database.impl.MySQLDatabase;
 import edu.najah.cap.FileRepository.FileRepository;
 import edu.najah.cap.FileRepository.SystemFile;
 import edu.najah.cap.Users.User;
@@ -12,12 +13,22 @@ public class App {
 
         SystemFile file1=null;
         try{
-//            fileRepository.importFile("C:\\Users\\HP\\Desktop\\karam.txt",user);
-//             file1 = fileRepository.exportFileByName("karam",user);
+            fileRepository.importFile("C:\\Users\\HP\\Desktop\\karam.txt",user);
+            fileRepository.importFile("C:\\Users\\HP\\Desktop\\abr.txt",user);
+            fileRepository.importFile("C:\\Users\\HP\\Desktop\\ibti.txt",user);
+            fileRepository.importFile("C:\\Users\\HP\\Desktop\\ahm.txt",user);
+//            fileRepository.RollBack("karam",0,user);
+//            fileRepository.RollBack("abr",0,user);
+//            fileRepository.RollBack("ahm",0,user);
+//            fileRepository.RollBack("ibti",0,user);
+//             file1 = fileRepository.exportFileByName("karam","txt",user);
+             fileRepository.viewFiles();
         }catch (Exception e){
             System.err.println(e.getMessage());
         }
 //        System.out.println(file1);
+        System.out.println(MySQLDatabase.getCounter());
+
 //        fileRepository.deleteFileByName("karam", user);
 
 //        SystemFile file1 = new SystemFile("ee","txt",100,"/Users/ibtihaj/Desktop/ee.txt",0);

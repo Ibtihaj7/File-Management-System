@@ -17,8 +17,8 @@ public class FileRepository {
     public void importFile(String url, User createdBy) throws Exception  {
      FileService.doImport(url,createdBy);
     }
-    public SystemFile exportFileByName(String fileName, User createdBy) throws Exception {
-       return FileService.doExportByName(fileName, createdBy);
+    public SystemFile exportFileByName(String fileName,String type, User createdBy) throws Exception {
+       return FileService.doExportByName(fileName,type, createdBy);
     }
     public ArrayList<SystemFile> exportFileByCategory(String categoryName, String categoryType)throws Exception  {
         return FileService.doExportByCategory(categoryName, categoryType);
