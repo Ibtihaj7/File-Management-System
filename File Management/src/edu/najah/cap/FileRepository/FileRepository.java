@@ -26,8 +26,8 @@ public class FileRepository {
     public void deleteFileByName(String url,User createdBy)throws Exception  {
         FileService.doDeleteByName(url,createdBy);
     }
-    public void deleteFileByCategory(String categoryName,String categoryType)throws Exception  {
-        FileService.doDeleteByCategory(categoryName,categoryType);
+    public void deleteFileByCategory(String categoryName, String categoryType, User createdBy)throws Exception  {
+        FileService.doDeleteByCategory(categoryName,categoryType, createdBy);
     }
 
     public void classifyFileBySize(SystemFile file){

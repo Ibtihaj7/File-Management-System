@@ -3,7 +3,9 @@ package edu.najah.cap.Security;
 import edu.najah.cap.Database.impl.MySQLDatabase;
 import edu.najah.cap.Exceptions.AuthorizationExeption;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.Arrays;
 
 public abstract class Authentication {
    private static String userRole=null;
@@ -11,10 +13,10 @@ public abstract class Authentication {
     private static  boolean logUserStatus=false;
 
     public static void logIn(String userEmail,String password)  throws Exception {
-        String query = "select * from user WHERE email = '" + userEmail + "' AND password= '" + password + "'";
+        String query = "select * from user WHERE email = ? AND password= ?";
         ResultSet resultQuery=null;
         try {
-            resultQuery=MySQLDatabase.getInstance().selectQuery(query);
+            resultQuery = MySQLDatabase.getInstance().executeQuery(query, Arrays.asList(userEmail,password));
         }catch (Exception e){
             System.err.println(e.getMessage());
         }

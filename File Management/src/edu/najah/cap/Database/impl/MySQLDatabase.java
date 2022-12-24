@@ -1,70 +1,66 @@
 package edu.najah.cap.Database.impl;
 
+
 import edu.najah.cap.Database.intf.Database;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MySQLDatabase implements Database {
     private static final String ROOT = "root";
     private static final String PASSWORD = "password";
     private static final String URL = "jdbc:mysql://localhost:3306/File_Management";
-    private static MySQLDatabase mySQLDatabase = null;
+    private static MySQLDatabase instance = null;
     private static Connection connection;
-    private static Statement statement;
-    private static int counter = 0;
 
-    private MySQLDatabase()  {
+    private MySQLDatabase() {
         try {
-            counter++;
             connection = DriverManager.getConnection(URL, ROOT, PASSWORD);
-            statement = connection.createStatement();
-        }catch (Exception e){
-            System.err.println(e.getMessage());
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
         }
+        System.out.println("Connection successfully");
     }
-    public static synchronized MySQLDatabase getInstance(){
-        if(mySQLDatabase == null){
-            try{
-                mySQLDatabase = new MySQLDatabase();
-                statement = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_READ_ONLY);
-            }catch (Exception e){
+
+    public static synchronized MySQLDatabase getInstance() {
+        if (instance == null) {
+            try {
+                instance = new MySQLDatabase();
+
+            } catch (Exception e) {
                 System.err.println(e.getMessage());
             }
         }
-        return mySQLDatabase;
-    }
-
-    @Override
-    public synchronized ResultSet selectQuery(String query) {
-        ResultSet result = null;
-        try{
-            result = statement.executeQuery(query);
-        }catch (Exception e){
-            System.err.println(e.getMessage());
-        }
-        return result;
+        return instance;
     }
     @Override
-    public synchronized void insertDeleteQuery(String query) {
-        try{
-            statement.executeUpdate(query);
-        }catch (Exception e){
-            System.err.println(e.getMessage());
-        }
-    }
-    @Override
-    public synchronized void updateQuery(String query) {
-        try{
-            connection.prepareStatement(query);
-        }catch (Exception e){
-            System.err.println(e.getMessage());
-        }
-    }
-    public static Connection getConnection() {
+    public Connection getConnection() {
         return connection;
     }
 
-    public static int getCounter() {
-        return counter;
+    @Override
+    public ResultSet executeQuery(String sql, List<Object> parameters) throws SQLException {
+        PreparedStatement preparedStatement = connection.prepareStatement(sql,ResultSet.TYPE_SCROLL_SENSITIVE,
+                ResultSet.CONCUR_UPDATABLE);
+        if (parameters == null) {
+            parameters = new ArrayList<>();
+        }
+        for (int i = 0; i < parameters.size(); i++) {
+            preparedStatement.setObject(i + 1, parameters.get(i));
+        }
+        return preparedStatement.executeQuery();
     }
+
+    @Override
+    public void executeStatement(String sql, List<Object> parameters) throws SQLException {
+        PreparedStatement preparedStatement = connection.prepareStatement(sql,ResultSet.TYPE_SCROLL_SENSITIVE,
+                ResultSet.CONCUR_UPDATABLE);
+        for (int i = 0; i < parameters.size(); i++) {
+            preparedStatement.setObject(i + 1, parameters.get(i));
+        }
+        preparedStatement.execute();
+    }
+
+
 }

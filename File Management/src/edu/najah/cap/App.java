@@ -7,16 +7,14 @@ import edu.najah.cap.Users.User;
 
 public class App {
     public static void main(String[] args) {
-
         FileRepository fileRepository = new FileRepository("karam");
         User user = new User("karam@gmail.com","karam@123");
 
         SystemFile file1=null;
         try{
-            fileRepository.importFile("C:\\Users\\HP\\Desktop\\karam.txt",user);
-            fileRepository.importFile("C:\\Users\\HP\\Desktop\\abr.txt",user);
-            fileRepository.importFile("C:\\Users\\HP\\Desktop\\ibti.txt",user);
-            fileRepository.importFile("C:\\Users\\HP\\Desktop\\ahm.txt",user);
+            fileRepository.importFile("C:\\Users\\HP\\Desktop\\karamzz.txt",user);
+            SystemFile file = fileRepository.exportFileByName("karamzz","txt",user);
+            System.out.println(file);
 //            fileRepository.RollBack("karam",0,user);
 //            fileRepository.RollBack("abr",0,user);
 //            fileRepository.RollBack("ahm",0,user);
@@ -27,7 +25,6 @@ public class App {
             System.err.println(e.getMessage());
         }
 //        System.out.println(file1);
-        System.out.println(MySQLDatabase.getCounter());
 
 //        fileRepository.deleteFileByName("karam", user);
 

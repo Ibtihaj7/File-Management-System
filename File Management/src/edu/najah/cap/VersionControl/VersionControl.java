@@ -9,6 +9,7 @@ import edu.najah.cap.Users.User;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Arrays;
 
 public abstract class VersionControl {
 
@@ -20,14 +21,8 @@ public abstract class VersionControl {
         }
         newVersion += 1;
         query = "INSERT INTO files VALUES (?, ?, ?, ?, ?)";
-        PreparedStatement preparedStatement = MySQLDatabase.getConnection().prepareStatement(query);
-        preparedStatement.setString(1, name);
-        preparedStatement.setString(2, type);
-        preparedStatement.setInt(3,size);
-        preparedStatement.setString(4,path);
-        preparedStatement.setInt(5, newVersion);
         try {
-            preparedStatement.execute();
+            MySQLDatabase.getInstance().executeStatement(query, Arrays.asList(name,type,size,path,newVersion));
         }catch (Exception e){
             System.err.println(e.getMessage());
         }
@@ -35,13 +30,8 @@ public abstract class VersionControl {
     }
     public static void Disable(String name,String type, int size, String path, ResultSet result) throws SQLException {
         String query = "Update files SET type = ?, size = ?, path = ? WHERE name = ?";
-        PreparedStatement preparedStatement = MySQLDatabase.getConnection().prepareStatement(query);
-        preparedStatement.setString(1, type);
-        preparedStatement.setInt(2, size);
-        preparedStatement.setString(3,path);
-        preparedStatement.setString(4,name);
         if (result.next()) {
-                preparedStatement.executeUpdate();
+            MySQLDatabase.getInstance().executeStatement(query,Arrays.asList(type,size,path,name));
 
             System.out.println("The file has been imported successfully");
         }
@@ -52,7 +42,7 @@ public abstract class VersionControl {
         }
         String fileNameEncrypted = Encryption.encodeBase64(fileName);
         String query = "DELETE FROM files WHERE name = ? AND version > ?";
-        PreparedStatement preparedStatement = MySQLDatabase.getConnection().prepareStatement(query, ResultSet.TYPE_SCROLL_SENSITIVE,
+        PreparedStatement preparedStatement = MySQLDatabase.getInstance().getConnection().prepareStatement(query, ResultSet.TYPE_SCROLL_SENSITIVE,
                 ResultSet.CONCUR_UPDATABLE);
         preparedStatement.setString(1, fileNameEncrypted);
         preparedStatement.setInt(2, version);

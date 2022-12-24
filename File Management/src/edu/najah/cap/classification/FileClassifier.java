@@ -11,7 +11,7 @@ public abstract class FileClassifier {
     private static HashMap<String,ArrayList<SystemFile>> fileCategoryRulers;
 
     static {
-        InitializeClassifier.initializeStaticVariable(fileSizeRanges,fileTypeRuler,fileCategoryRulers);
+     InitializeClassifier.initializeStaticVariable(fileSizeRanges,fileTypeRuler,fileCategoryRulers);
     }
 
     public static void classifyFileBySize(SystemFile file){

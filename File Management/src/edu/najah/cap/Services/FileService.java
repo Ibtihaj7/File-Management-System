@@ -14,11 +14,11 @@ import java.io.File;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Scanner;
 
 public abstract class FileService {
     static Scanner input = new Scanner(System.in);
-    private static PreparedStatement preparedStatement;
 
     public static void doImport(String pathName, User createdBy) throws Exception {
 
@@ -38,25 +38,15 @@ public abstract class FileService {
         }
         ResultSet statement = null;
         String query = "SELECT * FROM files WHERE name = ? AND type = ?";
-         preparedStatement = MySQLDatabase.getConnection().prepareStatement(query, ResultSet.TYPE_SCROLL_SENSITIVE,
-                ResultSet.CONCUR_UPDATABLE);
-        preparedStatement.setString(1, encryptedFileName);
-        preparedStatement.setString(2,type);
         try {
-           statement = preparedStatement.executeQuery();
+           statement = MySQLDatabase.getInstance().executeQuery(query, Arrays.asList(encryptedFileName,type));
         } catch (Exception e) {
             System.err.println(e.getMessage());
         }
         if (!statement.first()) {
             query = "INSERT INTO files VALUES (?, ?, ?, ?, ?)";
-            preparedStatement = MySQLDatabase.getConnection().prepareStatement(query);
-            preparedStatement.setString(1, encryptedFileName);
-            preparedStatement.setString(2, type);
-            preparedStatement.setInt(3, size);
-            preparedStatement.setString(4, encryptedFileName);
-            preparedStatement.setInt(5, 0);
             try {
-                preparedStatement.execute();
+                MySQLDatabase.getInstance().executeStatement(query,Arrays.asList(encryptedFileName,type,size,encryptedFilePath,0));
             } catch (Exception e) {
                 System.err.println(e.getMessage());
             }
@@ -90,13 +80,8 @@ public abstract class FileService {
         ResultSet statement = null;
         String encryptedFileName= Encryption.encodeBase64(filename);
         String query =  "SELECT * FROM files WHERE name = ? AND type = ?";
-        PreparedStatement preparedStatement = MySQLDatabase.getConnection().prepareStatement(query,  ResultSet.TYPE_SCROLL_SENSITIVE,
-                ResultSet.CONCUR_UPDATABLE);
-        preparedStatement.setString(1, encryptedFileName);
-        preparedStatement.setString(2,type);
         try{
-//            statement = MySQLDatabase.getInstance().selectQuery(query);
-            statement = preparedStatement.executeQuery();
+            statement = MySQLDatabase.getInstance().executeQuery(query,Arrays.asList(encryptedFileName,type));
         }catch (Exception e){
             System.err.println(e.getMessage());
         }
@@ -141,7 +126,7 @@ public abstract class FileService {
         }
         String fileNameEncoded =Encryption.encodeBase64(filename);
         String query = "DELETE FROM files WHERE name = ?";
-        PreparedStatement preparedStatement = MySQLDatabase.getConnection().prepareStatement(query);
+        PreparedStatement preparedStatement = MySQLDatabase.getInstance().getConnection().prepareStatement(query);
         preparedStatement.setString(1, fileNameEncoded);
         try {
             preparedStatement.execute();
@@ -150,18 +135,48 @@ public abstract class FileService {
         }
         System.out.println("File deleted successfully");
     }
-    public static void doDeleteByCategory(String categoryName, String categoryType) throws Exception{
+    public static void doDeleteByCategory(String categoryName, String categoryType, User createdBy) throws Exception{
+        if(!Authorization.hasAdminPermission(createdBy)){
+            throw new AuthorizationExeption("Your type is not allowed to do an export a file.");
+        }
         if(categoryType.equals("size")){
-            // karam
-
+            if (FileClassifier.getFileSizeRanges().containsKey(categoryName)){
+                FileClassifier.getFileSizeRanges().get(categoryName).forEach(file->{
+                    try {
+                        doDeleteByName(file.getName(), createdBy);
+                    }catch (Exception e){
+                        System.err.println(e.getMessage());
+                    }
+                });
+            }else{
+                throw new CategoryNotFoundExeption("'"+categoryName+"' not exist in "+categoryType+" category");
+            }
         }
         if(categoryType.equals("type")){
-            // karam
-
+            if (FileClassifier.getFileTypeRuler().containsKey(categoryName)){
+                FileClassifier.getFileTypeRuler().get(categoryName).forEach(file->{
+                    try {
+                        doDeleteByName(file.getName(), createdBy);
+                    }catch (Exception e){
+                        System.err.println(e.getMessage());
+                    }
+                });
+            }else{
+                throw new CategoryNotFoundExeption("'"+categoryName+"' not exist in "+categoryType+" category");
+            }
         }
         if(categoryType.equals("category")){
-            // karam
-
+            if (FileClassifier.getFileCategoryRulers().containsKey(categoryName)){
+                FileClassifier.getFileCategoryRulers().get(categoryName).forEach(file->{
+                    try {
+                        doDeleteByName(file.getName(), createdBy);
+                    }catch (Exception e){
+                        System.err.println(e.getMessage());
+                    }
+                });
+            }else{
+                throw new CategoryNotFoundExeption("'"+categoryName+"' not exist in "+categoryType+" category");
+            }
         }
     }
 
@@ -169,11 +184,9 @@ public abstract class FileService {
         String query="select name,type,size,path,MAX(version) AS version\n" +
                 " from files\n" +
                 " GROUP BY name";
-        PreparedStatement preparedStatement = MySQLDatabase.getConnection().prepareStatement(query,ResultSet.TYPE_SCROLL_SENSITIVE,
-                ResultSet.CONCUR_UPDATABLE);
         ResultSet statement = null;
         try{
-          statement = preparedStatement.executeQuery();
+          statement = MySQLDatabase.getInstance().executeQuery(query,null);
         }catch (Exception e){
            System.err.println(e.getMessage());
         }
