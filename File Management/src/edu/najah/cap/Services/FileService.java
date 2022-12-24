@@ -1,13 +1,14 @@
 package edu.najah.cap.Services;
 
-import edu.najah.cap.Classification.FileClassifier;
 import edu.najah.cap.Database.impl.MySQLDatabase;
 import edu.najah.cap.FileRepository.SystemFile;
-import edu.najah.cap.Security.AES;
 import edu.najah.cap.Security.Authorization;
+import edu.najah.cap.Security.Decryption;
+import edu.najah.cap.Security.Encryption;
 import edu.najah.cap.VersionControl.VersionControl;
 import edu.najah.cap.Exceptions.*;
 import edu.najah.cap.Users.User;
+import edu.najah.cap.classification.FileClassifier;
 
 import java.io.File;
 import java.sql.PreparedStatement;
@@ -29,8 +30,8 @@ public abstract class FileService {
         String name = file.getName().substring(0,index);
         String type = file.getName().substring(index + 1);
         int size = (int) file.length();
-        String encryptedFileName= AES.encodeBase64(name);
-        String encryptedFilePath= AES.encodeBase64(pathName);
+        String encryptedFileName= Encryption.encodeBase64(name);
+        String encryptedFilePath= Encryption.encodeBase64(pathName);
 
         if(size > 1000000){
             throw new MaxSizeExeption("The file size is too large for the system to store");
@@ -87,7 +88,7 @@ public abstract class FileService {
             throw new AuthorizationExeption("Your type is not allowed to do an export a file.");
         }
         ResultSet statement = null;
-        String encryptedFileName= AES.encodeBase64(filename);
+        String encryptedFileName= Encryption.encodeBase64(filename);
         String query =  "SELECT * FROM files WHERE name = ? AND type = ?";
         PreparedStatement preparedStatement = MySQLDatabase.getConnection().prepareStatement(query,  ResultSet.TYPE_SCROLL_SENSITIVE,
                 ResultSet.CONCUR_UPDATABLE);
@@ -104,9 +105,9 @@ public abstract class FileService {
             throw new FileNotFoundExeption("There is no file with this name.");
         }
         statement.last();
-        String fileName=AES.decodeBase64(statement.getString("name")),
+        String fileName= Decryption.decodeBase64(statement.getString("name")),
                 fileType=statement.getString("type"),
-                filePath=AES.decodeBase64(statement.getString("path"));
+                filePath=Decryption.decodeBase64(statement.getString("path"));
         int fileSize= statement.getInt("size"),
                 fileVersion=statement.getInt("version");
 
@@ -138,7 +139,7 @@ public abstract class FileService {
         if(!Authorization.hasAdminPermission(createdBy)){
             throw new AuthorizationExeption("Your type is not allowed to do an export a file.");
         }
-        String fileNameEncoded = AES.encodeBase64(filename);
+        String fileNameEncoded =Encryption.encodeBase64(filename);
         String query = "DELETE FROM files WHERE name = ?";
         PreparedStatement preparedStatement = MySQLDatabase.getConnection().prepareStatement(query);
         preparedStatement.setString(1, fileNameEncoded);
@@ -178,9 +179,9 @@ public abstract class FileService {
         }
         if(!statement.first())  throw new FileNotFoundExeption("There is no file in the system.");
         int i = 1;
-        System.out.println("File " + i++ + " name: "+AES.decodeBase64(statement.getString("name"))+" \t path : "+AES.decodeBase64(statement.getString("path"))+" \t type : "+statement.getString("type")+" \t size : "+statement.getInt("size")+" \t version : "+statement.getInt("version"));
+        System.out.println("File " + i++ + " name: "+Decryption.decodeBase64(statement.getString("name"))+" \t path : "+Decryption.decodeBase64(statement.getString("path"))+" \t type : "+statement.getString("type")+" \t size : "+statement.getInt("size")+" \t version : "+statement.getInt("version"));
         while(statement.next()){
-            System.out.println("File " + i++ + " name: "+AES.decodeBase64(statement.getString("name"))+" \t path : "+AES.decodeBase64(statement.getString("path"))+" \t type : "+statement.getString("type")+" \t size : "+statement.getInt("size")+" \t version : "+statement.getInt("version"));
+            System.out.println("File " + i++ + " name: "+Decryption.decodeBase64(statement.getString("name"))+" \t path : "+Decryption.decodeBase64(statement.getString("path"))+" \t type : "+statement.getString("type")+" \t size : "+statement.getInt("size")+" \t version : "+statement.getInt("version"));
         }
         System.out.println();
     }

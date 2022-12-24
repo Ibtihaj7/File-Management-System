@@ -1,9 +1,9 @@
 package edu.najah.cap.FileRepository;
 
-import edu.najah.cap.Classification.FileClassifier;
 import edu.najah.cap.Services.FileService;
 
 import edu.najah.cap.Users.User;
+import edu.najah.cap.classification.FileClassifier;
 
 import java.util.ArrayList;
 

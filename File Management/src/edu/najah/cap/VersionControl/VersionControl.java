@@ -2,9 +2,8 @@ package edu.najah.cap.VersionControl;
 
 import edu.najah.cap.Database.impl.MySQLDatabase;
 import edu.najah.cap.Exceptions.AuthorizationExeption;
-import edu.najah.cap.Security.AES;
-import edu.najah.cap.Exceptions.FileNotFoundExeption;
 import edu.najah.cap.Security.Authorization;
+import edu.najah.cap.Security.Encryption;
 import edu.najah.cap.Users.User;
 
 import java.sql.PreparedStatement;
@@ -51,7 +50,7 @@ public abstract class VersionControl {
         if (!Authorization.hasAdminPermission(createdBy)) {
             throw new AuthorizationExeption("Your type is not allowed to do an export a file.");
         }
-        String fileNameEncrypted = AES.encodeBase64(fileName);
+        String fileNameEncrypted = Encryption.encodeBase64(fileName);
         String query = "DELETE FROM files WHERE name = ? AND version > ?";
         PreparedStatement preparedStatement = MySQLDatabase.getConnection().prepareStatement(query, ResultSet.TYPE_SCROLL_SENSITIVE,
                 ResultSet.CONCUR_UPDATABLE);
