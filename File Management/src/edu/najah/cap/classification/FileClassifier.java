@@ -1,8 +1,7 @@
-package edu.najah.cap.Classification;
+package edu.najah.cap.classification;
 
 import edu.najah.cap.FileRepository.SystemFile;
 import edu.najah.cap.Exceptions.TypeNotSupportExeption;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -12,76 +11,52 @@ public abstract class FileClassifier {
     private static HashMap<String,ArrayList<SystemFile>> fileCategoryRulers;
 
     static {
-        fileSizeRanges = new HashMap<String, ArrayList<SystemFile>>();
-        fileSizeRanges.put("Large",new ArrayList<SystemFile>());
-        fileSizeRanges.put("Medium",new ArrayList<SystemFile>());
-        fileSizeRanges.put("Small",new ArrayList<SystemFile>());
-
-        fileTypeRuler = new HashMap<String,ArrayList<SystemFile>>();
-        fileTypeRuler.put("txt",new ArrayList<SystemFile>());
-        fileTypeRuler.put("pdf",new ArrayList<SystemFile>());
-        fileTypeRuler.put("csv",new ArrayList<SystemFile>());
-        fileTypeRuler.put("gif",new ArrayList<SystemFile>());
-        fileTypeRuler.put("png",new ArrayList<SystemFile>());
-        fileTypeRuler.put("jpeg",new ArrayList<SystemFile>());
-        fileTypeRuler.put("doc",new ArrayList<SystemFile>());
-        fileTypeRuler.put("html",new ArrayList<SystemFile>());
-
-        fileCategoryRulers = new HashMap<String,ArrayList<SystemFile>>();
+        InitializeClassifier.initializeStaticVariable(fileSizeRanges,fileTypeRuler,fileCategoryRulers);
     }
+
     public static void classifyFileBySize(SystemFile file){
-        if(file.getSize() < 100  ) {
-            fileSizeRanges.get("Small").add(file);
-            return;
-        }
-        if(file.getSize() < 5000){
-            fileSizeRanges.get("Medium").add(file);
-            return;
-        }
-        fileSizeRanges.get("Large").add(file);
+        fileSizeRanges.get(sizeOfFile(file)).add(file);
     }
 
-    public static void classifyFileByType(SystemFile file)throws Exception{
-        if(file.getType().equals("txt")){
-            fileTypeRuler.get("txt").add(file);
-            return;
+    private static String sizeOfFile(SystemFile file) {
+        if(isFileSmall(file.getSize())) return "Small";
+        if(isFileMedium(file.getSize())) return "Medium";
+        return "Large";
+    }
+    private static boolean isFileSmall(int size){ return size < 100; }
+    private static boolean isFileMedium(int size){ return size<5000; }
+
+    public static void classifyFileByType(SystemFile file) {
+        try {
+            fileTypeRuler.get(typeOfFile(file)).add(file);
+        }catch (TypeNotSupportExeption e){
+            System.err.println(e.getMessage());
         }
-        if(file.getType().equals("pdf")){
-            fileTypeRuler.get("pdf").add(file);
-            return;
-        }
-        if(file.getType().equals("csv")){
-            fileTypeRuler.get("csv").add(file);
-            return;
-        }
-        if(file.getType().equals("gif")){
-            fileTypeRuler.get("gif").add(file);
-            return;
-        }
-        if(file.getType().equals("png")){
-            fileTypeRuler.get("png").add(file);
-            return;
-        }
-        if(file.getType().equals("jpeg")){
-            fileTypeRuler.get("jpeg").add(file);
-            return;
-        }
-        if(file.getType().equals("doc")){
-            fileTypeRuler.get("doc").add(file);
-            return;
-        }
-        if(file.getType().equals("html")){
-            fileTypeRuler.get("html").add(file);
-            return;
-        }
-        throw new TypeNotSupportExeption("The type of this file not support in our system.");
+    }
+
+    private static String typeOfFile(SystemFile file) throws TypeNotSupportExeption{
+        if(SupportedTypes.txtFile(file))return "txt";
+        if(SupportedTypes.pdfFile(file))return "pdf";
+        if(SupportedTypes.csvFile(file))return "csv";
+        if(SupportedTypes.gifFile(file))return "gif";
+        if(SupportedTypes.pngFile(file))return "png";
+        if(SupportedTypes.jpegFile(file))return "jpeg";
+        if(SupportedTypes.docFile(file))return "doc";
+        if(SupportedTypes.htmlFile(file))return "html";
+
+        String exceptionMessage = "The type of this file not support in our system.";
+        throw new TypeNotSupportExeption(exceptionMessage);
     }
 
     public static void classifyFileByCategory(SystemFile file,String categoryName){
-        if(!fileCategoryRulers.containsKey(categoryName))
-            fileCategoryRulers.put(categoryName,new ArrayList<SystemFile>());
+        if(categoryNameNotExist(categoryName))
+            fileCategoryRulers.put(categoryName,new ArrayList<>());
 
         fileCategoryRulers.get(categoryName).add(file);
+    }
+
+    private static boolean categoryNameNotExist(String categoryName) {
+        return !fileCategoryRulers.containsKey(categoryName);
     }
 
     public static HashMap<String, ArrayList<SystemFile>> getFileSizeRanges() { return fileSizeRanges; }
