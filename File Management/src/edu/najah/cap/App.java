@@ -2,34 +2,22 @@ package edu.najah.cap;
 
 import edu.najah.cap.FileRepository.FileRepository;
 import edu.najah.cap.FileRepository.SystemFile;
-import edu.najah.cap.Security.AES;
-import edu.najah.cap.Security.Authentication;
-import edu.najah.cap.Security.Authorization;
-import edu.najah.cap.classification.FileClassifier;
-import edu.najah.cap.users.User;
-
-import javax.crypto.BadPaddingException;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
-import java.io.IOException;
-import java.security.InvalidAlgorithmParameterException;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
-import java.sql.SQLException;
+import edu.najah.cap.Users.User;
 
 public class App {
     public static void main(String[] args) {
 
-        FileRepository fileRepository = new FileRepository("ibtihaj");
-        User user = new User("ibtihaj.adham7@gmail.com","ibtihaj");
-//        fileRepository.importFile("C:\\Users\\HP\\Desktop\\karam.txt",user);
+        FileRepository fileRepository = new FileRepository("karam");
+        User user = new User("karam@gmail.com","karam@123");
+
         SystemFile file1=null;
         try{
-             file1 = fileRepository.exportFileByName("karam",user);
+//            fileRepository.importFile("C:\\Users\\HP\\Desktop\\karam.txt",user);
+//             file1 = fileRepository.exportFileByName("karam",user);
         }catch (Exception e){
             System.err.println(e.getMessage());
         }
-        System.out.println(file1);
+//        System.out.println(file1);
 //        fileRepository.deleteFileByName("karam", user);
 
 //        SystemFile file1 = new SystemFile("ee","txt",100,"/Users/ibtihaj/Desktop/ee.txt",0);
@@ -41,7 +29,6 @@ public class App {
 //        fileRepository.classifyFileBySize(file2);
 //        fileRepository.classifyFileBySize(file3);
 
-        System.out.println("fff");
 //
 //        FileClassifier.getFileSizeRanges().forEach((key,value)->{
 //            System.out.println(key+" : ");

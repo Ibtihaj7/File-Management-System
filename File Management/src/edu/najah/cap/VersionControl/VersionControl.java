@@ -1,9 +1,11 @@
 package edu.najah.cap.VersionControl;
 
 import edu.najah.cap.Database.impl.MySQLDatabase;
+import edu.najah.cap.Exceptions.AuthorizationExeption;
 import edu.najah.cap.Security.AES;
-import edu.najah.cap.exception.FileNotFoundExeption;
-import edu.najah.cap.users.User;
+import edu.najah.cap.Exceptions.FileNotFoundExeption;
+import edu.najah.cap.Security.Authorization;
+import edu.najah.cap.Users.User;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -25,9 +27,8 @@ public abstract class VersionControl {
         preparedStatement.setInt(3,size);
         preparedStatement.setString(4,path);
         preparedStatement.setInt(5, newVersion);
-        preparedStatement.execute();
         try {
-            MySQLDatabase.getInstance().insertDeleteQuery(query);
+            preparedStatement.execute();
         }catch (Exception e){
             System.err.println(e.getMessage());
         }
@@ -45,7 +46,10 @@ public abstract class VersionControl {
             System.out.println("The file has been imported successfully");
         }
     }
-    public static void Rollback(String fileName, User createdBy) throws Exception {
+    public static void Rollback(String fileName,int version, User createdBy) throws Exception {
+        if(!Authorization.hasAdminPermission(createdBy)){
+            throw new AuthorizationExeption("Your type is not allowed to do an export a file.");
+        }
         ResultSet statement = null;
         String query;
         try {
@@ -59,9 +63,10 @@ public abstract class VersionControl {
             throw new FileNotFoundExeption( "The file name you entered does not exist");
 
         statement.last();
-        query = "DELETE FROM files WHERE name = ?";
+        query = "DELETE FROM files WHERE name = ? AND version > ?";
         PreparedStatement preparedStatement = MySQLDatabase.getConnection().prepareStatement(query);
         preparedStatement.setString(1, statement.getString("name"));
+        preparedStatement.setInt(2, version);
         try {
             preparedStatement.execute();
         }catch (Exception e){

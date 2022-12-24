@@ -1,17 +1,16 @@
 package edu.najah.cap.Services;
 
+import edu.najah.cap.Classification.FileClassifier;
 import edu.najah.cap.Database.impl.MySQLDatabase;
 import edu.najah.cap.FileRepository.SystemFile;
 import edu.najah.cap.Security.AES;
 import edu.najah.cap.Security.Authorization;
 import edu.najah.cap.VersionControl.VersionControl;
-import edu.najah.cap.classification.FileClassifier;
-import edu.najah.cap.exception.*;
-import edu.najah.cap.users.User;
+import edu.najah.cap.Exceptions.*;
+import edu.najah.cap.Users.User;
 
 import java.io.File;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -50,6 +49,7 @@ public abstract class FileService {
             } catch (Exception e) {
                 System.err.println(e.getMessage());
             }
+            System.out.println("The file has been imported successfully");
             return;
         }
 
@@ -78,7 +78,6 @@ public abstract class FileService {
         }
         ResultSet statement = null;
         String encryptedFileName= AES.encodeBase64(filename);
-        System.out.println(encryptedFileName);
         String query =  "SELECT * FROM files WHERE name = '"+encryptedFileName+"'";
         try{
             statement = MySQLDatabase.getInstance().selectQuery(query);
@@ -131,7 +130,7 @@ public abstract class FileService {
         }catch (Exception e){
             System.err.println(e.getMessage());
         }
-        System.out.println("delete successfully");
+        System.out.println("File deleted successfully");
     }
     public static void doDeleteByCategory(String categoryName, String categoryType) throws Exception{
         if(categoryType.equals("size")){
@@ -163,10 +162,10 @@ public abstract class FileService {
         }
         System.out.println();
     }
-    public static void doRollBack(String url, User createdBy) throws Exception {
+    public static void doRollBack(String fileName, int version, User createdBy) throws Exception {
         if(!Authorization.hasAdminPermission(createdBy)){
             throw new AuthorizationExeption("Your type is not allowed to do an export a file.");
         }
-        VersionControl.Rollback(url, createdBy);
+        VersionControl.Rollback(fileName,version, createdBy);
     }
 }

@@ -1,7 +1,7 @@
 package edu.najah.cap.Security;
 
-import edu.najah.cap.users.User;
-import edu.najah.cap.users.UserRole;
+import edu.najah.cap.Users.User;
+import edu.najah.cap.Users.UserRole;
 
 public abstract class Authorization {
    public static boolean hasAdminPermission(User user){

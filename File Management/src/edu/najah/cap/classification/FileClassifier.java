@@ -1,7 +1,7 @@
-package edu.najah.cap.classification;
+package edu.najah.cap.Classification;
 
 import edu.najah.cap.FileRepository.SystemFile;
-import edu.najah.cap.exception.TypeNotSupportExeption;
+import edu.najah.cap.Exceptions.TypeNotSupportExeption;
 
 import java.util.ArrayList;
 import java.util.HashMap;

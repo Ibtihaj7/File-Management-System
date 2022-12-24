@@ -1,13 +1,9 @@
 package edu.najah.cap.Security;
 
 import edu.najah.cap.Database.impl.MySQLDatabase;
-import edu.najah.cap.exception.AuthorizationExeption;
-import edu.najah.cap.users.User;
+import edu.najah.cap.Exceptions.AuthorizationExeption;
 
 import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
 
 public abstract class Authentication {
    private static String userRole=null;

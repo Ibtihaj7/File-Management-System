@@ -1,4 +1,4 @@
-package edu.najah.cap.exception;
+package edu.najah.cap.Exceptions;
 
 public class InvalidInputExeption extends Exception{
     private String message;

@@ -1,10 +1,10 @@
 package edu.najah.cap.FileRepository;
 
+import edu.najah.cap.Classification.FileClassifier;
 import edu.najah.cap.Services.FileService;
-import edu.najah.cap.classification.FileClassifier;
-import edu.najah.cap.users.User;
 
-import java.sql.SQLException;
+import edu.najah.cap.Users.User;
+
 import java.util.ArrayList;
 
 public class FileRepository {
@@ -40,7 +40,7 @@ public class FileRepository {
 
     public void viewFiles() throws Exception { FileService.view(); }
 
-    public void RollBack(String url,User createdBy) throws Exception  {
-        FileService.doRollBack(url,createdBy);
+    public void RollBack(String fileName,int version,User createdBy) throws Exception  {
+        FileService.doRollBack(fileName,version,createdBy);
     }
 }

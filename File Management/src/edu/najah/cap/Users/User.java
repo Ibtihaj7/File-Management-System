@@ -1,12 +1,6 @@
-package edu.najah.cap.users;
+package edu.najah.cap.Users;
 
-import edu.najah.cap.Database.impl.MySQLDatabase;
 import edu.najah.cap.Security.Authentication;
-import edu.najah.cap.Security.Authorization;
-
-
-import java.sql.ResultSet;
-import java.sql.SQLException;
 
 
 public class User {
