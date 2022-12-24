@@ -27,9 +27,10 @@ public abstract class FileService {
             throw new AuthorizationExeption("Your type is not allowed to do an import a file.");
         }
         File file = new File(pathName);
-        int index = file.getName().lastIndexOf(".");
-        String name = file.getName().substring(0,index);
-        String type = file.getName().substring(index + 1);
+        int lastIndex = file.getName().lastIndexOf(".");
+        int firstIndex = file.getName().lastIndexOf("\\");
+        String name = file.getName().substring(firstIndex+1,lastIndex);
+        String type = file.getName().substring(lastIndex + 1);
         int size = (int) file.length();
         String encryptedFileName= Encryption.encodeBase64(name);
         String encryptedFilePath= Encryption.encodeBase64(pathName);
