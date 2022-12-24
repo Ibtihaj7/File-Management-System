@@ -15,6 +15,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Map;
 import java.util.Scanner;
 
 public abstract class FileService {
@@ -200,5 +201,47 @@ public abstract class FileService {
     }
     public static void doRollBack(String fileName, int version, User createdBy) throws Exception {
         VersionControl.Rollback(fileName,version, createdBy);
+    }
+
+    public static void viewFilesByCategory(String categoryName) {
+        boolean isCategoryNameSize=categoryName.equals("size");
+        boolean isCategoryNameType=categoryName.equals("type");
+        boolean isCategoryNameCustom=categoryName.equals("custom");
+        if(isCategoryNameSize) {
+            viewFilesCategorizedBySize();
+        }
+        if(isCategoryNameType) {
+            viewFilesCategorizedByType();
+        }
+        if(isCategoryNameCustom)
+          viewFilesWithCustomCategory();
+    }
+
+    private static void viewFilesWithCustomCategory() {
+        int filesWithCategoryNumber=0;
+
+        for (ArrayList<SystemFile>files:FileClassifier.getFileCategoryRulers().values()) {
+            System.out.println(files.get(filesWithCategoryNumber).toString());
+            filesWithCategoryNumber++;
+        }
+
+    }
+
+    private static void viewFilesCategorizedByType() {
+        int filesWithCategoryNumber=0;
+        for (ArrayList<SystemFile>files:FileClassifier.getFileTypeRuler().values()) {
+            System.out.println(files.get(filesWithCategoryNumber).toString());
+            filesWithCategoryNumber++;
+        }
+
+    }
+
+    private static void viewFilesCategorizedBySize() {
+        int filesWithCategoryNumber=0;
+
+        for (ArrayList<SystemFile>files:FileClassifier.getFileSizeRanges().values()) {
+            System.out.println( files.get(filesWithCategoryNumber).toString());
+            filesWithCategoryNumber++;
+        }
     }
 }
