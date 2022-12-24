@@ -9,7 +9,6 @@ public class App {
     public static void main(String[] args) {
         FileRepository fileRepository = new FileRepository("karam");
         User user = new User("karam@gmail.com","karam@123");
-
         SystemFile file1=null;
         try{
             fileRepository.importFile("C:\\Users\\HP\\Desktop\\karamzz.txt",user);
@@ -20,7 +19,7 @@ public class App {
 //            fileRepository.RollBack("ahm",0,user);
 //            fileRepository.RollBack("ibti",0,user);
 //             file1 = fileRepository.exportFileByName("karam","txt",user);
-             fileRepository.viewFiles();
+            fileRepository.viewFilesByCategory("type");
         }catch (Exception e){
             System.err.println(e.getMessage());
         }

@@ -1,5 +1,6 @@
 package edu.najah.cap.FileRepository;
 
+import com.sun.corba.se.impl.encoding.CDROutputObject;
 import edu.najah.cap.Services.FileService;
 
 import edu.najah.cap.Users.User;
@@ -38,7 +39,12 @@ public class FileRepository {
     }
     public void classifyFileByCategory(SystemFile file, String categoryName){ FileClassifier.classifyFileByCategory(file,categoryName); }
 
-    public void viewFiles() throws Exception { FileService.view(); }
+    public void viewAllFiles() throws Exception { FileService.view(); }
+    public void viewFilesByCategory(String categoryName){
+     FileService.viewFilesByCategory(categoryName);
+    }
+
+
 
     public void RollBack(String fileName,int version,User createdBy) throws Exception  {
         FileService.doRollBack(fileName,version,createdBy);
