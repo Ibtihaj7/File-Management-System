@@ -21,21 +21,23 @@ public class App {
         SystemFile file1,file2,file3,file4 ;
         ArrayList<SystemFile> files;
 
-//        try {
-//            fileRepository.importFile("/Users/ibtihaj/Desktop/words.txt",user1);
-//            fileRepository.importFile("/Users/ibtihaj/Desktop/words.pdf",user1);
-//            fileRepository.importFile("/Users/ibtihaj/Desktop/sss.pdf",user1);
-//            fileRepository.importFile("/Users/ibtihaj/Desktop/rrr.txt",user1);
-//            fileRepository.importFile("/Users/ibtihaj/Desktop/fff.pdf",user1);
-//            fileRepository.importFile("/Users/ibtihaj/Desktop/hhh.pdf",user1);
-//        }catch (Exception e){
-//            System.err.println(e);
-//        }
+        try {
+            fileRepository.importFile("/Users/ibtihaj/Desktop/words.txt",user1);
+            fileRepository.importFile("/Users/ibtihaj/Desktop/words.pdf",user1);
+            fileRepository.importFile("/Users/ibtihaj/Desktop/sss.pdf",user1);
+            fileRepository.importFile("/Users/ibtihaj/Desktop/rrr.txt",user1);
+            fileRepository.importFile("/Users/ibtihaj/Desktop/fff.pdf",user1);
+            fileRepository.importFile("/Users/ibtihaj/Desktop/hhh.pdf",user1);
+        }catch (Exception e){
+            System.err.println(e);
+        }
 
 
         System.out.println("----------------------------------------");
         try {
-            files = fileRepository.exportFileByCategory("type", "txt", user1);
+            file1=fileRepository.exportFileByName("sss","pdf",user1);
+            fileRepository.classifyFileByType(file1,user1);
+            fileRepository.viewFileByClassification("type", "pdf");
         }catch (Exception e){
             System.err.println(e);
         }
@@ -64,6 +66,15 @@ public class App {
         System.out.println("----------------------------------------");
 
         fileRepository.viewFileByClassification("new category","bbbb");
+        System.out.println("----------------------------------------");
+
+        try {
+            fileRepository.deleteFileByName("fff","pdf",user1);
+        }catch (Exception e){
+            System.err.println(e);
+        }
+        fileRepository.viewAllFiles();
+
         MySQLDatabase.disconnect();
     }
 

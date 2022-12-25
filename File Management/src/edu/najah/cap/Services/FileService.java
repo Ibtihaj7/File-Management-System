@@ -85,10 +85,10 @@ public abstract class FileService {
                 return;
             } else throw new CategoryNotFoundExeption("the category type not found in this category");
         if(categoryName.equals("type"))
-            if(FileClassifier.getFileTypeRuler().containsKey(categoryType)) {
+            if (FileClassifier.getFileTypeRuler().containsKey(categoryType)) {
                 viewFilesCategorizedByType(categoryType);
                 return;
-            }else throw new CategoryNotFoundExeption("the category type not found in this category");
+            } else throw new CategoryNotFoundExeption("the category type not found in this category");
         if(categoryName.equals("new category"))
             if(FileClassifier.getFileCategoryRulers().containsKey(categoryType)) {
                 viewFilesWithCustomCategory(categoryType);

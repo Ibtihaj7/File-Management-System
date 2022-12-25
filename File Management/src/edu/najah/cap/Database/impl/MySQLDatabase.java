@@ -1,6 +1,7 @@
 package edu.najah.cap.Database.impl;
 
 
+import edu.najah.cap.App;
 import edu.najah.cap.Database.intf.Database;
 
 import java.sql.*;
@@ -17,17 +18,18 @@ public class MySQLDatabase implements Database {
     private MySQLDatabase() {
         try {
             connection = DriverManager.getConnection(URL, ROOT, PASSWORD);
+            App.LOGGER.info("make new connection by "+ URL+" url.");
         } catch (SQLException e) {
+            App.LOGGER.error("connection not work by"+ URL+" url.");
             System.out.println(e.getMessage());
         }
-        System.out.println("Connection successfully");
+        App.LOGGER.debug("Connection successfully");
     }
 
     public static synchronized MySQLDatabase getInstance() {
         if (instance == null) {
             try {
                 instance = new MySQLDatabase();
-
             } catch (Exception e) {
                 System.err.println(e.getMessage());
             }
@@ -61,8 +63,10 @@ public class MySQLDatabase implements Database {
         if (connection != null) {
             try {
                 connection.close();
+                App.LOGGER.info("close the connection.");
             } catch (SQLException e) {
-                e.printStackTrace();
+                App.LOGGER.info("error in close the connection.");
+                System.err.println(e);
             }
         }
     }
