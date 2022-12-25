@@ -21,8 +21,6 @@ public class SystemFile{
 
     public String getType() { return type; }
 
-    public int getVersion() { return version; }
-
     public String getPath() { return path; }
 
     @Override

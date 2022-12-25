@@ -1,24 +1,22 @@
 package edu.najah.cap.FileRepository;
 
-import com.sun.corba.se.impl.encoding.CDROutputObject;
+import edu.najah.cap.Security.Authorization;
 import edu.najah.cap.Services.FileService;
-
 import edu.najah.cap.Users.User;
+import edu.najah.cap.VersionControl.impl.Enable;
+import edu.najah.cap.VersionControl.intf.VersionControl;
 import edu.najah.cap.classification.FileClassifier;
 
 import java.util.ArrayList;
 
 public class FileRepository {
-    private String name;
 
-    public FileRepository(String name) {
-        this.name = name;
-    }
-
+    private VersionControl versionControl = new Enable();
     public void importFile(String url, User createdBy) throws Exception  {
-     FileService.doImport(url,createdBy);
+     FileService.doImport(url,createdBy,versionControl);
     }
-    public SystemFile exportFileByName(String fileName,String type, User createdBy) throws Exception {
+
+    public SystemFile exportFileByName(String fileName, String type, User createdBy) throws Exception {
        return FileService.doExportByName(fileName,type, createdBy);
     }
     public ArrayList<SystemFile> exportFileByCategory(String categoryName, String categoryType)throws Exception  {
@@ -47,16 +45,18 @@ public class FileRepository {
     public  void viewFilesCategorizedByType(String categoryName) {
         FileService.viewFilesCategorizedByType(categoryName);
 
-
     }
-
     public  void viewFilesCategorizedBySize(String categoryName) {
         FileService.viewFilesCategorizedBySize(categoryName);
     }
 
-
-
     public void RollBack(String fileName,int version,User createdBy) throws Exception  {
         FileService.doRollBack(fileName,version,createdBy);
+    }
+
+    public void setVersionControl(VersionControl versionControl,User user) {
+        if(Authorization.hasAdminPermission(user)) {
+            this.versionControl = versionControl;
+        }
     }
 }

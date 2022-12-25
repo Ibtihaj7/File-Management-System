@@ -9,7 +9,7 @@ import java.util.List;
 
 public class MySQLDatabase implements Database {
     private static final String ROOT = "root";
-    private static final String PASSWORD = "<password>";
+    private static final String PASSWORD = "password";
     private static final String URL = "jdbc:mysql://localhost:3306/File_Management";
     private static MySQLDatabase instance = null;
     private static Connection connection;
@@ -34,10 +34,6 @@ public class MySQLDatabase implements Database {
         }
         return instance;
     }
-    @Override
-    public Connection getConnection() {
-        return connection;
-    }
 
     @Override
     public ResultSet executeQuery(String sql, List<Object> parameters) throws SQLException {
@@ -61,6 +57,13 @@ public class MySQLDatabase implements Database {
         }
         preparedStatement.execute();
     }
-
-
+    public static void disconnect() {
+        if (connection != null) {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 }
