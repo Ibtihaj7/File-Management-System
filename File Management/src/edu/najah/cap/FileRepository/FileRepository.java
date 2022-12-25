@@ -1,5 +1,6 @@
 package edu.najah.cap.FileRepository;
 
+import edu.najah.cap.Constant.Constant;
 import edu.najah.cap.Exceptions.AuthorizationExeption;
 import edu.najah.cap.Security.Authorization;
 import edu.najah.cap.Services.Delete.Delete;
@@ -23,35 +24,35 @@ public class FileRepository {
     private Delete anDelete;
     public void importFile(String url, User createdBy) throws Exception  {
         if(!Authorization.isAuthorized(createdBy)){
-            throw new AuthorizationExeption("Your permission is not allowed to do an import for a file.");
+            throw new AuthorizationExeption(Constant.USER_NOT_AOUTHORIZE_EXEPTION_MESSAGE);
         }
      FileService.doImport(url,createdBy,versionControl);
     }
 
     public SystemFile exportFileByName(String fileName, String type, User createdBy) throws Exception {
         if(!Authorization.isAuthorized(createdBy)){
-            throw new AuthorizationExeption("Your permission is not allowed to do an export for a file.");
+            throw new AuthorizationExeption(Constant.USER_NOT_AOUTHORIZE_EXEPTION_MESSAGE);
         }
         setAnExport(new Name());
        return (SystemFile) anExport.export(fileName,type, createdBy);
     }
     public ArrayList<SystemFile> exportFileByCategory(String categoryName, String categoryType, User createdBy)throws Exception  {
         if(!Authorization.isAuthorized(createdBy)){
-            throw new AuthorizationExeption("Your permission is not allowed to do an export for these files.");
+            throw new AuthorizationExeption(Constant.USER_NOT_AOUTHORIZE_EXEPTION_MESSAGE);
         }
         setAnExport(new Category());
         return (ArrayList<SystemFile>) anExport.export(categoryName, categoryType, createdBy);
     }
     public void deleteFileByName(String filename,String type, User createdBy)throws Exception  {
         if(!Authorization.hasAdminPermission(createdBy)){
-            throw new AuthorizationExeption("Your permission is not allowed to do an delete for a file.");
+            throw new AuthorizationExeption(Constant.USER_NOT_AOUTHORIZE_EXEPTION_MESSAGE);
         }
         setAnDelete(new edu.najah.cap.Services.Delete.Name());
         anDelete.delete(filename,type,createdBy);
     }
     public void deleteFileByCategory(String categoryName, String categoryType, User createdBy)throws Exception  {
         if(!Authorization.hasAdminPermission(createdBy)){
-            throw new AuthorizationExeption("Your permission is not allowed to do an delete for these files.");
+            throw new AuthorizationExeption(Constant.USER_NOT_HAS_ADMIN_PERMISSION_EXEPTION_MESSAGE);
         }
         setAnDelete(new edu.najah.cap.Services.Delete.Category());
         anDelete.delete(categoryName,categoryType, createdBy);
@@ -59,13 +60,13 @@ public class FileRepository {
 
     public void classifyFileBySize(SystemFile file, User createdBy)throws Exception{
         if(!Authorization.isAuthorized(createdBy)){
-            throw new AuthorizationExeption("Your permission is not allowed to do an classify for this file.");
+            throw new AuthorizationExeption(Constant.USER_NOT_AOUTHORIZE_EXEPTION_MESSAGE);
         }
         FileClassifier.classifyFileBySize(file);
     }
     public void classifyFileByType(SystemFile file, User createdBy) throws Exception{
         if(!Authorization.isAuthorized(createdBy)){
-            throw new AuthorizationExeption("Your permission is not allowed to do an classify for this file.");
+            throw new AuthorizationExeption(Constant.USER_NOT_AOUTHORIZE_EXEPTION_MESSAGE);
         }
         FileClassifier.classifyFileByType(file);
     }
@@ -88,14 +89,14 @@ public class FileRepository {
 
     public void RollBack(String fileName,int version,User createdBy) throws Exception  {
         if(!Authorization.hasAdminPermission(createdBy)){
-            throw new AuthorizationExeption("Your permission is not allowed to do an rollback for versions");
+            throw new AuthorizationExeption(Constant.USER_NOT_HAS_ADMIN_PERMISSION_EXEPTION_MESSAGE);
         }
         FileService.doRollBack(fileName,version);
     }
 
     public void setVersionControl(VersionControl versionControl,User user) throws Exception {
         if(!Authorization.hasAdminPermission(user)){
-            throw new AuthorizationExeption("Your permission is not allowed to set or change Version Control.");
+            throw new AuthorizationExeption(Constant.USER_NOT_HAS_ADMIN_PERMISSION_EXEPTION_MESSAGE);
         }
         this.versionControl = versionControl;
     }
