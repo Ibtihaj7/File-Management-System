@@ -204,45 +204,21 @@ public abstract class FileService {
         VersionControl.Rollback(fileName,version, createdBy);
     }
 
-    public static void viewFilesByCategory(String categoryName) {
-        boolean isCategoryNameSize=categoryName.equals("size");
-        boolean isCategoryNameType=categoryName.equals("type");
-        boolean isCategoryNameCustom=categoryName.equals("custom");
-        if(isCategoryNameSize) {
-            viewFilesCategorizedBySize();
-        }
-        if(isCategoryNameType) {
-            viewFilesCategorizedByType();
-        }
-        if(isCategoryNameCustom)
-          viewFilesWithCustomCategory();
-    }
 
-    private static void viewFilesWithCustomCategory() {
-        int filesWithCategoryNumber=0;
 
-        for (ArrayList<SystemFile>files:FileClassifier.getFileCategoryRulers().values()) {
-            System.out.println(files.get(filesWithCategoryNumber).toString());
-            filesWithCategoryNumber++;
-        }
+  public static void viewFilesWithCustomCategory(String categoryName) {
+        System.out.println(FileClassifier.getFileCategoryRulers().get(categoryName).toString());
 
     }
 
-    private static void viewFilesCategorizedByType() {
-        int filesWithCategoryNumber=0;
-        for (ArrayList<SystemFile>files:FileClassifier.getFileTypeRuler().values()) {
-            System.out.println(files.get(filesWithCategoryNumber).toString());
-            filesWithCategoryNumber++;
-        }
+   public static void viewFilesCategorizedByType(String categoryName) {
+        System.out.println(FileClassifier.getFileTypeRuler().get(categoryName).toString());
+
 
     }
 
-    private static void viewFilesCategorizedBySize() {
-        int filesWithCategoryNumber=0;
+  public static void viewFilesCategorizedBySize(String categoryName) {
+        System.out.println(FileClassifier.getFileSizeRanges().get(categoryName).toString());
 
-        for (ArrayList<SystemFile>files:FileClassifier.getFileSizeRanges().values()) {
-            System.out.println( files.get(filesWithCategoryNumber).toString());
-            filesWithCategoryNumber++;
-        }
     }
 }

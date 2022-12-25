@@ -40,8 +40,18 @@ public class FileRepository {
     public void classifyFileByCategory(SystemFile file, String categoryName){ FileClassifier.classifyFileByCategory(file,categoryName); }
 
     public void viewAllFiles() throws Exception { FileService.view(); }
-    public void viewFilesByCategory(String categoryName){
-     FileService.viewFilesByCategory(categoryName);
+    public void viewFilesWithCustomCategory(String categoryName) {
+        FileService.viewFilesWithCustomCategory(categoryName);
+    }
+
+    public  void viewFilesCategorizedByType(String categoryName) {
+        FileService.viewFilesCategorizedByType(categoryName);
+
+
+    }
+
+    public  void viewFilesCategorizedBySize(String categoryName) {
+        FileService.viewFilesCategorizedBySize(categoryName);
     }
 
 

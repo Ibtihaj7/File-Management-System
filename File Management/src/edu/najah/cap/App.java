@@ -8,18 +8,23 @@ import edu.najah.cap.Users.User;
 public class App {
     public static void main(String[] args) {
         FileRepository fileRepository = new FileRepository("karam");
-        User user = new User("karam@gmail.com","karam@123");
+        User user = new User("ABAR@GMAIL.COM","1122");
         SystemFile file1=null;
         try{
             fileRepository.importFile("C:\\Users\\HP\\Desktop\\karamzz.txt",user);
+            fileRepository.importFile("C:\\Users\\HP\\Desktop\\abr.txt",user);
+
             SystemFile file = fileRepository.exportFileByName("karamzz","txt",user);
-            System.out.println(file);
+            SystemFile file22 = fileRepository.exportFileByName("abr","txt",user);
+            fileRepository.classifyFileByType(file);
+            fileRepository.classifyFileByType(file22);
 //            fileRepository.RollBack("karam",0,user);
 //            fileRepository.RollBack("abr",0,user);
 //            fileRepository.RollBack("ahm",0,user);
 //            fileRepository.RollBack("ibti",0,user);
 //             file1 = fileRepository.exportFileByName("karam","txt",user);
-            fileRepository.viewFilesByCategory("type");
+
+            fileRepository.viewFilesCategorizedByType("txt");
         }catch (Exception e){
             System.err.println(e.getMessage());
         }
