@@ -1,5 +1,7 @@
 package edu.najah.cap.FileRepository;
 
+import edu.najah.cap.App;
+
 public class SystemFile{
     private  String name;
     private  int size;
@@ -13,6 +15,7 @@ public class SystemFile{
         this.size = size;
         this.path = path;
         this.version = version;
+        App.LOGGER.info("create file successfully with '"+name+"' name, '"+type+"' type, '"+size+"' size, '"+path+"' path and '"+version+"' version");
     }
 
     public String getName() { return name; }
