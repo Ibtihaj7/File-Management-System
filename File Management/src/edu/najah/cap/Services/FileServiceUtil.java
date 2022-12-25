@@ -93,10 +93,7 @@ public abstract class FileServiceUtil {
         }
     }
     public static ResultSet getAvailableFiles(){
-        String query= """
-                select name,type,size,path,MAX(version) AS version
-                 from files
-                 GROUP BY name""";
+        String query= "select name,type,size,path,MAX(version) AS version from files GROUP BY name";
         ResultSet statement = null;
         try {
             statement = MySQLDatabase.getInstance().executeQuery(query, null);

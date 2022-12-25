@@ -4,11 +4,16 @@ import edu.najah.cap.Database.impl.MySQLDatabase;
 import edu.najah.cap.FileRepository.FileRepository;
 import edu.najah.cap.FileRepository.SystemFile;
 import edu.najah.cap.Users.User;
+import jdk.nashorn.internal.lookup.MethodHandleFactory;
+import org.apache.log4j.BasicConfigurator;
+import org.apache.log4j.Logger;
 
 
 public class App {
+public static Logger LOGGER=Logger.getLogger(App.class.getName());
     public static void main(String[] args) {
         FileRepository fileRepository = new FileRepository();
+        BasicConfigurator.configure();
         User user = new User("karam","karam@123");
         SystemFile file;
         try{
