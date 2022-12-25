@@ -12,13 +12,7 @@ public class App {
         User user = new User("karam","karam@123");
         SystemFile file;
         try{
-//            fileRepository.importFile("C:\\Users\\HP\\Desktop\\karam22.txt",user);
-//            fileRepository.setVersionControl(new Disable(), user);
-//            fileRepository.importFile("C:\\Users\\HP\\Desktop\\karam22.txt",user);
-//            file = fileRepository.exportFileByName("karam22","txt",user);
-//            System.out.println(file);
-//            fileRepository.setVersionControl(new Enable(), user);
-//            fileRepository.importFile("C:\\Users\\HP\\Desktop\\karam22.txt",user);
+            fileRepository.importFile("C:\\Users\\HP\\Desktop\\karam22.txt",user);
             file = fileRepository.exportFileByName("karam22","txt",user);
             System.out.println(file);
             fileRepository.viewAllFiles();

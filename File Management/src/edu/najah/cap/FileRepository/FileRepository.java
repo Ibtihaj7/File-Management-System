@@ -2,7 +2,12 @@ package edu.najah.cap.FileRepository;
 
 import edu.najah.cap.Exceptions.AuthorizationExeption;
 import edu.najah.cap.Security.Authorization;
+import edu.najah.cap.Services.Delete.Delete;
+import edu.najah.cap.Services.Export.Category;
+import edu.najah.cap.Services.Export.Export;
+import edu.najah.cap.Services.Export.Name;
 import edu.najah.cap.Services.FileService;
+import edu.najah.cap.Services.Import.Import;
 import edu.najah.cap.Users.User;
 import edu.najah.cap.VersionControl.impl.Enable;
 import edu.najah.cap.VersionControl.intf.VersionControl;
@@ -13,6 +18,9 @@ import java.util.ArrayList;
 public class FileRepository {
 
     private VersionControl versionControl = new Enable();
+    private Import anImport;
+    private Export anExport;
+    private Delete anDelete;
     public void importFile(String url, User createdBy) throws Exception  {
         if(!Authorization.isAuthorized(createdBy)){
             throw new AuthorizationExeption("Your permission is not allowed to do an import for a file.");
@@ -24,25 +32,29 @@ public class FileRepository {
         if(!Authorization.isAuthorized(createdBy)){
             throw new AuthorizationExeption("Your permission is not allowed to do an export for a file.");
         }
-       return FileService.doExportByName(fileName,type, createdBy);
+        setAnExport(new Name());
+       return (SystemFile) anExport.export(fileName,type, createdBy);
     }
     public ArrayList<SystemFile> exportFileByCategory(String categoryName, String categoryType, User createdBy)throws Exception  {
         if(!Authorization.isAuthorized(createdBy)){
             throw new AuthorizationExeption("Your permission is not allowed to do an export for these files.");
         }
-        return FileService.doExportByCategory(categoryName, categoryType);
+        setAnExport(new Category());
+        return (ArrayList<SystemFile>) anExport.export(categoryName, categoryType, createdBy);
     }
-    public void deleteFileByName(String url,User createdBy)throws Exception  {
+    public void deleteFileByName(String filename,String type, User createdBy)throws Exception  {
         if(!Authorization.hasAdminPermission(createdBy)){
             throw new AuthorizationExeption("Your permission is not allowed to do an delete for a file.");
         }
-        FileService.doDeleteByName(url,createdBy);
+        setAnDelete(new edu.najah.cap.Services.Delete.Name());
+        anDelete.delete(filename,type,createdBy);
     }
     public void deleteFileByCategory(String categoryName, String categoryType, User createdBy)throws Exception  {
         if(!Authorization.hasAdminPermission(createdBy)){
             throw new AuthorizationExeption("Your permission is not allowed to do an delete for these files.");
         }
-        FileService.doDeleteByCategory(categoryName,categoryType, createdBy);
+        setAnDelete(new edu.najah.cap.Services.Delete.Category());
+        anDelete.delete(categoryName,categoryType, createdBy);
     }
 
     public void classifyFileBySize(SystemFile file, User createdBy)throws Exception{
@@ -78,7 +90,7 @@ public class FileRepository {
         if(!Authorization.hasAdminPermission(createdBy)){
             throw new AuthorizationExeption("Your permission is not allowed to do an rollback for versions");
         }
-        FileService.doRollBack(fileName,version,createdBy);
+        FileService.doRollBack(fileName,version);
     }
 
     public void setVersionControl(VersionControl versionControl,User user) throws Exception {
@@ -86,5 +98,17 @@ public class FileRepository {
             throw new AuthorizationExeption("Your permission is not allowed to set or change Version Control.");
         }
         this.versionControl = versionControl;
+    }
+
+    public void setAnImport(Import anImport) {
+        this.anImport = anImport;
+    }
+
+    public void setAnExport(Export anExport) {
+        this.anExport = anExport;
+    }
+
+    public void setAnDelete(Delete anDelete) {
+        this.anDelete = anDelete;
     }
 }
