@@ -13,7 +13,7 @@ public class App {
     public static void main(String[] args) {
         BasicConfigurator.configure();
         FileRepository fileRepository = new FileRepository();
-        User user = new User("karam","karam@123");
+        User user = new User("ABRAR","1122");
         SystemFile file;
         try{
             fileRepository.importFile("C:\\Users\\HP\\Desktop\\karam22.txt",user);

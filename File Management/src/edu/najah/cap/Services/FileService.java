@@ -1,5 +1,7 @@
 package edu.najah.cap.Services;
 
+import edu.najah.cap.App;
+import edu.najah.cap.Constant.Constant;
 import edu.najah.cap.Database.impl.MySQLDatabase;
 import edu.najah.cap.FileRepository.SystemFile;
 import edu.najah.cap.Security.Authorization;
@@ -28,14 +30,15 @@ public abstract class FileService {
 
         SystemFile encryptedFile = FileServiceUtil.getFileInformation(url);
 
-        if(encryptedFile.getSize() > 1000000){
-            throw new MaxSizeExeption("The file size is too large for the system to store");
+        if(encryptedFile.getSize()> Constant.LARGE_FILES_RANGE){
+            throw new MaxSizeExeption(Constant.MAX_SIZE_EXCEPTION_MESSAGE);
         }
 
         ResultSet result = FileServiceUtil.findExistFile(encryptedFile);
 
         if (FileServiceUtil.isEmpty(result)) {
             FileServiceUtil.insertToDB(encryptedFile);
+            App.LOGGER.debug("there is no version of the file and file add to version 0.");
             return;
         }
         if(versionControlType.getClass().equals(Disable.class) && Authorization.hasAdminPermission(createdBy)){
@@ -46,17 +49,22 @@ public abstract class FileService {
             setAnImport(new AddVersion());
             anImport.doAction(encryptedFile, result);
     }
-    public static void view() throws Exception {
-       ResultSet statement = null;
+    public static void view() {
+        ResultSet statement = null;
         try{
-           statement = FileServiceUtil.getAvailableFiles();
+            statement = FileServiceUtil.getAvailableFiles();
         }catch (Exception e){
-           System.err.println(e.getMessage());
+            System.err.println(e.getMessage());
         }
+
         if(FileServiceUtil.isEmpty(statement)){
-            throw new FileNotFoundExeption("There is no file in the system.");
+            try {
+                throw new FileNotFoundExeption(Constant.FILE_NOT_FOUND_EXCEPTION_MESSAGE);
+            }catch (FileNotFoundExeption e){
+                System.err.println(e);
+            }
         }
-       FileServiceUtil.printAvailableFiles(statement);
+        else FileServiceUtil.printAvailableFiles(statement);
     }
 
     public static void doRollBack(String fileName, int version) throws Exception {
@@ -70,22 +78,38 @@ public abstract class FileService {
         }
     }
 
+    public static void viewFileByClassification(String categoryName, String categoryType) throws CategoryNotFoundExeption{
+        if(categoryName.equals("size"))
+            if(FileClassifier.getFileSizeRanges().containsKey(categoryType)) {
+                viewFilesCategorizedBySize(categoryType);
+                return;
+            } else throw new CategoryNotFoundExeption("the category type not found in this category");
+        if(categoryName.equals("type"))
+            if(FileClassifier.getFileTypeRuler().containsKey(categoryType)) {
+                viewFilesCategorizedByType(categoryType);
+                return;
+            }else throw new CategoryNotFoundExeption("the category type not found in this category");
+        if(categoryName.equals("new category"))
+            if(FileClassifier.getFileCategoryRulers().containsKey(categoryType)) {
+                viewFilesWithCustomCategory(categoryType);
+                return;
+            }else throw new CategoryNotFoundExeption("the category type not found in this category");
 
-  public static void viewFilesWithCustomCategory(String categoryName) {
-        System.out.println(FileClassifier.getFileCategoryRulers().get(categoryName).toString());
-
+        throw new CategoryNotFoundExeption("the category name not found in this category");
     }
 
-   public static void viewFilesCategorizedByType(String categoryName) {
-        System.out.println(FileClassifier.getFileTypeRuler().get(categoryName).toString());
-
-
+    private static void viewFilesWithCustomCategory(String categoryName) {
+        FileClassifier.getFileCategoryRulers().get(categoryName).forEach( file -> System.out.println(file.toString()) );
     }
 
-  public static void viewFilesCategorizedBySize(String categoryName) {
-        System.out.println(FileClassifier.getFileSizeRanges().get(categoryName).toString());
-
+    private static void viewFilesCategorizedByType(String categoryName) {
+        FileClassifier.getFileTypeRuler().get(categoryName).forEach( file -> System.out.println(file.toString()) );
     }
+
+    private static void viewFilesCategorizedBySize(String categoryName) {
+        FileClassifier.getFileSizeRanges().get(categoryName).forEach( file -> System.out.println(file.toString()) );
+    }
+
 
     public static void setAnImport(Import anImport) {
         FileService.anImport = anImport;

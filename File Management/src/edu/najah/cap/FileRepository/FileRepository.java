@@ -1,6 +1,7 @@
 package edu.najah.cap.FileRepository;
 
 import edu.najah.cap.Exceptions.AuthorizationExeption;
+import edu.najah.cap.Exceptions.CategoryNotFoundExeption;
 import edu.najah.cap.Security.Authorization;
 import edu.najah.cap.Services.Delete.Delete;
 import edu.najah.cap.Services.Export.Category;
@@ -25,7 +26,7 @@ public class FileRepository {
         if(!Authorization.isAuthorized(createdBy)){
             throw new AuthorizationExeption("Your permission is not allowed to do an import for a file.");
         }
-     FileService.doImport(url,createdBy,versionControl);
+        FileService.doImport(url,createdBy,versionControl);
     }
 
     public SystemFile exportFileByName(String fileName, String type, User createdBy) throws Exception {
@@ -33,7 +34,7 @@ public class FileRepository {
             throw new AuthorizationExeption("Your permission is not allowed to do an export for a file.");
         }
         setAnExport(new Name());
-       return (SystemFile) anExport.export(fileName,type, createdBy);
+        return (SystemFile) anExport.export(fileName,type, createdBy);
     }
     public ArrayList<SystemFile> exportFileByCategory(String categoryName, String categoryType, User createdBy)throws Exception  {
         if(!Authorization.isAuthorized(createdBy)){
@@ -71,19 +72,15 @@ public class FileRepository {
     }
     public void classifyFileByCategory(SystemFile file, String categoryName){ FileClassifier.classifyFileByCategory(file,categoryName); }
 
-    public void viewAllFiles() throws Exception {
+    public void viewAllFiles()  {
         FileService.view();
     }
-    public void viewFilesWithCustomCategory(String categoryName) {
-        FileService.viewFilesWithCustomCategory(categoryName);
-    }
-
-    public  void viewFilesCategorizedByType(String categoryName) {
-        FileService.viewFilesCategorizedByType(categoryName);
-
-    }
-    public  void viewFilesCategorizedBySize(String categoryName) {
-        FileService.viewFilesCategorizedBySize(categoryName);
+    public void viewFileByClassification(String classificationName,String classificationType) {
+        try {
+            FileService.viewFileByClassification(classificationName, classificationType);
+        }catch (CategoryNotFoundExeption e){
+            System.err.println(e);
+        }
     }
 
     public void RollBack(String fileName,int version,User createdBy) throws Exception  {

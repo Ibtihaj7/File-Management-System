@@ -1,5 +1,6 @@
 package edu.najah.cap.Security;
 
+import edu.najah.cap.Constant.Constant;
 import edu.najah.cap.Database.impl.MySQLDatabase;
 import edu.najah.cap.Exceptions.AuthorizationExeption;
 
@@ -25,7 +26,7 @@ public abstract class Authentication {
             userRole=resultQuery.getString("role");
             return;
         }
-        throw new AuthorizationExeption("Email or password incorrect.");
+        throw new AuthorizationExeption(Constant.AUTHINTICATION_EXEPTION_MESSAGE);
     }
 
     public static String getUserRole() {

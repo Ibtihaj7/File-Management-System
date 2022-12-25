@@ -33,7 +33,7 @@ public abstract class FileServiceUtil {
     }
     public static boolean isEmpty(ResultSet resultSet){
         try {
-            if (!resultSet.first()) {
+            if (resultSet==null || !resultSet.first()) {
                 return true;
             }
         }catch (SQLException e){
@@ -93,11 +93,7 @@ public abstract class FileServiceUtil {
         }
     }
     public static ResultSet getAvailableFiles(){
-        String query= """
-                select name,type,size,path,MAX(version) AS version
-                 from files
-                 GROUP BY name""";
-        ResultSet statement = null;
+        String query= "select name,type,size,path,MAX(version) AS version from files GROUP BY name";        ResultSet statement = null;
         try {
             statement = MySQLDatabase.getInstance().executeQuery(query, null);
         }catch (SQLException e){
