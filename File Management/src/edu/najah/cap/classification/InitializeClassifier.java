@@ -1,5 +1,6 @@
 package edu.najah.cap.classification;
 
+import edu.najah.cap.App;
 import edu.najah.cap.FileRepository.SystemFile;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -18,11 +19,13 @@ abstract class InitializeClassifier {
         fileTypeRuler.put("jpeg",new ArrayList<SystemFile>());
         fileTypeRuler.put("doc",new ArrayList<SystemFile>());
         fileTypeRuler.put("html",new ArrayList<SystemFile>());
+        App.LOGGER.info("add type valid in the system.");
     }
 
     protected static void initializeFileSizeRanges(HashMap<String, ArrayList<SystemFile>> fileSizeRanges) {
         fileSizeRanges.put("Large",new ArrayList<SystemFile>());
         fileSizeRanges.put("Medium",new ArrayList<SystemFile>());
         fileSizeRanges.put("Small",new ArrayList<SystemFile>());
+        App.LOGGER.info("add size valid in the system.");
     }
 }
