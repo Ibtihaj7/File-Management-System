@@ -19,9 +19,6 @@ public abstract class FileService {
 
     public static void doImport(String url, User createdBy, VersionControl versionControlType) throws Exception {
 
-        if(!Authorization.hasAdminPermission(createdBy) && !Authorization.hasStaffPermission(createdBy)){
-            throw new AuthorizationExeption("Your type is not allowed to do an import a file.");
-        }
         SystemFile encryptedFile = FileServiceUtil.getFileInformation(url);
 
         if(encryptedFile.getSize() > 1000000){
@@ -42,9 +39,7 @@ public abstract class FileService {
     }
 
     public static SystemFile doExportByName(String filename,String type, User createdBy) throws Exception {
-        if(!Authorization.hasAdminPermission(createdBy)){
-            throw new AuthorizationExeption("Your type is not allowed to do an export a file.");
-        }
+
         String encryptedFileName= Encryption.encodeBase64(filename);
 
         ResultSet statement = FileServiceUtil.findFileByName(encryptedFileName, type);
@@ -77,9 +72,7 @@ public abstract class FileService {
     }
 
     public static void doDeleteByName(String filename, User createdBy)throws Exception {
-        if(!Authorization.hasAdminPermission(createdBy)){
-            throw new AuthorizationExeption("Your type is not allowed to do an export a file.");
-        }
+
         String fileNameEncoded =Encryption.encodeBase64(filename);
         String query = "DELETE FROM files WHERE name = ?";
         try {
@@ -90,9 +83,6 @@ public abstract class FileService {
         System.out.println("File deleted successfully");
     }
     public static void doDeleteByCategory(String categoryName, String categoryType, User createdBy) throws Exception{
-        if(!Authorization.hasAdminPermission(createdBy)){
-            throw new AuthorizationExeption("Your type is not allowed to do an export a file.");
-        }
         if(categoryType.equals("size")){
             if (FileClassifier.getFileSizeRanges().containsKey(categoryName)){
                 FileClassifier.getFileSizeRanges().get(categoryName).forEach(file->{
@@ -147,9 +137,7 @@ public abstract class FileService {
     }
 
     public static void doRollBack(String fileName, int version, User createdBy) throws Exception {
-        if (!Authorization.hasAdminPermission(createdBy)) {
-            throw new AuthorizationExeption("Your type is not allowed to do an export a file.");
-        }
+
         String fileNameEncrypted = Encryption.encodeBase64(fileName);
         String query = "DELETE FROM files WHERE name = ? AND version > ?";
         try {
