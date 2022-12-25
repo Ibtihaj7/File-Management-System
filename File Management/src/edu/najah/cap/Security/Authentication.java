@@ -4,7 +4,6 @@ import edu.najah.cap.Constant.Constant;
 import edu.najah.cap.Database.impl.MySQLDatabase;
 import edu.najah.cap.Exceptions.AuthorizationExeption;
 
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.Arrays;
 
@@ -26,7 +25,7 @@ public abstract class Authentication {
             userRole=resultQuery.getString("role");
             return;
         }
-        throw new AuthorizationExeption(Constant.AUTHINTICATION_EXEPTION_MESSAGE);
+        throw new AuthorizationExeption(Constant.AUTHENTICATION_EXCEPTION_MESSAGE);
     }
 
     public static String getUserRole() {

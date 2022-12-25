@@ -2,10 +2,8 @@ package edu.najah.cap.classification;
 
 import edu.najah.cap.App;
 import edu.najah.cap.Constant.Constant;
-import edu.najah.cap.Exceptions.MaxSizeExeption;
 import edu.najah.cap.FileRepository.SystemFile;
 import edu.najah.cap.Exceptions.TypeNotSupportExeption;
-import edu.najah.cap.Users.User;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -60,7 +58,7 @@ public abstract class FileClassifier {
             if (SupportedTypes.docFile(file)) return Constant.FILE_FORMAT_DOC;
             if (SupportedTypes.htmlFile(file)) return Constant.FILE_FORMAT_HTML;
 
-            throw new TypeNotSupportExeption(Constant.FILE_TYPE_NOT_SUPPORTED_Exeption_MESSAGE);
+            throw new TypeNotSupportExeption(Constant.FILE_TYPE_NOT_SUPPORTED_Exception_MESSAGE);
         }
 
         public static void classifyFileByCategory (SystemFile file, String categoryName){
