@@ -11,7 +11,7 @@ import java.util.Arrays;
 
 public class Overwrite implements Import{
     @Override
-    public void doAction(SystemFile encryptedFile, ResultSet result) {
+    public void Import(SystemFile encryptedFile, ResultSet result) {
         String query = "Update files SET type = ?, size = ?, path = ? WHERE name = ?";
         try {
             if (!FileServiceUtil.isEmpty(result)) {

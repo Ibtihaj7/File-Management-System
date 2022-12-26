@@ -8,7 +8,7 @@ import edu.najah.cap.Users.User;
 
 import java.sql.ResultSet;
 
-public class Name implements Export<SystemFile> {
+public class NameExporter implements Export<SystemFile> {
     @Override
     public SystemFile export(String name, String type, User user) throws Exception {
         String encryptedFileName= Encryption.encodeBase64(name);

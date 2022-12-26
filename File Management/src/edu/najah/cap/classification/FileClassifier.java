@@ -10,9 +10,9 @@ import java.util.HashMap;
 
 public abstract class FileClassifier {
 
-    private static HashMap<String, ArrayList<SystemFile>> fileSizeRanges = new HashMap<String, ArrayList<SystemFile>>();
-    private static HashMap<String, ArrayList<SystemFile>> fileTypeFormats = new HashMap<String, ArrayList<SystemFile>>();
-    private static HashMap<String, ArrayList<SystemFile>> fileCustomCategories = new HashMap<String, ArrayList<SystemFile>>();
+    private static final HashMap<String, ArrayList<SystemFile>> fileSizeRanges = new HashMap<>();
+    private static final HashMap<String, ArrayList<SystemFile>> fileTypeFormats = new HashMap<>();
+    private static final HashMap<String, ArrayList<SystemFile>> fileCustomCategories = new HashMap<>();
 
     static {
         App.LOGGER.info("Initialize FileClassifier parameter.");
@@ -33,7 +33,6 @@ public abstract class FileClassifier {
     private static boolean isFileSmall(int size) {
         return size < Constant.SMALL_FILES_RANGE;
     }
-
     private static boolean isFileMedium(int size) {
         return size < Constant.MEDIUM_FILES_RANGE;
     }

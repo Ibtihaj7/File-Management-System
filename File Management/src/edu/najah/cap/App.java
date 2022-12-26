@@ -4,6 +4,7 @@ import edu.najah.cap.Database.impl.MySQLDatabase;
 import edu.najah.cap.FileRepository.FileRepository;
 import edu.najah.cap.FileRepository.SystemFile;
 import edu.najah.cap.Users.User;
+import edu.najah.cap.VersionControl.impl.Disable;
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
 
@@ -11,34 +12,27 @@ import java.util.ArrayList;
 
 public class App {
     public static final Logger LOGGER = Logger.getLogger(App.class.getName());
+
     public static void main(String[] args) {
         BasicConfigurator.configure();
         FileRepository fileRepository = new FileRepository();
-        User user1 = new User("KARAMMM","1144");
-        User user2 = new User("ABRAR","1122");
-        User user3 = new User("KARAM","1133");
+        User user1 = new User("karam", "karam@123");
+        User user2 = new User("ibtihaj", "ibtihaj@123");
+        User user3 = new User("abrar", "abrar@123");
 
-        SystemFile file1,file2,file3,file4 ;
+        SystemFile file1, file2, file3, file4;
         ArrayList<SystemFile> files;
 
-      try {
-            fileRepository.importFile("/Users/ibtihaj/Desktop/words.txt",user1);
-      fileRepository.importFile("/Users/ibtihaj/Desktop/words.pdf",user1);
-       fileRepository.importFile("/Users/ibtihaj/Desktop/sss.pdf",user1);
-      fileRepository.importFile("/Users/ibtihaj/Desktop/rrr.txt",user1);
-        fileRepository.importFile("/Users/ibtihaj/Desktop/fff.pdf",user1);
-          fileRepository.importFile("/Users/ibtihaj/Desktop/hhh.pdf",user1);
-       }catch (Exception e){
-          System.err.println(e);
-        }
-
-
-        System.out.println("----------------------------------------");
         try {
-            files = fileRepository.exportFileByCategory("type", "txt", user1);
-        }catch (Exception e){
+            fileRepository.setVersionControl(new Disable(), user1);
+            fileRepository.importFile("/Users/HP/Desktop/words.txt",user1);
+      fileRepository.importFile("/Users/HP/Desktop/rrr.txt",user1);
+        fileRepository.importFile("/Users/HP/Desktop/fff.pdf",user1);
+          fileRepository.importFile("/Users/HP/Desktop/hhh.pdf",user1);
+        } catch (Exception e) {
             System.err.println(e);
         }
+
 
         fileRepository.viewAllFiles();
         System.out.println("----------------------------------------");
@@ -60,11 +54,13 @@ public class App {
             fileRepository.classifyFileByCategory(file4,"bbbb",user1);
         }catch (Exception e){
             System.err.println(e);
+        }finally {
+            MySQLDatabase.disconnect();
         }
         System.out.println("----------------------------------------");
 
-        fileRepository.viewFileByClassification("new category","bbbb");
-        MySQLDatabase.disconnect();
+        fileRepository.viewFileByClassification("new","bbbb");
+
     }
 
-}
+    }

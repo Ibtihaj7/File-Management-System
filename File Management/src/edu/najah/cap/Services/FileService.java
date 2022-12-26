@@ -6,8 +6,6 @@ import edu.najah.cap.Database.impl.MySQLDatabase;
 import edu.najah.cap.FileRepository.SystemFile;
 import edu.najah.cap.Security.Authorization;
 import edu.najah.cap.Security.Encryption;
-import edu.najah.cap.Services.Delete.Delete;
-import edu.najah.cap.Services.Export.Export;
 import edu.najah.cap.Services.Import.AddVersion;
 import edu.najah.cap.Services.Import.Import;
 import edu.najah.cap.Services.Import.Overwrite;
@@ -21,10 +19,9 @@ import java.sql.ResultSet;
 import java.util.Arrays;
 
 
+
 public abstract class FileService {
     private static Import anImport;
-    private static Export anExport;
-    private static Delete anDelete;
 
     public static void doImport(String url, User createdBy, VersionControl versionControlType) throws Exception {
         App.LOGGER.info("Received request to import file from URL: " + url +
@@ -45,12 +42,12 @@ public abstract class FileService {
         }
         if(versionControlType.getClass().equals(Disable.class) && Authorization.hasAdminPermission(createdBy)){
             setAnImport(new Overwrite());
-            anImport.doAction(encryptedFile,result);
+            anImport.Import(encryptedFile,result);
            App.LOGGER.info("Successfully imported file from URL: " + url);
             return;
         }
             setAnImport(new AddVersion());
-            anImport.doAction(encryptedFile, result);
+            anImport.Import(encryptedFile, result);
         App.LOGGER.info("Successfully imported file from URL: " + url);
 
     }
@@ -74,7 +71,7 @@ public abstract class FileService {
         else FileServiceUtil.printAvailableFiles(statement);
     }
 
-    public static void doRollBack(String fileName, int version) throws Exception {
+    public static void doRollBack(String fileName, int version){
         App.LOGGER.info("Received request to roll back file: " + fileName + " to version: " + version);
         String fileNameEncrypted = Encryption.encodeBase64(fileName);
         String query = "DELETE FROM files WHERE name = ? AND version > ?";
@@ -88,36 +85,20 @@ public abstract class FileService {
 
     public static void viewFileByClassification(String categoryName, String categoryType) throws CategoryNotFoundExeption{
         App.LOGGER.debug("Displaying files classified by category: " + categoryName + " with type: " + categoryType);
-        if(categoryName.equals("size"))
-            if(FileClassifier.getFileSizeRanges().containsKey(categoryType)) {
-                viewFilesCategorizedBySize(categoryType);
-                return;
-            } else throw new CategoryNotFoundExeption("the category type not found in this category");
-        if(categoryName.equals("type"))
-            if (FileClassifier.getFileTypeRuler().containsKey(categoryType)) {
-                viewFilesCategorizedByType(categoryType);
-                return;
-            } else throw new CategoryNotFoundExeption("the category type not found in this category");
-        if(categoryName.equals("new category"))
-            if(FileClassifier.getFileCategoryRulers().containsKey(categoryType)) {
-                viewFilesWithCustomCategory(categoryType);
-                return;
-            }else throw new CategoryNotFoundExeption("the category type not found in this category");
-
-        throw new CategoryNotFoundExeption("the category name not found in this category");
+        FileServiceUtil.checkCategoryNameAndPrint(categoryName,categoryType);
     }
 
-    private static void viewFilesWithCustomCategory(String categoryName) {
+    static void viewFilesWithCustomCategory(String categoryName) {
        App.LOGGER.debug("Displaying list of files with custom category: " + categoryName);
         FileClassifier.getFileCategoryRulers().get(categoryName).forEach( file -> System.out.println(file.toString()) );
     }
 
-    private static void viewFilesCategorizedByType(String categoryName) {
+    static void viewFilesCategorizedByType(String categoryName) {
         App.LOGGER.debug("Displaying list of files with custom category: " + categoryName);
         FileClassifier.getFileTypeRuler().get(categoryName).forEach( file -> System.out.println(file.toString()) );
     }
 
-    private static void viewFilesCategorizedBySize(String categoryName) {
+    static void viewFilesCategorizedBySize(String categoryName) {
         App.LOGGER.debug("Displaying list of files with custom category: " + categoryName);
         FileClassifier.getFileSizeRanges().get(categoryName).forEach( file -> System.out.println(file.toString()) );
     }
@@ -127,11 +108,4 @@ public abstract class FileService {
         FileService.anImport = anImport;
     }
 
-    public static void setAnExport(Export anExport) {
-        FileService.anExport = anExport;
-    }
-
-    public static void setAnDelete(Delete anDelete) {
-        FileService.anDelete = anDelete;
-    }
 }

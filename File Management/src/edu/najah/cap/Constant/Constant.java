@@ -14,9 +14,9 @@ public abstract class Constant {
   public static final String FILE_FORMAT_JPEG ="jpeg";
   public static final String MAX_SIZE_EXCEPTION_MESSAGE="The file size is too large for the system to store";
   public static final String FILE_NOT_FOUND_EXCEPTION_MESSAGE="There is no file in the system.";
-  public static final int SMALL_FILES_RANGE =100 ;
-  public static final int MEDIUM_FILES_RANGE =5000 ;
-  public static final int LARGE_FILES_RANGE =10000 ;
+  public static final int SMALL_FILES_RANGE =5000 ;
+  public static final int MEDIUM_FILES_RANGE =50000 ;
+  public static final int LARGE_FILES_RANGE =10000000 ;
   public static String FILE_TYPE_NOT_SUPPORTED_Exception_MESSAGE ="The type of this file not support in our system.";
   public static final String USER_NOT_AUTHORIZE_EXCEPTION_MESSAGE = "Your permission is not allowed to do this operation for a file.";
   public static final String USER_NOT_HAS_ADMIN_PERMISSION_EXCEPTION_MESSAGE ="You must have Admin permission to do this operation." ;
@@ -24,6 +24,7 @@ public abstract class Constant {
   public static final String FILE_SIZE_CATEGORY="size";
   public static final String FILE_TYPE_CATEGORY="type";
   public static final String FILE_NEW_CATEGORY="new";
+  public static final String CATEGORY_TYPE_NOT_FOUND = "the category type not found in this category";
 
 
 

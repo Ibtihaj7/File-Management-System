@@ -6,7 +6,7 @@ import edu.najah.cap.VersionControl.intf.VersionControl;
 
 public class Enable implements VersionControl {
     @Override
-    public void doVersionControl(String url, User user) throws Exception {
+    public void importWithVersionControl(String url, User user) throws Exception {
         FileService.doImport(url,user,this);
     }
 }

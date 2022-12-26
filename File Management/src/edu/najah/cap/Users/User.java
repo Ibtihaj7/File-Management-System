@@ -8,8 +8,8 @@ public class User {
         return username;
     }
 
-    private String username;
-    private String password;
+    private final String username;
+    private final String password;
     private String role;
     private boolean loginStatus;
 

@@ -9,7 +9,7 @@ import java.util.Arrays;
 
 public class AddVersion implements Import{
     @Override
-    public void doAction(SystemFile encryptedFile, ResultSet result) {
+    public void Import(SystemFile encryptedFile, ResultSet result) {
         App.LOGGER.debug("Importing file: " + encryptedFile.getName() + " of type: " + encryptedFile.getType());
         try {
             int newVersion = result.getInt("version");

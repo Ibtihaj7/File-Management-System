@@ -3,12 +3,13 @@ package edu.najah.cap.FileRepository;
 import edu.najah.cap.Exceptions.AuthorizationExeption;
 import edu.najah.cap.Exceptions.CategoryNotFoundExeption;
 import edu.najah.cap.Security.Authorization;
+import edu.najah.cap.Services.Delete.CategoryDeleter;
 import edu.najah.cap.Services.Delete.Delete;
-import edu.najah.cap.Services.Export.Category;
+import edu.najah.cap.Services.Delete.NameDeleter;
+import edu.najah.cap.Services.Export.CategoryExporter;
 import edu.najah.cap.Services.Export.Export;
-import edu.najah.cap.Services.Export.Name;
+import edu.najah.cap.Services.Export.NameExporter;
 import edu.najah.cap.Services.FileService;
-import edu.najah.cap.Services.Import.Import;
 import edu.najah.cap.Users.User;
 import edu.najah.cap.VersionControl.impl.Enable;
 import edu.najah.cap.VersionControl.intf.VersionControl;
@@ -16,46 +17,38 @@ import edu.najah.cap.classification.FileClassifier;
 
 import java.util.ArrayList;
 
+import static edu.najah.cap.Constant.Constant.USER_NOT_AUTHORIZE_EXCEPTION_MESSAGE;
+
 public class FileRepository {
 
     private VersionControl versionControl = new Enable();
-    private Import anImport;
-    private Export anExport;
-    private Delete anDelete;
-    public void AuthorizeUser(User user)throws AuthorizationExeption{
-        if(!Authorization.isAuthorized(user)){
-            throw new AuthorizationExeption("Your permission is not allowed to do an import for a file.");
-        }
-    }
-    public void AuthorizeAdmin(User user)throws AuthorizationExeption{
-        if(!Authorization.hasAdminPermission(user)){
-            throw new AuthorizationExeption("Your permission is not allowed to do an delete for a file.");
-        }
-    }
+    private Export exporter;
+    private Delete deleter;
+
     public void importFile(String url, User createdBy) throws Exception  {
         AuthorizeUser(createdBy);
-        FileService.doImport(url,createdBy,versionControl);
+        versionControl.importWithVersionControl(url, createdBy);
     }
 
     public SystemFile exportFileByName(String fileName, String type, User createdBy) throws Exception {
         AuthorizeUser(createdBy);
-        setAnExport(new Name());
-        return (SystemFile) anExport.export(fileName,type, createdBy);
+        setAnExport(new NameExporter());
+        return (SystemFile) exporter.export(fileName,type, createdBy);
     }
     public ArrayList<SystemFile> exportFileByCategory(String categoryName, String categoryType, User createdBy)throws Exception  {
         AuthorizeUser(createdBy);
-        setAnExport(new Category());
-        return (ArrayList<SystemFile>) anExport.export(categoryName, categoryType, createdBy);
+        setAnExport(new CategoryExporter());
+        return (ArrayList<SystemFile>) exporter.export(categoryName, categoryType, createdBy);
     }
     public void deleteFileByName(String filename,String type, User createdBy)throws Exception  {
         AuthorizeAdmin(createdBy);
-        setAnDelete(new edu.najah.cap.Services.Delete.Name());
-        anDelete.delete(filename,type,createdBy);
+        setAnDelete(new NameDeleter());
+        deleter.delete(filename,type,createdBy);
     }
     public void deleteFileByCategory(String categoryName, String categoryType, User createdBy)throws Exception  {
         AuthorizeAdmin(createdBy);
-        setAnDelete(new edu.najah.cap.Services.Delete.Category());
-        anDelete.delete(categoryName,categoryType, createdBy);
+        setAnDelete(new CategoryDeleter());
+        deleter.delete(categoryName,categoryType, createdBy);
     }
 
     public void classifyFileBySize(SystemFile file, User createdBy)throws Exception{
@@ -92,15 +85,22 @@ public class FileRepository {
         this.versionControl = versionControl;
     }
 
-    public void setAnImport(Import anImport) {
-        this.anImport = anImport;
+    private void setAnExport(Export exporter) {
+        this.exporter = exporter;
     }
 
-    public void setAnExport(Export anExport) {
-        this.anExport = anExport;
+    private void setAnDelete(Delete deleter) {
+        this.deleter = deleter;
     }
 
-    public void setAnDelete(Delete anDelete) {
-        this.anDelete = anDelete;
+    private void AuthorizeUser(User user)throws AuthorizationExeption{
+        if(!Authorization.isAuthorized(user)){
+            throw new AuthorizationExeption(USER_NOT_AUTHORIZE_EXCEPTION_MESSAGE);
+        }
+    }
+    private void AuthorizeAdmin(User user)throws AuthorizationExeption{
+        if(!Authorization.hasAdminPermission(user)){
+            throw new AuthorizationExeption(USER_NOT_AUTHORIZE_EXCEPTION_MESSAGE);
+        }
     }
 }
