@@ -16,7 +16,7 @@ public class App {
     public static void main(String[] args) {
 
         FileRepository fileRepository = new FileRepository();
-        User user1 = new User("karammmm", "karam@1231");
+        User user1 = new User("karam", "karam@123");
         User user2 = new User("ibtihaj", "ibtihaj@123");
         User user3 = new User("abrar", "abrar@123");
 
