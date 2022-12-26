@@ -16,7 +16,7 @@ public class App {
     public static void main(String[] args) {
         BasicConfigurator.configure();
         FileRepository fileRepository = new FileRepository();
-        User user1 = new User("karam", "karam@123");
+        User user1 = new User("karam", "karam@1231");
         User user2 = new User("ibtihaj", "ibtihaj@123");
         User user3 = new User("abrar", "abrar@123");
 
@@ -29,14 +29,14 @@ public class App {
       fileRepository.importFile("/Users/HP/Desktop/rrr.txt",user1);
         fileRepository.importFile("/Users/HP/Desktop/fff.pdf",user1);
           fileRepository.importFile("/Users/HP/Desktop/hhh.pdf",user1);
+          fileRepository.viewAllFiles(user1);
         } catch (Exception e) {
             System.err.println(e);
         }
 
 
-        fileRepository.viewAllFiles();
+
         System.out.println("----------------------------------------");
-        fileRepository.viewFileByClassification("type","txt");
 
         System.out.println("----------------------------------------");
 
@@ -52,6 +52,7 @@ public class App {
 
             file4=fileRepository.exportFileByName("hhh","pdf",user1);
             fileRepository.classifyFileByCategory(file4,"bbbb",user1);
+            fileRepository.viewFileByClassification("new","bbbb",user1);
         }catch (Exception e){
             System.err.println(e);
         }finally {
@@ -59,7 +60,7 @@ public class App {
         }
         System.out.println("----------------------------------------");
 
-        fileRepository.viewFileByClassification("new","bbbb");
+
 
     }
 

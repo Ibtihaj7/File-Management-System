@@ -5,6 +5,7 @@ import edu.najah.cap.Exceptions.CategoryNotFoundExeption;
 import edu.najah.cap.FileRepository.SystemFile;
 import edu.najah.cap.Security.Decryption;
 import edu.najah.cap.Security.Encryption;
+import edu.najah.cap.Users.User;
 import edu.najah.cap.classification.FileClassifier;
 
 import java.io.File;
@@ -107,20 +108,20 @@ public abstract class FileServiceUtil {
         return null;
     }
 
-    public static void checkCategoryNameAndPrint(String categoryName, String categoryType) throws CategoryNotFoundExeption {
+    public static void checkCategoryNameAndPrint(String categoryName, String categoryType, User user) throws CategoryNotFoundExeption {
         if(categoryName.equals(FILE_SIZE_CATEGORY))
             if(FileClassifier.getFileSizeRanges().containsKey(categoryType)) {
-                FileService.viewFilesCategorizedBySize(categoryType);
+                FileService.viewFilesCategorizedBySize(categoryType,user);
                 return;
             } else throw new CategoryNotFoundExeption(CATEGORY_TYPE_NOT_FOUND);
         if(categoryName.equals(FILE_TYPE_CATEGORY))
             if (FileClassifier.getFileTypeRuler().containsKey(categoryType)) {
-                FileService.viewFilesCategorizedByType(categoryType);
+                FileService.viewFilesCategorizedByType(categoryType,user);
                 return;
             } else throw new CategoryNotFoundExeption(CATEGORY_TYPE_NOT_FOUND);
         if(categoryName.equals(FILE_NEW_CATEGORY))
             if(FileClassifier.getFileCategoryRulers().containsKey(categoryType)) {
-                FileService.viewFilesWithCustomCategory(categoryType);
+                FileService.viewFilesWithCustomCategory(categoryType,user);
                 return;
             }else throw new CategoryNotFoundExeption(CATEGORY_TYPE_NOT_FOUND);
 

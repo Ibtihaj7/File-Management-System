@@ -25,6 +25,7 @@ public abstract class Constant {
   public static final String FILE_TYPE_CATEGORY="type";
   public static final String FILE_NEW_CATEGORY="new";
   public static final String CATEGORY_TYPE_NOT_FOUND = "the category type not found in this category";
+  public static final String LOGIN_WAS_NOT_CORRECT = " did not logged in";
 
 
 

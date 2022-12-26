@@ -51,9 +51,9 @@ public abstract class FileService {
         App.LOGGER.info("Successfully imported file from URL: " + url);
 
     }
-    public static void view() {
+    public static void view(User user) {
         ResultSet statement = null;
-        App.LOGGER.debug("Displaying file list");
+        App.LOGGER.debug("Displaying file list for" + user.getUsername());
 
         try{
             statement = FileServiceUtil.getAvailableFiles();
@@ -83,23 +83,23 @@ public abstract class FileService {
         }
     }
 
-    public static void viewFileByClassification(String categoryName, String categoryType) throws CategoryNotFoundExeption{
-        App.LOGGER.debug("Displaying files classified by category: " + categoryName + " with type: " + categoryType);
-        FileServiceUtil.checkCategoryNameAndPrint(categoryName,categoryType);
+    public static void viewFileByClassification(String categoryName, String categoryType, User user) throws CategoryNotFoundExeption{
+        App.LOGGER.debug(user.getUsername() +" is displaying files classified by category: " + categoryName + " with type: " + categoryType);
+        FileServiceUtil.checkCategoryNameAndPrint(categoryName,categoryType, user);
     }
 
-    static void viewFilesWithCustomCategory(String categoryName) {
-       App.LOGGER.debug("Displaying list of files with custom category: " + categoryName);
+    static void viewFilesWithCustomCategory(String categoryName, User user) {
+       App.LOGGER.debug(user.getUsername() +" is displaying list of files with custom category: " + categoryName);
         FileClassifier.getFileCategoryRulers().get(categoryName).forEach( file -> System.out.println(file.toString()) );
     }
 
-    static void viewFilesCategorizedByType(String categoryName) {
-        App.LOGGER.debug("Displaying list of files with custom category: " + categoryName);
+    static void viewFilesCategorizedByType(String categoryName, User user) {
+        App.LOGGER.debug(user.getUsername() + "is displaying list of files with custom category: " + categoryName);
         FileClassifier.getFileTypeRuler().get(categoryName).forEach( file -> System.out.println(file.toString()) );
     }
 
-    static void viewFilesCategorizedBySize(String categoryName) {
-        App.LOGGER.debug("Displaying list of files with custom category: " + categoryName);
+    static void viewFilesCategorizedBySize(String categoryName, User user) {
+        App.LOGGER.debug(user.getUsername() + "is displaying list of files with custom category: " + categoryName);
         FileClassifier.getFileSizeRanges().get(categoryName).forEach( file -> System.out.println(file.toString()) );
     }
 
