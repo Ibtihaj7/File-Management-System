@@ -71,12 +71,12 @@ public abstract class FileService {
         else FileServiceUtil.printAvailableFiles(statement);
     }
 
-    public static void doRollBack(String fileName, int version){
+    public static void doRollBack(String fileName,String type, int version){
         App.LOGGER.info("Received request to roll back file: " + fileName + " to version: " + version);
         String fileNameEncrypted = Encryption.encodeBase64(fileName);
-        String query = "DELETE FROM files WHERE name = ? AND version > ?";
+        String query = "DELETE FROM files WHERE name = ? AND type = ? AND version > ?";
         try {
-            MySQLDatabase.getInstance().executeStatement(query,Arrays.asList(fileNameEncrypted, version));
+            MySQLDatabase.getInstance().executeStatement(query,Arrays.asList(fileNameEncrypted,type, version));
            App.LOGGER.info("Successfully rolled back file: " + fileName + " to version: " + version);
         } catch (Exception e) {
             System.err.println(e.getMessage());

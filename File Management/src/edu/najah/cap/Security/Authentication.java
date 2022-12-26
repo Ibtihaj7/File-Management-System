@@ -20,7 +20,8 @@ public abstract class Authentication {
         try {
             resultQuery = MySQLDatabase.getInstance().executeQuery(query, Arrays.asList(username,password));
         }catch (Exception e){
-            System.err.println(e.getMessage());
+            throw new AuthorizationExeption(Constant.AUTHENTICATION_EXCEPTION_MESSAGE);
+
         }
 
         if(resultQuery.next()) {

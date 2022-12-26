@@ -32,13 +32,13 @@ public class FileRepository {
             versionControl.importWithVersionControl(url, createdBy);
     }
 
-    public synchronized SystemFile exportFileByName(String fileName, String type, User createdBy) throws Exception {
+    public  SystemFile exportFileByName(String fileName, String type, User createdBy) throws Exception {
         Authenticate(createdBy);
         AuthorizeUser(createdBy);
         setAnExport(new NameExporter());
         return (SystemFile) exporter.export(fileName,type, createdBy);
     }
-    public synchronized ArrayList<SystemFile> exportFileByCategory(String categoryName, String categoryType, User createdBy)throws Exception  {
+    public  ArrayList<SystemFile> exportFileByCategory(String categoryName, String categoryType, User createdBy)throws Exception  {
         Authenticate(createdBy);
         AuthorizeUser(createdBy);
         setAnExport(new CategoryExporter());
@@ -57,27 +57,27 @@ public class FileRepository {
         deleter.delete(categoryName,categoryType, createdBy);
     }
 
-    public synchronized void classifyFileBySize(SystemFile file, User createdBy)throws Exception{
+    public  void classifyFileBySize(SystemFile file, User createdBy)throws Exception{
         Authenticate(createdBy);
         AuthorizeUser(createdBy);
         FileClassifier.classifyFileBySize(file);
     }
-    public synchronized void classifyFileByType(SystemFile file, User createdBy) throws Exception{
+    public void classifyFileByType(SystemFile file, User createdBy) throws Exception{
         Authenticate(createdBy);
         AuthorizeUser(createdBy);
         FileClassifier.classifyFileByType(file);
     }
-    public synchronized void classifyFileByCategory(SystemFile file, String categoryName,User user)throws Exception{
+    public void classifyFileByCategory(SystemFile file, String categoryName,User user)throws Exception{
         Authenticate(user);
         AuthorizeUser(user);
         FileClassifier.classifyFileByCategory(file,categoryName);
     }
 
-    public synchronized void viewAllFiles(User user)throws Exception {
+    public void viewAllFiles(User user)throws Exception {
         Authenticate(user);
         FileService.view(user);
     }
-    public synchronized void viewFileByClassification(String classificationName,String classificationType, User user)throws Exception {
+    public void viewFileByClassification(String classificationName,String classificationType, User user)throws Exception {
         Authenticate(user);
         try {
             FileService.viewFileByClassification(classificationName, classificationType,user);
@@ -86,9 +86,9 @@ public class FileRepository {
         }
     }
 
-    public synchronized void RollBack(String fileName,int version,User createdBy) throws Exception  {
+    public synchronized void RollBack(String fileName,String type, int version,User createdBy) throws Exception  {
         AuthorizeAdmin(createdBy);
-        FileService.doRollBack(fileName,version);
+        FileService.doRollBack(fileName,type,version);
     }
 
     public synchronized void setVersionControl(VersionControl versionControl,User user) throws Exception {
