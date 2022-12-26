@@ -1,5 +1,6 @@
 package edu.najah.cap.Services.Delete;
 
+import edu.najah.cap.App;
 import edu.najah.cap.Constant.Constant;
 import edu.najah.cap.Exceptions.CategoryNotFoundExeption;
 import edu.najah.cap.Users.User;
@@ -10,6 +11,8 @@ public class CategoryFactory {
     private static Delete delete = new Name();
 
     public static void doDelete(String categoryName, String categoryType, User createdBy) throws Exception{
+        App.LOGGER.info("Received request to delete category: " + categoryName + " of type: " + categoryType +
+                " created by: " + createdBy.getUsername());
 
          final  String NOT_FOUND_CATEGORY_EXCEPTION="'"+categoryName+"' not exist in "+categoryType+" category";
          boolean isSizeCategory=categoryType.equals(Constant.FILE_SIZE_CATEGORY);
@@ -23,6 +26,7 @@ public class CategoryFactory {
             FileClassifier.getFileSizeRanges().get(categoryName).forEach(file -> {
                 try {
                     delete.delete(file.getName(), file.getType(), createdBy);
+                    App.LOGGER.info("Successfully deleted category: " + categoryName);
                 } catch (Exception e) {
                     System.err.println(e.getMessage());
                 }
@@ -35,6 +39,7 @@ public class CategoryFactory {
         FileClassifier.getFileTypeRuler().get(categoryName).forEach(file->{
                     try {
                         delete.delete(file.getName(), file.getType(), createdBy);
+                        App.LOGGER.info("Successfully deleted category: " + categoryName);
                     }catch (Exception e){
                         System.err.println(e.getMessage());
                     }
@@ -47,6 +52,7 @@ public class CategoryFactory {
                 FileClassifier.getFileCategoryRulers().get(categoryName).forEach(file->{
                     try {
                         delete.delete(file.getName(), file.getType(), createdBy);
+                        App.LOGGER.info("Successfully deleted category: " + categoryName);
                     }catch (Exception e){
                         System.err.println(e.getMessage());
                     }

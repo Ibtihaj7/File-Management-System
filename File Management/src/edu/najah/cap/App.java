@@ -14,23 +14,23 @@ public class App {
     public static void main(String[] args) {
         BasicConfigurator.configure();
         FileRepository fileRepository = new FileRepository();
-        User user1 = new User("ibtihaj","ibtihaj");
-        User user2 = new User("abrar","abrar");
-        User user3 = new User("karam","karam");
+        User user1 = new User("KARAMMM","1144");
+        User user2 = new User("ABRAR","1122");
+        User user3 = new User("KARAM","1133");
 
         SystemFile file1,file2,file3,file4 ;
         ArrayList<SystemFile> files;
 
-//        try {
-//            fileRepository.importFile("/Users/ibtihaj/Desktop/words.txt",user1);
-//            fileRepository.importFile("/Users/ibtihaj/Desktop/words.pdf",user1);
-//            fileRepository.importFile("/Users/ibtihaj/Desktop/sss.pdf",user1);
-//            fileRepository.importFile("/Users/ibtihaj/Desktop/rrr.txt",user1);
-//            fileRepository.importFile("/Users/ibtihaj/Desktop/fff.pdf",user1);
-//            fileRepository.importFile("/Users/ibtihaj/Desktop/hhh.pdf",user1);
-//        }catch (Exception e){
-//            System.err.println(e);
-//        }
+      try {
+            fileRepository.importFile("/Users/ibtihaj/Desktop/words.txt",user1);
+      fileRepository.importFile("/Users/ibtihaj/Desktop/words.pdf",user1);
+       fileRepository.importFile("/Users/ibtihaj/Desktop/sss.pdf",user1);
+      fileRepository.importFile("/Users/ibtihaj/Desktop/rrr.txt",user1);
+        fileRepository.importFile("/Users/ibtihaj/Desktop/fff.pdf",user1);
+          fileRepository.importFile("/Users/ibtihaj/Desktop/hhh.pdf",user1);
+       }catch (Exception e){
+          System.err.println(e);
+        }
 
 
         System.out.println("----------------------------------------");

@@ -4,6 +4,10 @@ import edu.najah.cap.Security.Authentication;
 
 
 public class User {
+    public String getUsername() {
+        return username;
+    }
+
     private String username;
     private String password;
     private String role;

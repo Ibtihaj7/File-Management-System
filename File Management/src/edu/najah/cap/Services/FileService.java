@@ -27,6 +27,8 @@ public abstract class FileService {
     private static Delete anDelete;
 
     public static void doImport(String url, User createdBy, VersionControl versionControlType) throws Exception {
+        App.LOGGER.info("Received request to import file from URL: " + url +
+                " by user: " + createdBy.getUsername() + " with version control type: " + versionControlType);
 
         SystemFile encryptedFile = FileServiceUtil.getFileInformation(url);
 
@@ -44,13 +46,18 @@ public abstract class FileService {
         if(versionControlType.getClass().equals(Disable.class) && Authorization.hasAdminPermission(createdBy)){
             setAnImport(new Overwrite());
             anImport.doAction(encryptedFile,result);
+           App.LOGGER.info("Successfully imported file from URL: " + url);
             return;
         }
             setAnImport(new AddVersion());
             anImport.doAction(encryptedFile, result);
+        App.LOGGER.info("Successfully imported file from URL: " + url);
+
     }
     public static void view() {
         ResultSet statement = null;
+        App.LOGGER.debug("Displaying file list");
+
         try{
             statement = FileServiceUtil.getAvailableFiles();
         }catch (Exception e){
@@ -68,17 +75,19 @@ public abstract class FileService {
     }
 
     public static void doRollBack(String fileName, int version) throws Exception {
-
+        App.LOGGER.info("Received request to roll back file: " + fileName + " to version: " + version);
         String fileNameEncrypted = Encryption.encodeBase64(fileName);
         String query = "DELETE FROM files WHERE name = ? AND version > ?";
         try {
             MySQLDatabase.getInstance().executeStatement(query,Arrays.asList(fileNameEncrypted, version));
+           App.LOGGER.info("Successfully rolled back file: " + fileName + " to version: " + version);
         } catch (Exception e) {
             System.err.println(e.getMessage());
         }
     }
 
     public static void viewFileByClassification(String categoryName, String categoryType) throws CategoryNotFoundExeption{
+        App.LOGGER.debug("Displaying files classified by category: " + categoryName + " with type: " + categoryType);
         if(categoryName.equals("size"))
             if(FileClassifier.getFileSizeRanges().containsKey(categoryType)) {
                 viewFilesCategorizedBySize(categoryType);
@@ -99,14 +108,17 @@ public abstract class FileService {
     }
 
     private static void viewFilesWithCustomCategory(String categoryName) {
+       App.LOGGER.debug("Displaying list of files with custom category: " + categoryName);
         FileClassifier.getFileCategoryRulers().get(categoryName).forEach( file -> System.out.println(file.toString()) );
     }
 
     private static void viewFilesCategorizedByType(String categoryName) {
+        App.LOGGER.debug("Displaying list of files with custom category: " + categoryName);
         FileClassifier.getFileTypeRuler().get(categoryName).forEach( file -> System.out.println(file.toString()) );
     }
 
     private static void viewFilesCategorizedBySize(String categoryName) {
+        App.LOGGER.debug("Displaying list of files with custom category: " + categoryName);
         FileClassifier.getFileSizeRanges().get(categoryName).forEach( file -> System.out.println(file.toString()) );
     }
 
