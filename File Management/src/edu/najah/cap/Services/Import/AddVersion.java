@@ -22,8 +22,9 @@ public class AddVersion implements Import{
                     ,encryptedFile.getSize(),encryptedFile.getPath(),newVersion));
            App.LOGGER.info("Successfully imported file: " + encryptedFile.getName());
         }catch (Exception e){
+            App.LOGGER.error("error while insert a file.");
             System.err.println(e.getMessage());
         }
-        System.out.println("The file has been imported successfully");
+        App.LOGGER.info("The file has been imported successfully");
     }
 }
